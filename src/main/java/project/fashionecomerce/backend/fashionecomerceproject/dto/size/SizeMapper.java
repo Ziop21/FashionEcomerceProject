@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import project.fashionecomerce.backend.fashionecomerceproject.repository.size.SizeEntity;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -15,6 +14,5 @@ public interface SizeMapper {
 
     Size toDto(SizeEntity sizeEntity);
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "sequenceId", target = "sequenceId")
     void updateExist(Size size, @MappingTarget SizeEntity sizeEntity);
 }

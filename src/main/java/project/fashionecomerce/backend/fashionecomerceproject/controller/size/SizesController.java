@@ -14,7 +14,6 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.size.mo
 import project.fashionecomerce.backend.fashionecomerceproject.dto.common.MySortHandler;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.size.Size;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.size.SizeQuery;
-import project.fashionecomerce.backend.fashionecomerceproject.service.generator.SequenceGeneratorService;
 import project.fashionecomerce.backend.fashionecomerceproject.service.size.SizeUseCaseService;
 
 @RestController
@@ -24,8 +23,6 @@ public class SizesController implements SizesAPI {
     final SizeUseCaseService sizeUseCaseService;
     @NonNull
     final SizeModelMapper sizeModelMapper;
-    @NonNull
-    final SequenceGeneratorService sequenceGeneratorService;
     @Override
     public ResponseEntity<SizeResponse> save(SizeRequest sizeRequest) {
         Size size = sizeModelMapper.toDto(sizeRequest);
