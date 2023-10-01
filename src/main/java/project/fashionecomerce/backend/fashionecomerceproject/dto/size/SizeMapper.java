@@ -13,6 +13,6 @@ public interface SizeMapper {
     List<Size> toDto(List<SizeEntity> sizeEntityList);
 
     Size toDto(SizeEntity sizeEntity);
-    @Mapping(source = "id", target = "id")
+    @Mapping(source = "id", target = "id", ignore = true)
     void updateExist(Size size, @MappingTarget SizeEntity sizeEntity);
 }
