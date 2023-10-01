@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface SizeRepository extends MongoRepository<SizeEntity, String>{
     @Query(value = "{ 'name': { $regex: ?0} }")
     Page<SizeEntity> customerFindAll(String search, Pageable pageable);
+
+    Boolean existsByName(String name);
 }
