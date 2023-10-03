@@ -10,6 +10,7 @@ import project.fashionecomerce.backend.fashionecomerceproject.dto.size.Size;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.size.SizeId;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.size.SizeMapper;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.size.SizeQuery;
+import project.fashionecomerce.backend.fashionecomerceproject.exception.MyResourceNotFoundException;
 import project.fashionecomerce.backend.fashionecomerceproject.repository.size.SizeEntity;
 import project.fashionecomerce.backend.fashionecomerceproject.repository.size.SizeRepository;
 
@@ -27,7 +28,7 @@ public class SizeQueryService {
     
 
     public Size findById(SizeId sizeId) {
-        SizeEntity sizeEntity = sizeRepository.findById(sizeId.id()).orElseThrow(RuntimeException::new);
+        SizeEntity sizeEntity = sizeRepository.findById(sizeId.id()).orElseThrow(MyResourceNotFoundException::new);
         return sizeMapper.toDto(sizeEntity);
     }
 

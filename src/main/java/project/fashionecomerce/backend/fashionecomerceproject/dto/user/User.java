@@ -1,7 +1,9 @@
 package project.fashionecomerce.backend.fashionecomerceproject.dto.user;
 
-import java.util.List;
+import lombok.Builder;
 
+import java.util.List;
+@Builder
 public record User (
         String id,
         String role,
@@ -20,6 +22,5 @@ public record User (
         String eWallet,
         String userLevelId,
         Boolean isDeleted
-
 ){
 }

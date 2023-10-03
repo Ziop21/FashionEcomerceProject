@@ -24,10 +24,9 @@ public class SizesController implements SizesAPI {
     @NonNull
     final SizeModelMapper sizeModelMapper;
     @Override
-    public ResponseEntity<SizeResponse> save(SizeRequest sizeRequest) {
+    public void save(SizeRequest sizeRequest) {
         Size size = sizeModelMapper.toDto(sizeRequest);
         sizeUseCaseService.save(size);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
     @Override
