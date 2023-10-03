@@ -30,9 +30,6 @@ public class SizeUseCaseService {
     public void delete(SizeId sizeId) {
         sizeCommandService.delete(sizeId);
     }
-//    public List<Size> findAll() {
-//        return sizeQueryService.findAll();
-//    }
 
     public Size findById(SizeId sizeId) {
         return sizeQueryService.findById(sizeId);
