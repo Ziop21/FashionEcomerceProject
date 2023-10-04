@@ -21,7 +21,6 @@ public class SizeQueryService {
     final SizeRepository sizeRepository;
     @NonNull
     final SizeMapper sizeMapper;
-    
 
     public Size findById(SizeId sizeId) {
         SizeEntity sizeEntity = sizeRepository.findById(sizeId.id()).orElseThrow(MyResourceNotFoundException::new);

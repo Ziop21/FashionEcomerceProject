@@ -39,5 +39,4 @@ public class SizesController implements SizesAPI {
         PageResponse<SizeResponse> sizeResponsePage = new PageResponse<>(sizePage.map(sizeModelMapper::toModel));
         return new ResponseEntity<>(sizeResponsePage, HttpStatus.OK);
     }
-
 }
