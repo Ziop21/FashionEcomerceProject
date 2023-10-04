@@ -19,15 +19,14 @@ public class VerificationTokenEntity {
     @Id
     private String id;
     private String token;
-    @DBRef
     private String userId;
     private LocalDateTime expiryDateTime;
     private static final int EXPIRATION = 30;
     public VerificationTokenEntity(String userId){
         UUID uniqueId = UUID.randomUUID();
-        token = uniqueId.toString();
-        userId = userId;
-        expiryDateTime = calculateExpiryDateTime(EXPIRATION);
+        this.token = uniqueId.toString();
+        this.userId = userId;
+        this.expiryDateTime = calculateExpiryDateTime(EXPIRATION);
     }
     private LocalDateTime calculateExpiryDateTime(int expiryTimeInMinutes) {
         LocalDateTime currentDateTime = LocalDateTime.now();

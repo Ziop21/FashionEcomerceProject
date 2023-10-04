@@ -16,8 +16,6 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.size.mo
 public interface SizesAPI {
     @PostMapping
     void save(@RequestBody @Valid SizeRequest sizeRequest);
-//    @GetMapping
-//    ResponseEntity<List<SizeResponse>> findAll();
 
     @GetMapping
     ResponseEntity<PageResponse<SizeResponse>> findAll(

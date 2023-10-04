@@ -21,10 +21,6 @@ public class SizeQueryService {
     final SizeRepository sizeRepository;
     @NonNull
     final SizeMapper sizeMapper;
-//    public List<Size> findAll() {
-//        List<SizeEntity> sizeEntityList = sizeRepository.findAll();
-//        return sizeMapper.toDto(sizeEntityList);
-//    }
     
 
     public Size findById(SizeId sizeId) {

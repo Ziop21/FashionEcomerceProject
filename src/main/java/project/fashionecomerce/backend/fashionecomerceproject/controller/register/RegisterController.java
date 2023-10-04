@@ -2,6 +2,8 @@ package project.fashionecomerce.backend.fashionecomerceproject.controller.regist
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecomerce.backend.fashionecomerceproject.controller.register.models.RegisterRequest;
 import project.fashionecomerce.backend.fashionecomerceproject.service.register.RegisterUseCaseService;
@@ -14,15 +16,15 @@ public class RegisterController implements RegisterAPI {
     public void register(RegisterRequest registerRequest) {
 
     }
-
     @Override
-    public void sendToken(String email) {
+    public ResponseEntity<String> sendToken(String email) {
         registerUseCaseService.sendToken(email);
+        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
     @Override
-    public String verifyToken(String token, String email) {
-        String userEmail = registerUseCaseService.verifyToken(token, email);
-        return userEmail;
+    public ResponseEntity<String> verifyToken(String token, String email) {
+        registerUseCaseService.verifyToken(token, email);
+        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 }
