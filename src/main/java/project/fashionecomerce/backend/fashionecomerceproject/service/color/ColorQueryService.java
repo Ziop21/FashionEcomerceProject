@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.common.PageResponse;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorId;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorMapper;
@@ -24,7 +23,6 @@ public class ColorQueryService {
         Page<ColorEntity> colorEntityPage = colorRepository.customerFindAll(colorQuery.search(),pageRequest);
         return colorEntityPage.map(colorMapper::toDto);
     }
-
     public Color findById(ColorId colorId) {
         ColorEntity colorEntity = colorRepository.findById(colorId.id()).orElseThrow(RuntimeException::new);
         return colorMapper.toDto(colorEntity);

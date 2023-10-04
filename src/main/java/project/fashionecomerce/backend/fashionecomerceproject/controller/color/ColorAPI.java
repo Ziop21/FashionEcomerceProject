@@ -9,9 +9,9 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.color.m
 @RequestMapping("/color/{colorId}")
 public interface ColorAPI {
     @PutMapping
-    ResponseEntity<ColorResponse> update(@PathVariable String colorId, @RequestBody @Valid ColorRequest colorRequest);
+    void update(@PathVariable String colorId, @RequestBody @Valid ColorRequest colorRequest);
     @GetMapping
     ResponseEntity<ColorResponse> findById(@PathVariable String colorId);
     @DeleteMapping
-    ResponseEntity<ColorResponse> delete(@PathVariable String colorId);
+    void delete(@PathVariable String colorId);
 }

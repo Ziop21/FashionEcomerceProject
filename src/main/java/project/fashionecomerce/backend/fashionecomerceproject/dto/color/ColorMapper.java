@@ -16,5 +16,5 @@ public interface ColorMapper {
     List<Color> toDto(List<ColorEntity> colorEntityList);
     Color toDto(ColorEntity colorEntity);
     @Mapping(source = "id", target = "id", ignore = true)
-    void updateExist(Color color,@MappingTarget ColorEntity colorEntity);
+    void updateExist(Color color, @MappingTarget ColorEntity colorEntity);
 }

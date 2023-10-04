@@ -17,41 +17,24 @@ public class ColorUseCaseService {
     final ColorCommandService colorCommandService;
     @NonNull
     final ColorQueryService colorQueryService;
+
     @Transactional
     public void save(Color color) {
         colorCommandService.save(color);
     }
-
+    @Transactional
+    public void update(ColorId colorId, Color color) {
+        colorCommandService.update(colorId, color);
+    }
+    @Transactional
+    public void delete(ColorId colorId) {
+        colorCommandService.delete(colorId);
+    }
     public Page<Color> findAll(ColorQuery colorQuery, PageRequest pageRequest) {
         return colorQueryService.findAll(colorQuery, pageRequest);
     }
-
-    public void update(ColorId colorId, Color color) {
-        colorCommandService.update(colorId,color);
-    }
-
     public Color findById(ColorId colorId) {
         return colorQueryService.findById(colorId);
     }
 
-    public void delete(ColorId colorId) {
-        colorCommandService.delete(colorId);
-    }
-
-//    @Transactional
-//    public void update(ColorId colorId, Color color) {
-//        colorCommandService.update(colorId, color);
-//    }
-//    @Transactional
-//    public void delete(ColorId colorId) {
-//        colorCommandService.delete(colorId);
-//    }
-//
-//    public Color findById(ColorId colorId) {
-//        return colorQueryService.findById(colorId);
-//    }
-//
-//    public Page<Color> findAll(ColorQuery colorQuery, PageRequest pageRequest) {
-//        return colorQueryService.findAll(colorQuery, pageRequest);
-//    }
 }
