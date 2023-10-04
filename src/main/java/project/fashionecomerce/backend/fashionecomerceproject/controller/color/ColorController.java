@@ -19,21 +19,18 @@ public class ColorController implements ColorAPI {
 final ColorUseCaseService colorUseCaseService;
 @NonNull
 final ColorModelMapper colorModelMapper;
-
     @Override
     public ResponseEntity<ColorResponse> update(String colorId, ColorRequest colorRequest) {
         Color color = colorModelMapper.toDto(colorRequest);
         colorUseCaseService.update(new ColorId(colorId),color);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
-
     @Override
     public ResponseEntity<ColorResponse> findById(String colorId) {
         Color color = colorUseCaseService.findById(new ColorId(colorId));
         ColorResponse colorResponse = colorModelMapper.toModel(color);
         return new ResponseEntity<>(colorResponse,HttpStatus.OK);
     }
-
     @Override
     public ResponseEntity<ColorResponse> delete(String colorId) {
         colorUseCaseService.delete(new ColorId(colorId));

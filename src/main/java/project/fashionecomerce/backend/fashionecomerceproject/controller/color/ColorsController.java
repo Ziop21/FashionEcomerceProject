@@ -30,16 +30,15 @@ public class ColorsController implements ColorsAPI {
         colorUseCaseService.save(color);
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
+    @Override
+    public ResponseEntity<PageResponse<ColorResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
+       ColorQuery colorQuery = new ColorQuery(searchString);
 
-//    @Override
-//    public ResponseEntity<ColorResponse> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
-////        ColorQuery colorQuery = new ColorQuery(searchString);
-////        PageRequest pageRequest = PageRequest.of(pageCurrent-1,pageSize, MySortHandler.of(sort));
-////        Page<Color>  colorPage = colorUseCaseService.findAll(colorQuery, pageRequest);
-////        PageResponse<ColorResponse> colorResponsePage = new PageResponse<>(colorPage.map(colorModelMapper::toModel));
-////        return new ResponseEntity<ColorResponse>(colorResponsePage);
-//
-//    }
+       PageRequest pageRequest = PageRequest.of(pageCurrent-1,pageSize, MySortHandler.of(sort));
 
+       Page<Color>  colorPage = colorUseCaseService.findAll(colorQuery, pageRequest);
 
+       PageResponse<ColorResponse> colorResponsePage = new PageResponse<>(colorPage.map(colorModelMapper::toModel));
+       return new ResponseEntity<PageResponse<ColorResponse>>(colorResponsePage,HttpStatus.OK);
+    }
 }

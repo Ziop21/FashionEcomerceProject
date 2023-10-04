@@ -2,7 +2,6 @@ package project.fashionecomerce.backend.fashionecomerceproject.service.color;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
 import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorId;
@@ -25,7 +24,6 @@ public class ColorCommandService {
         ColorEntity colorEntity = colorMapper.toEntity(color);
         colorRepository.save(colorEntity);
     }
-
     public void update(ColorId colorId, Color color) {
         ColorEntity colorEntity = colorRepository.findById(colorId.id()).orElseThrow(MyResourceNotFoundException::new);
         if(!color.name().equals(colorEntity.getName())&& colorRepository.existsByName(color.name()))
@@ -33,7 +31,6 @@ public class ColorCommandService {
         colorMapper.updateExist(color, colorEntity);
         colorRepository.save(colorEntity);
     }
-
     public void delete(ColorId colorId) {
         colorRepository.deleteById(colorId.id());
     }
