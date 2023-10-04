@@ -14,11 +14,11 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.size.mo
 @RequestMapping("/size/{sizeId}")
 public interface SizeAPI {
     @PutMapping
-    ResponseEntity<SizeResponse> update(@PathVariable String sizeId, @RequestBody @Valid SizeRequest sizeRequest);
+    void update(@PathVariable String sizeId, @RequestBody @Valid SizeRequest sizeRequest);
 
     @GetMapping
     ResponseEntity<SizeResponse> findById(@PathVariable String sizeId);
 
     @DeleteMapping
-    ResponseEntity<SizeResponse> delete(@PathVariable String sizeId);
+    void delete(@PathVariable String sizeId);
 }

@@ -24,10 +24,9 @@ public class SizesController implements SizesAPI {
     @NonNull
     final SizeModelMapper sizeModelMapper;
     @Override
-    public ResponseEntity<SizeResponse> save(SizeRequest sizeRequest) {
+    public void save(SizeRequest sizeRequest) {
         Size size = sizeModelMapper.toDto(sizeRequest);
         sizeUseCaseService.save(size);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
     @Override
@@ -40,11 +39,4 @@ public class SizesController implements SizesAPI {
         PageResponse<SizeResponse> sizeResponsePage = new PageResponse<>(sizePage.map(sizeModelMapper::toModel));
         return new ResponseEntity<>(sizeResponsePage, HttpStatus.OK);
     }
-
-//    @Override
-//    public ResponseEntity<List<SizeResponse>> findAll() {
-//        List<Size> sizeList = sizeUseCaseService.findAll();
-//        List<SizeResponse> sizeResponseList = sizeModelMapper.toModel(sizeList);
-//        return new ResponseEntity<>(sizeResponseList, HttpStatus.OK);
-//    }
 }

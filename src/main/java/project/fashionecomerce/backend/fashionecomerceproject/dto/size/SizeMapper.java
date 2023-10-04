@@ -14,5 +14,6 @@ public interface SizeMapper {
 
     Size toDto(SizeEntity sizeEntity);
     @Mapping(source = "id", target = "id", ignore = true)
+    @Mapping(source = "createdAt", target = "createdAt", ignore = true)
     void updateExist(Size size, @MappingTarget SizeEntity sizeEntity);
 }

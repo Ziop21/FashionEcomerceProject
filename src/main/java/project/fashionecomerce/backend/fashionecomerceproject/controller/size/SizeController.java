@@ -20,10 +20,9 @@ public class SizeController implements SizeAPI{
     @NonNull
     final SizeModelMapper sizeModelMapper;
     @Override
-    public ResponseEntity<SizeResponse> update(String sizeId, SizeRequest sizeRequest) {
+    public void update(String sizeId, SizeRequest sizeRequest) {
         Size size = sizeModelMapper.toDto(sizeRequest);
         sizeUseCaseService.update(new SizeId(sizeId), size);
-        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @Override
@@ -34,8 +33,7 @@ public class SizeController implements SizeAPI{
     }
 
     @Override
-    public ResponseEntity<SizeResponse> delete(String sizeId) {
+    public void delete(String sizeId) {
         sizeUseCaseService.delete(new SizeId(sizeId));
-        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
