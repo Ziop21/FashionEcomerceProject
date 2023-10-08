@@ -1,4 +1,4 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.register.models;
+package project.fashionecomerce.backend.fashionecomerceproject.controller.account.models;
 
 import jakarta.validation.constraints.Email;
 

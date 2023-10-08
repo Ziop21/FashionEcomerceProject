@@ -17,9 +17,9 @@ public class MongoDBConfig {
     public SimpleMongoClientDatabaseFactory mongoDbFactory() {
         return new SimpleMongoClientDatabaseFactory("mongodb://localhost:27017/fashion_ecomerce");
     }
-
-    @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoDbFactory());
-    }
+//
+//    @Bean
+//    public MongoTemplate mongoTemplate() {
+//        return new MongoTemplate(mongoDbFactory());
+//    }
 }
