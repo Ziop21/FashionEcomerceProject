@@ -1,11 +1,11 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.account;
+package project.fashionecomerce.backend.fashionecomerceproject.controller.register;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.account.models.RegisterRequest;
+import project.fashionecomerce.backend.fashionecomerceproject.controller.register.models.RegisterRequest;
 import project.fashionecomerce.backend.fashionecomerceproject.service.register.RegisterUseCaseService;
 
 @RestController

@@ -1,4 +1,4 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.account;
+package project.fashionecomerce.backend.fashionecomerceproject.controller.register;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.account.models.RegisterRequest;
+import project.fashionecomerce.backend.fashionecomerceproject.controller.register.models.RegisterRequest;
 
 @RequestMapping("/register")
 public interface RegisterAPI {
