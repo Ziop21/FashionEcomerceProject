@@ -7,8 +7,8 @@ import project.fashionecomerce.backend.fashionecomerceproject.dto.stockDiary.Sto
 @Service
 @RequiredArgsConstructor
 public class StockDiaryUseCaseService {
-    @NonNull
-    final StockDiaryQueryService stockDiaryQueryService;
+//    @NonNull
+//    final StockDiaryQueryService stockDiaryQueryService;
     @NonNull
     final StockDiaryCommandService stockDiaryCommandService;
     public void save(StockDiary stockDiary) {stockDiaryCommandService.save(stockDiary);

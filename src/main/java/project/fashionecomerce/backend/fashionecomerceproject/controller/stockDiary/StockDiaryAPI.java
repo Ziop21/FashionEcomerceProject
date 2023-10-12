@@ -9,5 +9,5 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.stockDi
 @RequestMapping("/stockDiary")
 public interface StockDiaryAPI {
     @PostMapping
-    Void save(@RequestBody @Valid StockDiaryRequest stockDiaryRequest);
+    void save(@RequestBody @Valid StockDiaryRequest stockDiaryRequest);
 }

@@ -11,12 +11,11 @@ import project.fashionecomerce.backend.fashionecomerceproject.service.stockDiary
 @RestController
 @RequiredArgsConstructor
 public class StockDiaryController implements StockDiaryAPI {
-
     @NonNull
     final StockDiaryUseCaseService stockDiaryUseCaseService;
     @Override
-    public Void save(StockDiaryRequest stockDiaryRequest) {
-         StockDiary  stockDiary = StockDiaryModelMapper.INSTANCE.toDTO(stockDiaryRequest);
-         stockDiaryUseCaseService.save(stockDiary);
+    public void save(StockDiaryRequest stockDiaryRequest) {
+        StockDiary stockDiary = StockDiaryModelMapper.INSTANCE.toDTO(stockDiaryRequest);
+        stockDiaryUseCaseService.save(stockDiary);
     }
 }

@@ -6,7 +6,5 @@ import project.fashionecomerce.backend.fashionecomerceproject.repository.stockDi
 @Mapper(componentModel = "spring")
 public interface StockDiaryMapper
 {
-
     StockDiaryEntity toEntity(StockDiary stockDiary);
-
 }

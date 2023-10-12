@@ -9,7 +9,5 @@ import project.fashionecomerce.backend.fashionecomerceproject.dto.stockDiary.Sto
 @Mapper
 public interface StockDiaryModelMapper {
    StockDiaryModelMapper INSTANCE = Mappers.getMapper(StockDiaryModelMapper.class);
-
-   @Mapping(source = "someField", target = "correspondingFieldInDTO")
    StockDiary toDTO(StockDiaryRequest stockDiaryRequest);
 }
