@@ -8,7 +8,7 @@ import project.fashionecomerce.backend.fashionecomerceproject.controller.color.m
 import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorResponse;
 import project.fashionecomerce.backend.fashionecomerceproject.controller.common.PageResponse;
 
-@RequestMapping("/color")
+@RequestMapping("/api/color")
 public interface ColorsAPI {
     @PostMapping
     void save(@RequestBody @Valid ColorRequest colorRequest);

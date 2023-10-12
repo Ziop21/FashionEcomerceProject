@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorRequest;
 import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorResponse;
 
-@RequestMapping("/color/{colorId}")
+@RequestMapping("/api/color/{colorId}")
 public interface ColorAPI {
     @PutMapping
     void update(@PathVariable String colorId, @RequestBody @Valid ColorRequest colorRequest);

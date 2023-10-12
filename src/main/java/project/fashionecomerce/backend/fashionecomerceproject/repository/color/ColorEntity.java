@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Document(value = "Color")
+@Document(value = "color")
 public class ColorEntity extends Auditable implements Serializable {
     @Id
     private String id;
