@@ -33,8 +33,8 @@ public class ColorUseCaseService {
     public Page<Color> findAll(ColorQuery colorQuery, PageRequest pageRequest) {
         return colorQueryService.findAll(colorQuery, pageRequest);
     }
+
     public Color findById(ColorId colorId) {
         return colorQueryService.findById(colorId);
     }
-
 }
