@@ -9,5 +9,4 @@ class FashionEcomerceProjectApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
