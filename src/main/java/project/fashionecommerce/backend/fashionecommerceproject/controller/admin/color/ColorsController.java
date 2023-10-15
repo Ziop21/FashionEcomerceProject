@@ -38,6 +38,6 @@ public class ColorsController implements ColorsAPI {
        Page<Color>  colorPage = colorUseCaseService.findAll(colorQuery, pageRequest);
 
        PageResponse<ColorResponse> colorResponsePage = new PageResponse<>(colorPage.map(colorModelMapper::toModel));
-       return new ResponseEntity<PageResponse<ColorResponse>>(colorResponsePage,HttpStatus.OK);
+       return new ResponseEntity<>(colorResponsePage,HttpStatus.OK);
     }
 }
