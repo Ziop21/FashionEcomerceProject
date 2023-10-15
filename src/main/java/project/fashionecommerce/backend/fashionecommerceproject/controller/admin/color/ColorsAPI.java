@@ -1,14 +1,14 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.color;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorRequest;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorResponse;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.common.PageResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorRequest;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorResponse;
 
-@RequestMapping("/api/color")
+@RequestMapping("/api/admin/color")
 public interface ColorsAPI {
     @PostMapping
     void save(@RequestBody @Valid ColorRequest colorRequest);

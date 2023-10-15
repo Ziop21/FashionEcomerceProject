@@ -1,15 +1,15 @@
-package project.fashionecomerce.backend.fashionecomerceproject.service.color;
+package project.fashionecommerce.backend.fashionecommerceproject.service.database.color;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorId;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorMapper;
-import project.fashionecomerce.backend.fashionecomerceproject.exception.MyConflictsException;
-import project.fashionecomerce.backend.fashionecomerceproject.exception.MyResourceNotFoundException;
-import project.fashionecomerce.backend.fashionecomerceproject.repository.color.ColorEntity;
-import project.fashionecomerce.backend.fashionecomerceproject.repository.color.ColorRepository;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConflictsException;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.color.ColorEntity;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.color.ColorRepository;
 
 @Service
 @RequiredArgsConstructor

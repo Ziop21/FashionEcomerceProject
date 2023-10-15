@@ -1,16 +1,16 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.color;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorModelMapper;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorRequest;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorResponse;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorId;
-import project.fashionecomerce.backend.fashionecomerceproject.service.color.ColorUseCaseService;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorModelMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorRequest;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.color.ColorUseCaseService;
 
 @RestController
 @RequiredArgsConstructor

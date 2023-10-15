@@ -1,4 +1,4 @@
-package project.fashionecomerce.backend.fashionecomerceproject.repository.color;
+package project.fashionecommerce.backend.fashionecommerceproject.repository.database.color;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

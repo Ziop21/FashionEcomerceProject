@@ -1,12 +1,12 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.color;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorRequest;
-import project.fashionecomerce.backend.fashionecomerceproject.controller.color.models.ColorResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorRequest;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models.ColorResponse;
 
-@RequestMapping("/api/color/{colorId}")
+@RequestMapping("/api/admin/color/{colorId}")
 public interface ColorAPI {
     @PutMapping
     void update(@PathVariable String colorId, @RequestBody @Valid ColorRequest colorRequest);

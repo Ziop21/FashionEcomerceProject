@@ -1,16 +1,16 @@
-package project.fashionecomerce.backend.fashionecomerceproject.service.color;
+package project.fashionecommerce.backend.fashionecommerceproject.service.database.color;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorId;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorMapper;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.ColorQuery;
-import project.fashionecomerce.backend.fashionecomerceproject.repository.color.ColorEntity;
-import project.fashionecomerce.backend.fashionecomerceproject.repository.color.ColorRepository;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.color.ColorEntity;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.color.ColorRepository;
 
 @Service
 @RequiredArgsConstructor

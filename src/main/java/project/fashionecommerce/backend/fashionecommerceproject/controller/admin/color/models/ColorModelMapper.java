@@ -1,7 +1,7 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.color.models;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models;
 
 import org.mapstruct.Mapper;
-import project.fashionecomerce.backend.fashionecomerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

@@ -1,4 +1,4 @@
-package project.fashionecomerce.backend.fashionecomerceproject.controller.color.models;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.color.models;
 
 import jakarta.validation.constraints.NotNull;
 
