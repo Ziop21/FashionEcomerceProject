@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
-import project.fashionecommerce.backend.fashionecommerceproject.repository.auditable.Auditable;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.auditable.FullAuditable;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.role.RoleEntity;
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode()
 @Document(value = "user")
-public class UserEntity extends Auditable implements Serializable {
+public class UserEntity extends FullAuditable implements Serializable {
     @Id
     private String id;
     private List<RoleEntity> roles;

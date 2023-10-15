@@ -2,54 +2,48 @@ package project.fashionecommerce.backend.fashionecommerceproject.util;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
-
 import io.jsonwebtoken.*;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
-import project.fashionecommerce.backend.fashionecommerceproject.repository.security.user_detail.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
 
 @Component
 public class JwtUtils implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${fashion_ecomerce.app.jwtSecret}")
+    @Value("${fashion_ecommerce.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${fashion_ecomerce.app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    @Value("${fashion_ecommerce.app.jwtExpirationMs}")
+    private Long jwtExpirationMs;
+    @Value("${fashion_ecommerce.app.cookieExpirationS}")
+    private Long cookieExpirationS;
 
-    @Value("${fashion_ecomerce.app.jwtCookieName}")
+    @Value("${fashion_ecommerce.app.jwtCookieName}")
     private String jwtCookie;
 
-    @Value("${fashion_ecomerce.app.jwtRefreshCookieName}")
+    @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
     private String jwtRefreshCookie;
 
-
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, String path) {
         String jwt = generateTokenFromEmail(userPrincipal.getEmail());
-        return generateCookie(jwtCookie, jwt, "/api");
+        return generateCookie(jwtCookie, jwt, path);
     }
 
-    public ResponseCookie generateJwtCookie(User user) {
+    public ResponseCookie generateJwtCookie(User user, String path) {
         String jwt = generateTokenFromEmail(user.email());
-        return generateCookie(jwtCookie, jwt, "/api");
+        return generateCookie(jwtCookie, jwt, path);
     }
 
-    public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refresh-token");
-    }
-
-    public String getJwtFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtCookie);
+    public ResponseCookie generateRefreshJwtCookie(String refreshToken, String path) {
+        return generateCookie(jwtRefreshCookie, refreshToken, path);
     }
 
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
@@ -66,7 +60,7 @@ public class JwtUtils implements Serializable {
         return cookie;
     }
 
-    public String getUserEmailFromJwtToken(String token) {
+    public String getValueFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -97,8 +91,15 @@ public class JwtUtils implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes())
                 .compact();
     }
+    public String generateTokenFromCartId(String cartId) {
+        return Jwts.builder()
+                .setSubject(cartId)
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes())
+                .compact();
+    }
 
-    private String getCookieValueByName(HttpServletRequest request, String name) {
+    public String getCookieValueByName(HttpServletRequest request, String name) {
         Cookie cookie = WebUtils.getCookie(request, name);
         if (cookie != null) {
             return cookie.getValue();
@@ -107,8 +108,8 @@ public class JwtUtils implements Serializable {
         }
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path) {
-        ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+    public ResponseCookie generateCookie(String name, String value, String path) {
+        ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(cookieExpirationS).httpOnly(true).build();
         return cookie;
     }
 }

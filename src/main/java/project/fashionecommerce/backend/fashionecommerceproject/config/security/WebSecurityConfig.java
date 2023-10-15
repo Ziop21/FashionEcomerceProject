@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.authentication.AuthEntryPointJwt;
-import project.fashionecommerce.backend.fashionecommerceproject.service.userDetails.UserDetailsServiceImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -61,10 +61,9 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-                            .requestMatchers("/api/auth/login").hasAnyAuthority("GUEST")
                             .requestMatchers("/api/auth/**").hasAnyAuthority("ADMIN", "CUSTOMER", "STAFF")
                             .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
-                            .requestMatchers("/api/guest/**").hasAnyAuthority("GUEST")
+                            .requestMatchers("/api/guest/**").permitAll()
                             .requestMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER")
                             .requestMatchers("/api/staff/**").hasAnyAuthority("STAFF")
                             .anyRequest().authenticated()
