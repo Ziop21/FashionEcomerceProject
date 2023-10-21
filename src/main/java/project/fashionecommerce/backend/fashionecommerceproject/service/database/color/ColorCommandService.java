@@ -28,7 +28,7 @@ public class ColorCommandService {
         ColorEntity colorEntity = colorRepository.findById(colorId.id()).orElseThrow(MyResourceNotFoundException::new);
         if(!color.name().equals(colorEntity.getName())&& colorRepository.existsByName(color.name()))
             throw new MyConflictsException();
-        colorMapper.updateExist(color, colorEntity);
+        colorMapper.updateExisted(color, colorEntity);
         colorRepository.save(colorEntity);
     }
     public void delete(ColorId colorId) {

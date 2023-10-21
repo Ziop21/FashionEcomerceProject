@@ -20,7 +20,7 @@ public class ColorQueryService {
     @NonNull
     final ColorMapper colorMapper;
     public Page<Color> findAll(ColorQuery colorQuery, PageRequest pageRequest) {
-        Page<ColorEntity> colorEntityPage = colorRepository.customerFindAll(colorQuery.search(),pageRequest);
+        Page<ColorEntity> colorEntityPage = colorRepository.customerFindAll(colorQuery.search(), pageRequest);
         return colorEntityPage.map(colorMapper::toDto);
     }
     public Color findById(ColorId colorId) {
