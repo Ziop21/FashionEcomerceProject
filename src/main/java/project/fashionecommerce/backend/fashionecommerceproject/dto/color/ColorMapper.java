@@ -15,5 +15,5 @@ public interface ColorMapper {
     @Mapping(source = "id", target = "id", ignore = true)
     @Mapping(source = "createdBy", target = "createdBy", ignore = true)
     @Mapping(source = "createdAt", target = "createdAt", ignore = true)
-    void updateExist(Color color, @MappingTarget ColorEntity colorEntity);
+    void updateExisted(Color color, @MappingTarget ColorEntity colorEntity);
 }

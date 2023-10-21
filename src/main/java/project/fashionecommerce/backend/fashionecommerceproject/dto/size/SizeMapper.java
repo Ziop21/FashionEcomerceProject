@@ -16,5 +16,5 @@ public interface SizeMapper {
     @Mapping(source = "id", target = "id", ignore = true)
     @Mapping(source = "createdAt", target = "createdAt", ignore = true)
     @Mapping(source = "createdBy", target = "createdBy", ignore = true)
-    void updateExist(Size size, @MappingTarget SizeEntity sizeEntity);
+    void updateExisted(Size size, @MappingTarget SizeEntity sizeEntity);
 }

@@ -23,7 +23,8 @@ public class SizeQueryService {
     final SizeMapper sizeMapper;
 
     public Size findById(SizeId sizeId) {
-        SizeEntity sizeEntity = sizeRepository.findById(sizeId.id()).orElseThrow(MyResourceNotFoundException::new);
+        SizeEntity sizeEntity = sizeRepository.findById(sizeId.id())
+                .orElseThrow(MyResourceNotFoundException::new);
         return sizeMapper.toDto(sizeEntity);
     }
 
