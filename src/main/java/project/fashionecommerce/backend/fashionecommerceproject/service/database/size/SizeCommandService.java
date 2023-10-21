@@ -31,7 +31,7 @@ public class SizeCommandService {
         if (!size.name().equals(foundEntity.getName())
                 && sizeRepository.existsByName(size.name()))
             throw new MyConflictsException();
-        sizeMapper.updateExist(size, foundEntity);
+        sizeMapper.updateExisted(size, foundEntity);
         sizeRepository.save(foundEntity);
     }
 
