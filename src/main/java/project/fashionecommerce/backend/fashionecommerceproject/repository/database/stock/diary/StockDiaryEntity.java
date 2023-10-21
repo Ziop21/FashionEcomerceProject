@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Document(value = "stockDiary")
+@Document(value = "stock_diary")
 public class StockDiaryEntity extends FullAuditable implements Serializable{
     @Id
     String id;

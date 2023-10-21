@@ -8,7 +8,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.common.models.Pa
 import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models.StockDiaryResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models.StockDiaryRequest;
 
-@RequestMapping("/api/admin/stockDiary")
+@RequestMapping("/api/admin/stock-diary")
 public interface StockDiariesAPI {
     @PostMapping
     void save(@RequestBody @Valid StockDiaryRequest stockDiaryRequest);

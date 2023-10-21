@@ -18,12 +18,20 @@ public class StockDiaryUseCaseService {
     @NonNull
     final StockDiaryQueryService stockDiaryQueryService;
     @Transactional
-    public void save(StockDiary stockDiary) {stockDiaryCommandService.save(stockDiary);}
+    public void save(StockDiary stockDiary) {
+        stockDiaryCommandService.save(stockDiary);
+    }
     @Transactional
-    public void update(StockDiaryId stockDiaryId, StockDiary stockDiary) { stockDiaryCommandService.update(stockDiaryId, stockDiary);}
+    public void update(StockDiaryId stockDiaryId, StockDiary stockDiary) {
+        stockDiaryCommandService.update(stockDiaryId, stockDiary);
+    }
     @Transactional
-    public void delete(StockDiaryId stockDiaryId) { stockDiaryCommandService.delete(stockDiaryId);}
-    public StockDiary findById(StockDiaryId stockDiaryId) {return stockDiaryQueryService.findById(stockDiaryId);}
+    public void delete(StockDiaryId stockDiaryId) {
+        stockDiaryCommandService.delete(stockDiaryId);
+    }
+    public StockDiary findById(StockDiaryId stockDiaryId) {
+        return stockDiaryQueryService.findById(stockDiaryId);
+    }
     public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
         return stockDiaryQueryService.findAll(stockDiaryQuery, pageRequest);
     }
