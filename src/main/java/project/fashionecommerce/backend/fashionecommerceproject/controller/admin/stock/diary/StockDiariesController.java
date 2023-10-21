@@ -16,6 +16,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiaryQuery;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.diary.StockDiaryUseCaseService;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 public class StockDiariesController implements StockDiariesAPI {
@@ -29,8 +31,8 @@ public class StockDiariesController implements StockDiariesAPI {
         stockDiaryUseCaseService.save(stockDiary);
     }
     @Override
-    public ResponseEntity<PageResponse<StockDiaryResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
-        StockDiaryQuery stockDiaryQuery = new StockDiaryQuery(searchString);
+    public ResponseEntity<PageResponse<StockDiaryResponse>> findAll(LocalDateTime fromDate, LocalDateTime toDate, String sort, Integer pageCurrent, Integer pageSize) {
+        StockDiaryQuery stockDiaryQuery = new StockDiaryQuery(fromDate, toDate);
         PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
 
         Page<StockDiary> stockDiaryPage = stockDiaryUseCaseService.findAll(stockDiaryQuery, pageRequest);

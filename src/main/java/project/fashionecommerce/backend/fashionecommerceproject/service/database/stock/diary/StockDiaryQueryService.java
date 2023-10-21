@@ -20,7 +20,7 @@ public class StockDiaryQueryService {
     @NonNull
     final StockDiaryMapper stockDiaryMapper;
     public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
-        Page<StockDiaryEntity> stockDiaryEntityPage = stockDiaryRepository.customerFindAll(stockDiaryQuery.search(), pageRequest);
+        Page<StockDiaryEntity> stockDiaryEntityPage = stockDiaryRepository.customFindAll(stockDiaryQuery.fromDate(), stockDiaryQuery.toDate(), pageRequest);
         return stockDiaryEntityPage.map(stockDiaryMapper::toDto);
     }
 

@@ -17,9 +17,9 @@ import java.io.Serializable;
 @Document(value = "stock_diary")
 public class StockDiaryEntity extends FullAuditable implements Serializable{
     @Id
-    String id;
-    String stockId;
-    long quantity;
-    long errorQuantity;
-    String note;
+    private String id;
+    private String stockId;
+    private Long quantity;
+    private Long errorQuantity;
+    private String note;
 }

@@ -6,9 +6,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface StockDiaryRepository extends MongoRepository<StockDiaryEntity, String>{
     @Query(value = "{ 'createdBy': { $regex: ?0, $options: 'i'} }")
-    Page<StockDiaryEntity> customerFindAll(String search, Pageable pageable);
+    Page<StockDiaryEntity> customFindAll(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable);
     boolean existsById(String createdBy);
 }
