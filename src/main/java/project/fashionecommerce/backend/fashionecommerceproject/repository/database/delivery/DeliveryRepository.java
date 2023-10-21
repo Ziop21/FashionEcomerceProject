@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeliveryRepository extends MongoRepository<DeliveryEntity, String> {
     @Query(value = "{ 'name': { $regex: ?0, $options: 'i'} }")
-    Page<DeliveryEntity> customerFindAll(String search, Pageable pageable);
+    Page<DeliveryEntity> customFindAll(String search, Pageable pageable);
     Boolean existsByName(String name);
 }

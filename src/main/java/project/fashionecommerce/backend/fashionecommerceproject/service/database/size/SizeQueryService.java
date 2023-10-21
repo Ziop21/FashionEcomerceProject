@@ -29,7 +29,7 @@ public class SizeQueryService {
     }
 
     public Page<Size> findAll(SizeQuery sizeQuery, PageRequest pageRequest) {
-        Page<SizeEntity> sizeEntityPage = sizeRepository.customerFindAll(sizeQuery.search(), pageRequest);
+        Page<SizeEntity> sizeEntityPage = sizeRepository.customFindAll(sizeQuery.search(), pageRequest);
         return sizeEntityPage.map(sizeMapper::toDto);
     }
 }

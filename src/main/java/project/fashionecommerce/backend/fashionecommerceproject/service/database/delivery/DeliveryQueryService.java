@@ -21,7 +21,7 @@ public class DeliveryQueryService {
     @NonNull final DeliveryRepository deliveryRepository;
     @NonNull final DeliveryMapper deliveryMapper;
     public Page<Delivery> findAll(DeliveryQuery deliveryQuery, PageRequest pageRequest) {
-        Page<DeliveryEntity> deliveryEntities = deliveryRepository.customerFindAll(deliveryQuery.search(), pageRequest);
+        Page<DeliveryEntity> deliveryEntities = deliveryRepository.customFindAll(deliveryQuery.search(), pageRequest);
         return deliveryEntities.map(deliveryMapper::toDto);
     }
 
