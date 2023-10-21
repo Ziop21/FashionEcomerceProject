@@ -1,7 +1,8 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary.models;
+package project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary;
+
 import java.time.LocalDateTime;
 
-public record StockDiaryResponse(
+public record StockDiary(
         String id,
         String stockId,
         long quantity,

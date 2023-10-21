@@ -1,7 +1,6 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary.models;
-
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models;
 import org.mapstruct.Mapper;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.stockDiary.StockDiary;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiary;
 @Mapper(componentModel = "spring")
 public interface StockDiaryModelMapper {
 

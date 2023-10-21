@@ -1,10 +1,10 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary.models.StockDiaryRequest;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary.models.StockDiaryResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models.StockDiaryResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models.StockDiaryRequest;
 
 @RequestMapping("/api/admin/stockDiary/{stockDiaryId}")
 public interface StockDiaryAPI {

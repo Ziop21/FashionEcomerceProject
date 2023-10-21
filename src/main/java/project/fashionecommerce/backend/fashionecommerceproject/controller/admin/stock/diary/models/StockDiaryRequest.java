@@ -1,6 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stockDiary.models;
-
-import org.bson.types.ObjectId;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models;
 
 public record StockDiaryRequest(
         String stockId,
