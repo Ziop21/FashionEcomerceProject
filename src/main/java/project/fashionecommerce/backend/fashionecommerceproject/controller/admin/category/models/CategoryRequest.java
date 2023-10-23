@@ -9,6 +9,8 @@ public record CategoryRequest(
         @NotNull
         String name,
         String slug,
-        String image
+        String image,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

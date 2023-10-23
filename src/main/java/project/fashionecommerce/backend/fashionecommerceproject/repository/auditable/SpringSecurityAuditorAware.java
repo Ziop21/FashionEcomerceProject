@@ -18,7 +18,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal);
         if (currentUser.get().toString() == "anonymousUser")
-            return Optional.ofNullable(currentUser.toString());
+            return Optional.ofNullable(null);
         return Optional.ofNullable(currentUser
                     .map(UserDetailsImpl.class::cast)
                     .get().getId());

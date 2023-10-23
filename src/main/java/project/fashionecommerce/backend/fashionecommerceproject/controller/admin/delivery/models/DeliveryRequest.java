@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 public record DeliveryRequest(
         @NotNull
         String name,
-        String description
+        String description,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

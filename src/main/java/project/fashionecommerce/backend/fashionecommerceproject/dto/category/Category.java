@@ -1,8 +1,11 @@
 package project.fashionecommerce.backend.fashionecommerceproject.dto.category;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 public record Category (
         String id,
         List<String> categoryIds,
@@ -12,6 +15,8 @@ public record Category (
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isActive,
+        Boolean isDeleted
 ) {
 }
