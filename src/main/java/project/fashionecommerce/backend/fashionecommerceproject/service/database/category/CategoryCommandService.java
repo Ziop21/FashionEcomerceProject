@@ -2,6 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.service.databas
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.Category;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.CategoryId;
@@ -10,6 +11,9 @@ import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConf
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.category.CategoryEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.category.CategoryRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

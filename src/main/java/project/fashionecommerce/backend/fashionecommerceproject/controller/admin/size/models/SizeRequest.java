@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record SizeRequest(
         @NotNull
-        String name
+        String name,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

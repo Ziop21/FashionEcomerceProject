@@ -9,6 +9,8 @@ public record UserLevelRequest(
         @NotNull
         Long minPoint,
         @NotNull
-        Double discount
+        Double discount,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }
