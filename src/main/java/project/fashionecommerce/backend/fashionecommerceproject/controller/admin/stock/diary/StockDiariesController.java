@@ -31,11 +31,10 @@ public class StockDiariesController implements StockDiariesAPI {
         stockDiaryUseCaseService.save(stockDiary);
     }
     @Override
-    public ResponseEntity<PageResponse<StockDiaryResponse>> findAll(LocalDateTime fromDate, LocalDateTime toDate, String sort, Integer pageCurrent, Integer pageSize) {
-        StockDiaryQuery stockDiaryQuery = new StockDiaryQuery(fromDate, toDate);
+    public ResponseEntity<PageResponse<StockDiaryResponse>> findAll( String sort, Integer pageCurrent, Integer pageSize) {
         PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
 
-        Page<StockDiary> stockDiaryPage = stockDiaryUseCaseService.findAll(stockDiaryQuery, pageRequest);
+        Page<StockDiary> stockDiaryPage = stockDiaryUseCaseService.findAll(pageRequest);
 
         PageResponse<StockDiaryResponse> stockDiaryResponsePageResponse = new PageResponse<>(stockDiaryPage.map(stockDiaryModelMapper::toModel));
         return new ResponseEntity<>(stockDiaryResponsePageResponse, HttpStatus.OK);

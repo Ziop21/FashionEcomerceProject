@@ -19,11 +19,10 @@ public class StockDiaryQueryService {
     final StockDiaryRepository stockDiaryRepository;
     @NonNull
     final StockDiaryMapper stockDiaryMapper;
-    public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
-        Page<StockDiaryEntity> stockDiaryEntityPage = stockDiaryRepository.customFindAll(stockDiaryQuery.fromDate(), stockDiaryQuery.toDate(), pageRequest);
+    public Page<StockDiary> findAll(PageRequest pageRequest) {
+        Page<StockDiaryEntity> stockDiaryEntityPage = stockDiaryRepository.findAll( pageRequest);
         return stockDiaryEntityPage.map(stockDiaryMapper::toDto);
     }
-
     public StockDiary findById(StockDiaryId stockDiaryId) {
         StockDiaryEntity stockDiaryEntity = stockDiaryRepository.findById(stockDiaryId.id()).orElseThrow(MyResourceNotFoundException::new);
         return stockDiaryMapper.toDto(stockDiaryEntity);

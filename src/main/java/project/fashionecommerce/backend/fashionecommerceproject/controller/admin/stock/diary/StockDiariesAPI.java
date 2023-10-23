@@ -16,8 +16,6 @@ public interface StockDiariesAPI {
     void save(@RequestBody @Valid StockDiaryRequest stockDiaryRequest);
     @GetMapping
     ResponseEntity<PageResponse<StockDiaryResponse>> findAll(
-            @RequestParam(required = false, value = "fromDate", defaultValue = "") LocalDateTime fromDate,
-            @RequestParam(required = false, value = "toDate", defaultValue = "") LocalDateTime toDate,
             @RequestParam(required = false, value = "sort", defaultValue = "") String sort,
             @RequestParam(required = false, value = "pageCurrent", defaultValue = "1") @Min(1) Integer pageCurrent,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize

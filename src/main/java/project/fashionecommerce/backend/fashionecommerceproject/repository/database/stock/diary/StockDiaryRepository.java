@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface StockDiaryRepository extends MongoRepository<StockDiaryEntity, String>{
-    @Query(value = "{ 'createdBy': { $regex: ?0, $options: 'i'} }")
-    Page<StockDiaryEntity> customFindAll(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable);
-    boolean existsById(String createdBy);
+    Page<StockDiaryEntity> findAll(Pageable pageable);
+
+
+    boolean existsByCreatedBy(String createdBy);
 }
+
