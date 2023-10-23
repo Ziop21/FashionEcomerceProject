@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ColorRepository extends MongoRepository<ColorEntity, String> {
     @Query(value = "{ 'name': { $regex: ?0, $options: 'i' } }")
-    Page<ColorEntity> customerFindAll(String search, Pageable pageable);
+    Page<ColorEntity> customFindAll(String search, Pageable pageable);
     Boolean existsByName(String name);
 }

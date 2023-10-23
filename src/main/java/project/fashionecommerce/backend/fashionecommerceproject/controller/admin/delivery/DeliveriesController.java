@@ -31,7 +31,7 @@ public class DeliveriesController implements DeliveriesAPI{
     public ResponseEntity<PageResponse<DeliveryResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
         DeliveryQuery deliveryQuery = new DeliveryQuery(searchString);
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent-1,pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
 
         Page<Delivery> deliveryPage = deliveryUseCaseService.findAll(deliveryQuery, pageRequest);
 

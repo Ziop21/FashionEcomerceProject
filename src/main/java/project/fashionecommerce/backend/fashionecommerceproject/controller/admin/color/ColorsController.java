@@ -33,7 +33,7 @@ public class ColorsController implements ColorsAPI {
     public ResponseEntity<PageResponse<ColorResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
        ColorQuery colorQuery = new ColorQuery(searchString);
 
-       PageRequest pageRequest = PageRequest.of(pageCurrent-1,pageSize, MySortHandler.of(sort));
+       PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
 
        Page<Color>  colorPage = colorUseCaseService.findAll(colorQuery, pageRequest);
 
