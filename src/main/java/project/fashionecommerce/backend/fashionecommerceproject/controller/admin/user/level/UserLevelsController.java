@@ -28,8 +28,8 @@ public class UserLevelsController implements UserLevelsAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<UserLevelResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageUserLevel) {
-        UserLevelQuery userLevelQuery = new UserLevelQuery(searchString);
+    public ResponseEntity<PageResponse<UserLevelResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageUserLevel) {
+        UserLevelQuery userLevelQuery = new UserLevelQuery(search);
         PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageUserLevel, MySortHandler.of(sort));
 
         Page<UserLevel> userLevelPage = userLevelUseCaseService.findAll(userLevelQuery, pageRequest);

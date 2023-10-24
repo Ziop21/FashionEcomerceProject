@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 @RequiredArgsConstructor
 public class StockQueryService {
@@ -33,10 +32,10 @@ public class StockQueryService {
     public Page<Stock> findAll(StockQuery stockQuery, PageRequest pageRequest) {
         Criteria criteria = new Criteria();
 
-        if (stockQuery.searchString() != null && !stockQuery.searchString().isBlank()) {
+        if (stockQuery.search() != null && !stockQuery.search().isBlank()) {
             criteria.orOperator(
-                    Criteria.where("products.name").regex(".*" + stockQuery.searchString() + ".*", "i"),
-                    Criteria.where("products.description").regex(".*" + stockQuery.searchString() + ".*", "i")
+                    Criteria.where("products.name").regex(".*" + stockQuery.search() + ".*", "i"),
+                    Criteria.where("products.description").regex(".*" + stockQuery.search() + ".*", "i")
             );
         }
 

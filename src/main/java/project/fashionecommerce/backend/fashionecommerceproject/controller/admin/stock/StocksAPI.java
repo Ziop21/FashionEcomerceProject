@@ -21,7 +21,7 @@ public interface StocksAPI {
 
     @GetMapping
     ResponseEntity<PageResponse<StockResponse>> findAll(
-            @RequestParam(required = false, value = "searchString", defaultValue = "") String searchString,
+            @RequestParam(required = false, value = "search", defaultValue = "") String search,
             @RequestParam(required = false, value = "sizeIds", defaultValue = "") List<String> sizeIds,
             @RequestParam(required = false, value = "colorIds", defaultValue = "") List<String> colorIds,
             @RequestParam(required = false, value = "sort", defaultValue = "") String sort,
