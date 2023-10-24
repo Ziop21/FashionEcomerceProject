@@ -29,9 +29,9 @@ public class StocksController implements StocksAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<StockResponse>> findAll(String searchString, List<String> sizeIds, List<String> colorIds, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<StockResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds, String sort, Integer pageCurrent, Integer pageSize) {
         StockQuery stockQuery = StockQuery.builder()
-                .searchString(searchString)
+                .search(search)
                 .sizeIds(sizeIds)
                 .colorIds(colorIds)
                 .build();

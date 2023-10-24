@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ import project.fashionecommerce.backend.fashionecommerceproject.config.security.
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationUseCaseService {
@@ -32,6 +37,10 @@ public class AuthenticationUseCaseService {
     @NonNull final UserMapper userMapper;
     @NonNull final JwtUtils jwtUtils;
     @Autowired final PasswordEncoder passwordEncoder;
+    public List<String> getMyRoles(String username) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return securityContext.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+    }
 
     @Transactional
     public String refreshToken(String refreshToken) {

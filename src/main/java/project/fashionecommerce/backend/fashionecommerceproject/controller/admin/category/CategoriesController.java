@@ -29,8 +29,8 @@ public class CategoriesController implements CategoriesAPI{
     }
 
     @Override
-    public ResponseEntity<PageResponse<CategoryResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
-        CategoryQuery categoryQuery = new CategoryQuery(searchString);
+    public ResponseEntity<PageResponse<CategoryResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+        CategoryQuery categoryQuery = new CategoryQuery(search);
         PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
         Page<Category> categoryPage = categoryUseCaseService.findAll(categoryQuery, pageRequest);
         PageResponse<CategoryResponse> categoryResponsePageResponse = new PageResponse<>(categoryPage.map(categoryModelMapper::toModel));

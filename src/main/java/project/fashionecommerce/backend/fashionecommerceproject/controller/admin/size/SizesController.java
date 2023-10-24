@@ -30,8 +30,8 @@ public class SizesController implements SizesAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<SizeResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
-        SizeQuery sizeQuery = new SizeQuery(searchString);
+    public ResponseEntity<PageResponse<SizeResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+        SizeQuery sizeQuery = new SizeQuery(search);
         PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
 
         Page<Size> sizePage = sizeUseCaseService.findAll(sizeQuery, pageRequest);

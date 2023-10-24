@@ -30,8 +30,8 @@ public class ColorsController implements ColorsAPI {
         colorUseCaseService.save(color);
     }
     @Override
-    public ResponseEntity<PageResponse<ColorResponse>> findAll(String searchString, String sort, Integer pageCurrent, Integer pageSize) {
-       ColorQuery colorQuery = new ColorQuery(searchString);
+    public ResponseEntity<PageResponse<ColorResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+       ColorQuery colorQuery = new ColorQuery(search);
 
        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
 
