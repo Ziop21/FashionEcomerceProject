@@ -32,7 +32,7 @@ public class StockDiaryUseCaseService {
     public StockDiary findById(StockDiaryId stockDiaryId) {
         return stockDiaryQueryService.findById(stockDiaryId);
     }
-    public Page<StockDiary> findAll( PageRequest pageRequest) {
-        return stockDiaryQueryService.findAll( pageRequest);
+    public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
+        return stockDiaryQueryService.findAll(stockDiaryQuery, pageRequest);
     }
 }

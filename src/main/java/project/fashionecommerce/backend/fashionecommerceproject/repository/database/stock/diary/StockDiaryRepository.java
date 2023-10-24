@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Repository
 public interface StockDiaryRepository extends MongoRepository<StockDiaryEntity, String>{
     Page<StockDiaryEntity> findAll(Pageable pageable);
-
-
     boolean existsByCreatedBy(String createdBy);
 }
 
