@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.category.Category;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.auditable.FullAuditable;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
