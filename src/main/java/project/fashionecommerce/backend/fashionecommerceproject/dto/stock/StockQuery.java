@@ -5,7 +5,7 @@ import java.util.List;
 
 @Builder
 public record StockQuery(
-        String searchString,
+        String search,
         List<String> colorIds,
         List<String> sizeIds
 ) {

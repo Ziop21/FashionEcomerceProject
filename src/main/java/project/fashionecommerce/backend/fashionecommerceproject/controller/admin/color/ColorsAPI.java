@@ -14,7 +14,7 @@ public interface ColorsAPI {
     void save(@RequestBody @Valid ColorRequest colorRequest);
     @GetMapping
     ResponseEntity<PageResponse<ColorResponse>> findAll(
-            @RequestParam(required = false,value = "searchString", defaultValue = "") String searchString,
+            @RequestParam(required = false,value = "search", defaultValue = "") String search,
             @RequestParam(required = false,value = "sort", defaultValue = "") String sort,
             @RequestParam(required = false,value = "pageCurrent", defaultValue = "1") @Min(1) Integer pageCurrent,
             @RequestParam(required = false,value = "pageSize",defaultValue = "20") Integer pageSize
