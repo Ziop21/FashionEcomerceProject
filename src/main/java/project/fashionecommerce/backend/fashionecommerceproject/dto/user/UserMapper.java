@@ -2,6 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.dto.user;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.role.Role;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserEntity;
 import java.util.List;
@@ -19,4 +20,9 @@ public interface UserMapper {
 
     @Mapping(source = "roles", target = "roles")
     User updateDtoRoles(User user, List<Role> roles);
+
+    @Mapping(source = "id", target = "id", ignore = true)
+    @Mapping(source = "createdAt", target = "createdAt", ignore = true)
+    @Mapping(source = "createdBy", target = "createdBy", ignore = true)
+    void updateExisted(User user, @MappingTarget UserEntity foundEntity);
 }

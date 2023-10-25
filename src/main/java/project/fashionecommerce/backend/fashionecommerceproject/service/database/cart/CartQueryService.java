@@ -39,8 +39,8 @@ public class CartQueryService {
 
         if (cartQuery.search() != null && !cartQuery.search().isBlank()) {
             criteria.orOperator(
-                    Criteria.where("users.firstname").regex(".*" + cartQuery.search() + ".*", "i"),
-                    Criteria.where("users.lastname").regex(".*" + cartQuery.search() + ".*", "i")
+                    Criteria.where("users.firstName").regex(".*" + cartQuery.search() + ".*", "i"),
+                    Criteria.where("users.lastName").regex(".*" + cartQuery.search() + ".*", "i")
             );
         }
 

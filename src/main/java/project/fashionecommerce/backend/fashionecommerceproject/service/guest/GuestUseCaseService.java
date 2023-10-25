@@ -24,6 +24,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.role.Role;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConfirmPasswordUnmatchException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConflictsException;
@@ -138,11 +139,7 @@ public class GuestUseCaseService {
             throw new MyConfirmPasswordUnmatchException();
         User user = userQueryService.findByEmail(register.email());
         String hashedPassword = passwordEncoder.encode(register.password());
-        user = userMapper.updateDtoHashedPassword(user, hashedPassword);
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role(ERole.CUSTOMER));
-        user = userMapper.updateDtoRoles(user, roles);
-        userCommandService.save(user);
+        userCommandService.updateHashedPassword(new UserId(user.id()), hashedPassword);
         return "Success";
     }
     public void sendEmailVerification(String email, Token token) {
@@ -166,8 +163,11 @@ public class GuestUseCaseService {
         }
         if (userQueryService.existsByEmail(email))
             throw new MyConflictsException();
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role(ERole.CUSTOMER));
         User user = User.builder()
                 .email(email)
+                .roles(roles)
                 .isEmailActive(false)
                 .isDeleted(false)
                 .build();
@@ -191,9 +191,7 @@ public class GuestUseCaseService {
         }
         Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
         foundToken = tokenCommandService.verifyExpiration(foundToken);
-        User user = userQueryService.findById(foundToken.userId());
-        user = userMapper.updateDtoIsEmailActive(user, true);
-        userCommandService.save(user);
+        userCommandService.updateIsEmailActive(new UserId(foundToken.userId()), true);
         tokenCommandService.deleteByUserId(foundToken.userId());
         return "Success";
     }
