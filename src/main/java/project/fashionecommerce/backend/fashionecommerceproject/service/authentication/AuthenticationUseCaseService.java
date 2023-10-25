@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.authentication.MyAuthentication;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.TokenRefreshException;
@@ -48,7 +49,7 @@ public class AuthenticationUseCaseService {
                 .map(tokenCommandService::verifyExpiration)
                 .map(Token::userId)
                 .map(userId -> {
-                    User user = userQueryService.findById(userId);
+                    User user = userQueryService.findById(new UserId(userId));
                     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user, "/api");
                     return jwtCookie.toString();
                 })
