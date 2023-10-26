@@ -52,7 +52,6 @@ public class GuestController implements GuestAPI{
     @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         Login login = guestModelMapper.toDto(loginRequest);
-
         MyAuthentication myAuthentication = guestUseCaseService.login(login);
 
         List<String> roles = myAuthentication.userDetails().getAuthorities().stream()

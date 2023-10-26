@@ -38,7 +38,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,11 +70,7 @@ public class GuestUseCaseService {
 
     @Transactional
     public MyAuthentication index(HttpServletRequest request) {
-        String currentUser = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-        if (currentUser == "anonymousUser") {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
             if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
                 Cart cart = Cart.builder().isDeleted(false).build();
@@ -97,11 +92,7 @@ public class GuestUseCaseService {
 
     @Transactional
     public MyAuthentication login(Login login) {
-        String currentUser = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-        if (currentUser != "anonymousUser") {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return MyAuthentication.builder().userDetails(userDetails).build();
@@ -126,11 +117,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String register(Register register) {
-        String currentUser = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-        if (currentUser != "anonymousUser") {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
@@ -152,11 +139,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String sendToken(String email) {
-        String currentUser = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-        if (currentUser != "anonymousUser") {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
@@ -180,11 +163,7 @@ public class GuestUseCaseService {
 
     @Transactional
     public String verifyToken(String token) {
-        String currentUser = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-        if (currentUser != "anonymousUser") {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
