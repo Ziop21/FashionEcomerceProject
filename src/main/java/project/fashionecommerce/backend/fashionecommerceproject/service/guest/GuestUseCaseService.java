@@ -117,7 +117,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String register(Register register) {
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
@@ -139,7 +139,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String sendToken(String email) {
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
@@ -163,7 +163,7 @@ public class GuestUseCaseService {
 
     @Transactional
     public String verifyToken(String token) {
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return "You have not signed out yet";
