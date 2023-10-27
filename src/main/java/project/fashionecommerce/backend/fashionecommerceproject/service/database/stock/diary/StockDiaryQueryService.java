@@ -19,6 +19,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.exception.MyReso
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.diary.StockDiaryEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.diary.StockDiaryRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,8 +42,10 @@ public class StockDiaryQueryService {
             );
         }
 
-        if (stockDiaryQuery.fromDate() != null && stockDiaryQuery.toDate() != null) {
-            criteria.and("createdAt").gte(stockDiaryQuery.fromDate()).lte(stockDiaryQuery.toDate());
+        if (stockDiaryQuery.fromDate() != null && stockDiaryQuery.toDate() != null){
+            LocalDateTime newFromDate = LocalDateTime.parse(stockDiaryQuery.fromDate() + "T00:00:00");
+            LocalDateTime newToDate = LocalDateTime.parse(stockDiaryQuery.toDate() + "T00:00:00");
+            criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
         Aggregation aggregation = Aggregation.newAggregation(

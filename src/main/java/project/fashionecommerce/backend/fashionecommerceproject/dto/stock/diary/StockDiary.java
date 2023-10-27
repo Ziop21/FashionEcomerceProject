@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public record StockDiary(
         String id,
         String stockId,
-        long quantity,
-        long errorQuantity,
+        Long quantity,
+        Long errorQuantity,
         String note,
         String updatedBy,
         String createdBy,

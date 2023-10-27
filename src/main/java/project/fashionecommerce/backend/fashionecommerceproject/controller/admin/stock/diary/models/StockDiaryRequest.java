@@ -1,9 +1,13 @@
 package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.diary.models;
 
+import jakarta.validation.constraints.NotNull;
+
 public record StockDiaryRequest(
+        @NotNull
         String stockId,
-        long quantity,
-        long errorQuantity,
+        @NotNull
+        Long quantity,
+        Long errorQuantity,
         String note
 ) {
 }
