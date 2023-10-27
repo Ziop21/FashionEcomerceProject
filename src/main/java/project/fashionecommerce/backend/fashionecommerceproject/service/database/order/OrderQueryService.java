@@ -14,11 +14,12 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrderStatus;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.Order;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.order.OrderRepository;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.order.OrderEntity;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public class OrderQueryService {
 
         if (orderQuery.fromDate() != null && orderQuery.toDate() != null){
             LocalDateTime newFromDate = LocalDateTime.parse(orderQuery.fromDate() + "T00:00:00");
-            LocalDateTime newToDate = LocalDateTime.parse(orderQuery.toDate() + "T00:00:00");
+            LocalDateTime newToDate = LocalDateTime.parse(orderQuery.toDate() + "T23:59:59");
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
@@ -82,5 +83,10 @@ public class OrderQueryService {
 
         return new PageImpl<>(orderPage.getContent().stream().map(orderMapper::toDto).collect(Collectors.toList()), pageRequest, total);
 
+    }
+
+    public Order findById(OrderId orderId) {
+        OrderEntity orderEntity = orderRepository.findById(orderId.id()).orElseThrow(MyResourceNotFoundException::new);
+        return orderMapper.toDto(orderEntity);
     }
 }

@@ -92,7 +92,7 @@ public class UserQueryService {
 
         if (userQuery.fromDate() != null && userQuery.toDate() != null){
             LocalDateTime newFromDate = LocalDateTime.parse(userQuery.fromDate() + "T00:00:00");
-            LocalDateTime newToDate = LocalDateTime.parse(userQuery.toDate() + "T00:00:00");
+            LocalDateTime newToDate = LocalDateTime.parse(userQuery.toDate() + "T23:59:59");
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 

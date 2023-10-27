@@ -18,7 +18,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.diary.StockDiaryEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.diary.StockDiaryRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class StockDiaryQueryService {
 
         if (stockDiaryQuery.fromDate() != null && stockDiaryQuery.toDate() != null){
             LocalDateTime newFromDate = LocalDateTime.parse(stockDiaryQuery.fromDate() + "T00:00:00");
-            LocalDateTime newToDate = LocalDateTime.parse(stockDiaryQuery.toDate() + "T00:00:00");
+            LocalDateTime newToDate = LocalDateTime.parse(stockDiaryQuery.toDate() + "T23:59:59");
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
