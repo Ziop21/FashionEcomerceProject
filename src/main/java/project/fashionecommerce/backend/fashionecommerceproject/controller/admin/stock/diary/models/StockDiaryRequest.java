@@ -7,6 +7,7 @@ public record StockDiaryRequest(
         String stockId,
         @NotNull
         Long quantity,
+        @NotNull
         Long errorQuantity,
         String note
 ) {
