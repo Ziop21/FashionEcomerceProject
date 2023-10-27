@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,9 +68,17 @@ public class GuestUseCaseService {
     @Value("${fashion_ecommerce.app.jwtCartCookieName}")
     private String cartTokenCookieName;
 
+    public String getCurrentUser(){
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal).get().toString();
+    }
+
     @Transactional
     public MyAuthentication index(HttpServletRequest request) {
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        String currentUser = getCurrentUser();
+        if (currentUser == "anonymousUser") {
             String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
             if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
                 Cart cart = Cart.builder().isDeleted(false).build();
@@ -90,42 +100,44 @@ public class GuestUseCaseService {
 
     @Transactional
     public MyAuthentication login(Login login) {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = getCurrentUser();
+        if (currentUser == "anonymousUser") {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(login.email(), login.password()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return MyAuthentication.builder().userDetails(userDetails).build();
+            String username = userDetails.getUsername() == null
+                    ? userDetails.getEmail() : userDetails.getUsername();
+
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+
+            ResponseCookie usernameCookie = jwtUtils.generateCookie("username", username, "/api");
+            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
+            Token refreshToken = tokenCommandService.save(userDetails.getId(), refreshTokenDurationMs);
+            ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.token(), "/api/auth/refresh-token");
+            return new MyAuthentication(userDetails, null, usernameCookie.toString(), jwtCookie.toString(), jwtRefreshCookie.toString());
         }
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(login.email(), login.password()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String username = userDetails.getUsername() == null
-                ? userDetails.getEmail() : userDetails.getUsername();
-
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        ResponseCookie usernameCookie = jwtUtils.generateCookie("username", username, "/api");
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
-        Token refreshToken = tokenCommandService.save(userDetails.getId(), refreshTokenDurationMs);
-        ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.token(), "/api/auth/refresh-token");
-        return new MyAuthentication(userDetails, null, usernameCookie.toString(), jwtCookie.toString(), jwtRefreshCookie.toString());
+        return MyAuthentication.builder().userDetails(userDetails).build();
     }
     @Transactional
     public String register(Register register) {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return "You have not signed out yet";
+        String currentUser = getCurrentUser();
+        if (currentUser == "anonymousUser") {
+            if (!register.confirmPassword().equals(register.password()))
+                throw new MyConfirmPasswordUnmatchException();
+            User user = userQueryService.findByEmail(register.email());
+            String hashedPassword = passwordEncoder.encode(register.password());
+            userCommandService.updateHashedPassword(new UserId(user.id()), hashedPassword);
+            return "Success";
         }
-        if (!register.confirmPassword().equals(register.password()))
-            throw new MyConfirmPasswordUnmatchException();
-        User user = userQueryService.findByEmail(register.email());
-        String hashedPassword = passwordEncoder.encode(register.password());
-        userCommandService.updateHashedPassword(new UserId(user.id()), hashedPassword);
-        return "Success";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return "You have not signed out yet";
+
     }
     public void sendEmailVerification(String email, Token token) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -137,39 +149,41 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String sendToken(String email) {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return "You have not signed out yet";
-        }
-        if (userQueryService.existsByEmail(email))
-            throw new MyConflictsException();
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role(ERole.CUSTOMER));
-        User user = User.builder()
-                .email(email)
-                .roles(roles)
-                .isEmailActive(false)
-                .isDeleted(false)
-                .build();
-        user = userCommandService.save(user);
+        String currentUser = getCurrentUser();
+        if (currentUser == "anonymousUser") {
+            if (userQueryService.existsByEmail(email))
+                throw new MyConflictsException();
+            List<Role> roles = new ArrayList<>();
+            roles.add(new Role(ERole.CUSTOMER));
+            User user = User.builder()
+                    .email(email)
+                    .roles(roles)
+                    .isEmailActive(false)
+                    .isDeleted(false)
+                    .build();
+            user = userCommandService.save(user);
 
-        Token token = tokenCommandService.save(user.id(), emailTokenDurationS);
-        this.sendEmailVerification(email, token);
-        return "Success";
+            Token token = tokenCommandService.save(user.id(), emailTokenDurationS);
+            this.sendEmailVerification(email, token);
+            return "Success";
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return "You have not signed out yet";
     }
 
     @Transactional
     public String verifyToken(String token) {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return "You have not signed out yet";
+        String currentUser = getCurrentUser();
+        if (currentUser == "anonymousUser") {
+            Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
+            foundToken = tokenCommandService.verifyExpiration(foundToken);
+            userCommandService.updateIsEmailActive(new UserId(foundToken.userId()), true);
+            tokenCommandService.deleteByUserId(foundToken.userId());
+            return "Success";
         }
-        Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
-        foundToken = tokenCommandService.verifyExpiration(foundToken);
-        userCommandService.updateIsEmailActive(new UserId(foundToken.userId()), true);
-        tokenCommandService.deleteByUserId(foundToken.userId());
-        return "Success";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return "You have not signed out yet";
     }
 }
