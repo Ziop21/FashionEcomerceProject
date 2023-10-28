@@ -3,7 +3,6 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class GuestController implements GuestAPI{
+public class GuestController implements GuestAPI {
     @NonNull final AuthenticationUseCaseService authenticationUseCaseService;
     @NonNull final JwtUtils jwtUtils;
     @NonNull final GuestModelMapper guestModelMapper;
