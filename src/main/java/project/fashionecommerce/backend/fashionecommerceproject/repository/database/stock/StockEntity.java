@@ -29,7 +29,5 @@ public class StockEntity extends FullAuditable implements Serializable {
     private List<ObjectId> colorIds;
     private Long quantity;
     private Boolean isMixedColor;
-    private Boolean isActive;
-    private Boolean isDeleted;
     private List<ReviewEntity> reviews;
 }

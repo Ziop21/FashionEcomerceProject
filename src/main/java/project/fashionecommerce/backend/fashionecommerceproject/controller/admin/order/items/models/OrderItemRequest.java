@@ -2,6 +2,8 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.admi
 
 public record OrderItemRequest (
         Long quantity,
-        String stockId
+        String stockId,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

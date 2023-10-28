@@ -8,6 +8,8 @@ public record CategoryProductRequest(
         @NotNull
         String productId,
         @NotNull
-        Boolean isDeleted
+        Boolean isDeleted,
+        @NotNull
+        Boolean isActive
 ) {
 }

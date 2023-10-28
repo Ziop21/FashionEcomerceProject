@@ -11,6 +11,8 @@ public record StockDiary(
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

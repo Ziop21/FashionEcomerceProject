@@ -18,6 +18,9 @@ public record ProductRequest(
         List<String> images,
         Double rating,
         @NotNull
+        Boolean isDeleted,
+
+        @NotNull
         Boolean isActive
 ) {
 }

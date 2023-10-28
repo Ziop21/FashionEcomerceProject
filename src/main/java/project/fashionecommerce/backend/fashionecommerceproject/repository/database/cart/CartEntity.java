@@ -23,6 +23,5 @@ public class CartEntity extends TimeAuditable implements Serializable {
     private String id;
     @Field(targetType = FieldType.OBJECT_ID)
     private String userId;
-    private Boolean isDeleted;
     List<CartItemEntity> cartItems;
 }

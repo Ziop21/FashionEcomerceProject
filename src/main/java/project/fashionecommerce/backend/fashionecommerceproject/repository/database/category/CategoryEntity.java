@@ -23,6 +23,4 @@ public class CategoryEntity extends FullAuditable implements Serializable {
     private String name;
     private String slug;
     private String image;
-    private Boolean isActive;
-    private Boolean isDeleted;
 }

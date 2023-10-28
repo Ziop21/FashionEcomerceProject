@@ -23,5 +23,4 @@ public class CategoryProductEntity extends FullAuditable implements Serializable
     private String categoryId;
     @Field(targetType = FieldType.OBJECT_ID)
     private String productId;
-    private Boolean isDeleted;
 }

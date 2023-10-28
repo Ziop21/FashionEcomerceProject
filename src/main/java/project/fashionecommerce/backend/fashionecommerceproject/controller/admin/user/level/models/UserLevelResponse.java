@@ -9,6 +9,7 @@ public record UserLevelResponse(
         Long minPoint,
         Double discount,
         Boolean isDeleted,
+        Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String createdBy,

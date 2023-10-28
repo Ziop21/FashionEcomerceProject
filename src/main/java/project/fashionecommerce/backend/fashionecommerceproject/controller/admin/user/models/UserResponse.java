@@ -22,6 +22,7 @@ public record UserResponse(
         String eWallet,
         String userLevelId,
         Boolean isDeleted,
+        Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String createdBy,

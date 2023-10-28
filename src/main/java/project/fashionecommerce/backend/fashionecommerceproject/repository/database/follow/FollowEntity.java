@@ -23,5 +23,4 @@ public class FollowEntity extends TimeAuditable implements Serializable {
     private String productId;
     @Field(targetType = FieldType.OBJECT_ID)
     private String userId;
-    private Boolean isDeleted;
 }

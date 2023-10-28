@@ -10,6 +10,7 @@ public record Cart(
         String id,
         String userId,
         Boolean isDeleted,
+        Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         List<CartItem> cartItems

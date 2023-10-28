@@ -27,5 +27,4 @@ public class ProductEntity extends FullAuditable implements Serializable {
     private Boolean isSelling;
     private List<String> images;
     private Double rating;
-    private Boolean isActive;
 }

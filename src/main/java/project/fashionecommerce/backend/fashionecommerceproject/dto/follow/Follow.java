@@ -8,6 +8,7 @@ public record Follow (
         String userId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        Boolean isDeleted
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

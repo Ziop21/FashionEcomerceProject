@@ -11,4 +11,6 @@ public abstract class TimeAuditable {
     protected LocalDateTime createdAt;
     @LastModifiedDate
     protected LocalDateTime updatedAt;
+    protected Boolean isDeleted;
+    protected Boolean isActive;
 }

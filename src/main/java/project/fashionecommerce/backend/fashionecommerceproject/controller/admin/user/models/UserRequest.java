@@ -31,6 +31,9 @@ public record UserRequest(
         String eWallet,
         String userLevelId,
         @NotNull
-        Boolean isDeleted
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ){
 }

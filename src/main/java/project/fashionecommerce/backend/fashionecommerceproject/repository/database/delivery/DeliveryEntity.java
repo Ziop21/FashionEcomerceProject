@@ -19,6 +19,4 @@ public class DeliveryEntity extends FullAuditable implements Serializable {
     private String id;
     private String name;
     private String description;
-    private Boolean isDeleted;
-    private Boolean isActive;
 }

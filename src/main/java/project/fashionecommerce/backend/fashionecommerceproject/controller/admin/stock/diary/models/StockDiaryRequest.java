@@ -9,6 +9,11 @@ public record StockDiaryRequest(
         Long quantity,
         @NotNull
         Long errorQuantity,
-        String note
+        String note,
+        @NotNull
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ) {
 }

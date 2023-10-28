@@ -37,5 +37,4 @@ public class UserEntity extends FullAuditable implements Serializable {
     private String eWallet;
     @Field(targetType = FieldType.OBJECT_ID)
     private String userLevelId;
-    private Boolean isDeleted = false;
 }

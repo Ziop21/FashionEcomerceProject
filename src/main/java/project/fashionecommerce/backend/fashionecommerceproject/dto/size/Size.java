@@ -8,6 +8,8 @@ public record Size (
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String createdBy,
-        String updatedBy
+        String updatedBy,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

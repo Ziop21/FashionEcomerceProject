@@ -10,6 +10,11 @@ public record ReviewRequest(
         String content,
         @NotNull
         Double rating,
-        List<String> images
+        List<String> images,
+        @NotNull
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ) {
 }

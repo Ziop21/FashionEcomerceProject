@@ -14,6 +14,7 @@ public record ProductResponse(
         Boolean isSelling,
         List<String> images,
         Double rating,
+        Boolean isDeleted,
         Boolean isActive,
         String createdBy,
         String updatedBy,

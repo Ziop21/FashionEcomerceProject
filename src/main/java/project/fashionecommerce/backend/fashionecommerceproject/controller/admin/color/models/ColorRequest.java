@@ -4,5 +4,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record ColorRequest(
         @NotNull
-        String name
+        String name,
+        @NotNull
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ) { }

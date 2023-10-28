@@ -19,6 +19,11 @@ public record OrderRequest(
         @NotNull
         Double shippingFee,
         EOrderStatus status,
-        Boolean isPaidBefore
+        Boolean isPaidBefore,
+        @NotNull
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ) {
 }

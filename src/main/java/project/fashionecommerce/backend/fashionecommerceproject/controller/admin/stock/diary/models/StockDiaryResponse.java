@@ -8,6 +8,8 @@ public record StockDiaryResponse(
         Long quantity,
         Long errorQuantity,
         String note,
+        Boolean isDeleted,
+        Boolean isActive,
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,

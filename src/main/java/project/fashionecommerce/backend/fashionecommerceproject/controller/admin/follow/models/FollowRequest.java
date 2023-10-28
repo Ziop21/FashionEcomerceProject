@@ -8,6 +8,9 @@ public record FollowRequest(
         @NotNull
         String userId,
         @NotNull
-        Boolean isDeleted
+        Boolean isDeleted,
+
+        @NotNull
+        Boolean isActive
 ) {
 }

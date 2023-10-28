@@ -6,6 +6,8 @@ public record CartItem (
         String stockId,
         Long quantity,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ){
 }

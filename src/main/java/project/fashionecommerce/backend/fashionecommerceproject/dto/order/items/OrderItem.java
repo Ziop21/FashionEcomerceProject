@@ -6,6 +6,8 @@ public record OrderItem(
         Long quantity,
         String stockId,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

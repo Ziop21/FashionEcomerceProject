@@ -23,10 +23,11 @@ public record User (
         Long point,
         String eWallet,
         String userLevelId,
-        Boolean isDeleted,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String createdBy,
-        String updatedBy
+        String updatedBy,
+        Boolean isDeleted,
+        Boolean isActive
 ){
 }

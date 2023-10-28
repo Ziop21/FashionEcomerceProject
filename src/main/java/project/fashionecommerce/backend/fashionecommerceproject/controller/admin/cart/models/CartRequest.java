@@ -8,7 +8,12 @@ import java.util.List;
 public record CartRequest(
         @NotNull
         String userId,
+        List<CartItemRequest> cartItems,
+
+        @NotNull
         Boolean isDeleted,
-        List<CartItemRequest> cartItems
+
+        @NotNull
+        Boolean isActive
 ) {
 }

@@ -23,5 +23,4 @@ public class ReviewEntity extends TimeAuditable implements Serializable {
     private String content;
     private Double rating;
     private List<String> images;
-
 }

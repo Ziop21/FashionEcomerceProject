@@ -17,6 +17,8 @@ public record Order (
         EOrderStatus status,
         Boolean isPaidBefore,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

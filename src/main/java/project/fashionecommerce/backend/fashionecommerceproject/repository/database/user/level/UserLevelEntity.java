@@ -22,5 +22,4 @@ public class UserLevelEntity extends FullAuditable implements Serializable {
     private String description;
     private Long minPoint;
     private Double discount;
-    private Boolean isDeleted;
 }

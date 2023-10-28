@@ -14,10 +14,11 @@ public record Product (
         Boolean isSelling,
         List<String> images,
         Double rating,
-        Boolean isActive,
         String createdBy,
         String updatedBy,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }

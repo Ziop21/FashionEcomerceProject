@@ -9,6 +9,8 @@ public record ReviewResponse(
         Double rating,
         List<String> images,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean isDeleted,
+        Boolean isActive
 ) {
 }
