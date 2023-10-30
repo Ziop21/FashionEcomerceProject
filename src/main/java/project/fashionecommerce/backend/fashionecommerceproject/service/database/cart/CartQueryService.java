@@ -46,7 +46,7 @@ public class CartQueryService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "userId", "_id", "users"),
-                Aggregation.unwind("users"),
+                Aggregation.unwind("users", true),
                 Aggregation.match(criteria),
                 Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())

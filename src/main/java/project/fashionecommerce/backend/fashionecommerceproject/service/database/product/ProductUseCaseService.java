@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductQuery;
@@ -31,6 +32,6 @@ public class ProductUseCaseService {
     }
 
     public Page<Product> findAll(ProductQuery productQuery, PageRequest pageRequest) {
-        return productQueryService.findAll(productQuery, pageRequest);
+        return productQueryService.findAll(productQuery, pageRequest, ERole.ADMIN);
     }
 }

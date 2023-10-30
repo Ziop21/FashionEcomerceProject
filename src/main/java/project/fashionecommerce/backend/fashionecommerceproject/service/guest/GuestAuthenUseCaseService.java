@@ -1,6 +1,5 @@
 package project.fashionecommerce.backend.fashionecommerceproject.service.guest;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,28 +10,22 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.authentication.Login;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.authentication.MyAuthentication;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.authentication.Register;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.Cart;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.Login;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.MyAuthentication;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.Register;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.role.Role;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConfirmPasswordUnmatchException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConflictsException;
-import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
-import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
-import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartCommandService;
-import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
@@ -40,67 +33,32 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class GuestUseCaseService {
+public class GuestAuthenUseCaseService {
+    @NonNull final HomeUseCaseService homeUseCaseService;
+    @NonNull final JwtUtils jwtUtils;
+    @NonNull final UserQueryService userQueryService;
     @NonNull final UserCommandService userCommandService;
     @NonNull final TokenCommandService tokenCommandService;
-    @NonNull final CartCommandService cartCommandService;
-
     @NonNull final TokenQueryService tokenQueryService;
-    @NonNull final UserQueryService userQueryService;
-    @NonNull final CartQueryService cartQueryService;
-
-    @NonNull final JwtUtils jwtUtils;
     @NonNull final AuthenticationManager authenticationManager;
-    @Autowired private JavaMailSender javaMailSender;
+
     @Autowired final PasswordEncoder passwordEncoder;
+    @Autowired private JavaMailSender javaMailSender;
 
-    @NonNull final UserMapper userMapper;
-
+    @Value("${fashion_ecommerce.app.username}")
+    private String usernameCookieName;
     @Value("${fashion_ecommerce.app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
     @Value("${fashion_ecommerce.app.jwtEmailExpirationS}")
     private Long emailTokenDurationS;
-    @Value("${fashion_ecommerce.app.jwtCartCookieName}")
-    private String cartTokenCookieName;
-
-    public String getCurrentUser(){
-        return Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal).get().toString();
-    }
-
-    @Transactional
-    public MyAuthentication index(HttpServletRequest request) {
-        String currentUser = getCurrentUser();
-        if (currentUser == "anonymousUser") {
-            String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-            if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
-                Cart cart = Cart.builder().isDeleted(false).build();
-                cart = cartCommandService.save(cart);
-                String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
-                ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
-                return MyAuthentication.builder().cartTokenCookieString(cartTokenCookie.toString()).build();
-            }
-            return MyAuthentication.builder().build();
-        }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-        if (jwtUtils.validateJwtToken(oldCartToken) == false) {
-            throw new MyForbiddenException();
-        }
-        return MyAuthentication.builder().userDetails(userDetails).build();
-    }
 
     @Transactional
     public MyAuthentication login(Login login) {
-        String currentUser = getCurrentUser();
+        String currentUser = homeUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.email(), login.password()));
@@ -113,7 +71,7 @@ public class GuestUseCaseService {
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
-            ResponseCookie usernameCookie = jwtUtils.generateCookie("username", username, "/api");
+            ResponseCookie usernameCookie = jwtUtils.generateCookie(usernameCookieName, username, "/api");
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
             Token refreshToken = tokenCommandService.save(userDetails.getId(), refreshTokenDurationMs);
             ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.token(), "/api/auth/refresh-token");
@@ -125,7 +83,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String register(Register register) {
-        String currentUser = getCurrentUser();
+        String currentUser = homeUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             if (!register.confirmPassword().equals(register.password()))
                 throw new MyConfirmPasswordUnmatchException();
@@ -149,7 +107,7 @@ public class GuestUseCaseService {
     }
     @Transactional
     public String sendToken(String email) {
-        String currentUser = getCurrentUser();
+        String currentUser = homeUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             if (userQueryService.existsByEmail(email))
                 throw new MyConflictsException();
@@ -174,7 +132,7 @@ public class GuestUseCaseService {
 
     @Transactional
     public String verifyToken(String token) {
-        String currentUser = getCurrentUser();
+        String currentUser = homeUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
             foundToken = tokenCommandService.verifyExpiration(foundToken);

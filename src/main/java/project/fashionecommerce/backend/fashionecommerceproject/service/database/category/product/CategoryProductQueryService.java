@@ -59,11 +59,11 @@ public class CategoryProductQueryService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "createdBy", "_id", "user"),
-                Aggregation.unwind("user"),
+                Aggregation.unwind("user", true),
                 Aggregation.lookup("product", "productId", "_id", "product"),
-                Aggregation.unwind("product"),
+                Aggregation.unwind("product", true),
                 Aggregation.lookup("category", "categoryId", "_id", "category"),
-                Aggregation.unwind("category"),
+                Aggregation.unwind("category", true),
                 Aggregation.match(criteria),
                 Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())

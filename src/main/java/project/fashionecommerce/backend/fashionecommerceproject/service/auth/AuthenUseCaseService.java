@@ -1,4 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.service.authentication;
+package project.fashionecommerce.backend.fashionecommerceproject.service.auth;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.authentication.MyAuthentication;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.MyAuthentication;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationUseCaseService {
+public class AuthenUseCaseService {
     @NonNull final UserCommandService userCommandService;
     @NonNull final UserQueryService userQueryService;
     @NonNull final TokenQueryService tokenQueryService;
@@ -64,7 +64,7 @@ public class AuthenticationUseCaseService {
             String userId = ((UserDetailsImpl) principle).getId();
             tokenCommandService.deleteByUserId(userId);
         }
-        ResponseCookie usernameCookie = ResponseCookie.from("username", null).path("/api").build();
+        ResponseCookie usernameCookie = jwtUtils.getCleanUsernameCookie();
         ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 

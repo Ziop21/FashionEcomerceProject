@@ -1,4 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.dto.authentication;
+package project.fashionecommerce.backend.fashionecommerceproject.dto.authen;
 
 public record Register (
     String email,

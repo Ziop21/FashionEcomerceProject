@@ -66,7 +66,7 @@ public class OrderQueryService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "userId", "_id", "user"),
-                Aggregation.unwind("user"),
+                Aggregation.unwind("user", true),
                 Aggregation.match(criteria),
                 Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())

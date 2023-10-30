@@ -1,26 +1,19 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.admin.product;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.product;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.product.models.ProductRequest;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.product.models.ProductResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.product.models.GuestProductResponse;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/api/admin/product")
-public interface ProductsAPI {
-    @PostMapping
-    void save(@RequestBody @Valid ProductRequest productRequest);
-
+@RequestMapping("/api/guest/product")
+public interface GuestProductAPI {
     @GetMapping
-    ResponseEntity<PageResponse<ProductResponse>> findAll(
+    ResponseEntity<PageResponse<GuestProductResponse>> findAll(
             @RequestParam(required = false, value = "search", defaultValue = "") String search,
             @RequestParam(required = false, value = "sizeIds", defaultValue = "") List<String> sizeIds,
             @RequestParam(required = false, value = "colorIds", defaultValue = "") List<String> colorIds,

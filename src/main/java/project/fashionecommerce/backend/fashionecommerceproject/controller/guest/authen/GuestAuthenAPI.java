@@ -1,6 +1,5 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.home;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
@@ -10,23 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.home.models.LoginRequest;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.home.models.RegisterRequest;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.LoginRequest;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.RegisterRequest;
 
-@RequestMapping("/api/guest")
-public interface GuestAPI {
-
-    @PostMapping("/auth/login")
+@RequestMapping("/api/guest/auth")
+public interface GuestAuthenAPI {
+    @PostMapping("/login")
     ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest);
-    @GetMapping
-    ResponseEntity<?> index(HttpServletRequest request);
-    @PostMapping("/auth/register")
+    @PostMapping("/register")
     ResponseEntity<?>  register(@RequestBody @Valid RegisterRequest registerRequest);
 
-    @PostMapping("/auth/register/send-token/{email}")
+    @PostMapping("/register/send-token/{email}")
     ResponseEntity<?> sendToken(@PathVariable @Email String email);
 
-    @GetMapping("/auth/register/verify")
+    @GetMapping("/register/verify")
     ResponseEntity<?> verifyEmailToken(
             @RequestParam(required = false, value = "token", defaultValue = "") String token
     );

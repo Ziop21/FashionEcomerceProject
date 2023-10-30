@@ -51,7 +51,7 @@ public class StockQueryService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("product", "productId", "_id", "products"),
-                Aggregation.unwind("products"),
+                Aggregation.unwind("products", true),
                 Aggregation.match(criteria),
                 Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())

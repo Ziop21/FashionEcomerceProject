@@ -1,4 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.dto.authentication;
+package project.fashionecommerce.backend.fashionecommerceproject.dto.authen;
 
 import lombok.Builder;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;

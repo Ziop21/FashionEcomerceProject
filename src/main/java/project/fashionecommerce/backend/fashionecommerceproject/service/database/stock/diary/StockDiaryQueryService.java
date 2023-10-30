@@ -49,7 +49,7 @@ public class StockDiaryQueryService {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "createdBy", "_id", "users"),
-                Aggregation.unwind("users"),
+                Aggregation.unwind("users", true),
                 Aggregation.match(criteria),
                 Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())

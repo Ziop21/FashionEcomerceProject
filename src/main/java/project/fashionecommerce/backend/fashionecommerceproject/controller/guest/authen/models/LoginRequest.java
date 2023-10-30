@@ -1,4 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.home.models;
+package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models;
 
 import jakarta.validation.constraints.NotBlank;
 

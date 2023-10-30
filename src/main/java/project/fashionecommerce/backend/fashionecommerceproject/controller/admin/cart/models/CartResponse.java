@@ -9,6 +9,7 @@ public record CartResponse(
         String id,
         String userId,
         Boolean isDeleted,
+        Boolean isActive,
         List<CartItemRequest> cartItems,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

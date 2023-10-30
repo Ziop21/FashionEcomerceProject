@@ -1,7 +1,9 @@
 package project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items;
 
-import java.time.LocalDateTime;
+import lombok.Builder;
 
+import java.time.LocalDateTime;
+@Builder
 public record CartItem (
         String stockId,
         Long quantity,
