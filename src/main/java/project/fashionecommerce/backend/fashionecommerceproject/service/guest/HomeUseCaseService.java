@@ -51,7 +51,14 @@ public class HomeUseCaseService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-        if (jwtUtils.validateJwtToken(oldCartToken) == false) {
+        if (oldCartToken == null){
+            Cart cart = Cart.builder().isDeleted(false).build();
+            cart = cartCommandService.save(cart);
+            String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
+            ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
+            return MyAuthentication.builder().userDetails(userDetails).cartTokenCookieString(cartTokenCookie.toString()).build();
+        }
+        if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
             throw new MyForbiddenException();
         }
         return MyAuthentication.builder().userDetails(userDetails).build();

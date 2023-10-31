@@ -10,6 +10,11 @@ public record CartItem (
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Boolean isDeleted,
-        Boolean isActive
+        Boolean isActive,
+        String productName,
+        String sizeName,
+        String colorName,
+        Double price,
+        Double promotionalPrice
 ){
 }
