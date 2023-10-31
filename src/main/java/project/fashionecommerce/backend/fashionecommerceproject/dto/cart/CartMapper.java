@@ -19,4 +19,12 @@ public interface CartMapper {
 
     @Mapping(source = "cartItems", target = "cartItems")
     Cart updateCartItems(Cart cart, List<CartItem> cartItems);
+
+    @Mapping(source = "productName", target = "productName")
+    @Mapping(source = "colorName", target = "colorName")
+    @Mapping(source = "sizeName", target = "sizeName")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "promotionalPrice", target = "promotionalPrice")
+    CartItem updateDto(CartItem cartItem, String productName, String colorName,
+                       String sizeName, Double price, Double promotionalPrice);
 }

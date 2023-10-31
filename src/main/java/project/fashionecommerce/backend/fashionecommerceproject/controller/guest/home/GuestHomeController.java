@@ -31,6 +31,14 @@ public class GuestHomeController implements GuestHomeAPI {
         List<String> roles = myAuthentication.userDetails().getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        if (myAuthentication.cartTokenCookieString() != null)
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, myAuthentication.cartTokenCookieString())
+                    .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
+                            myAuthentication.userDetails().getUsername(),
+                            myAuthentication.userDetails().getEmail(),
+                            roles));
         return ResponseEntity
                 .ok()
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
