@@ -22,7 +22,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.product.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,7 +54,7 @@ public class ProductQueryService {
 
         Optional<List<String>> colorIds = Optional.ofNullable(productQuery.colorIds());
         if (!colorIds.isEmpty() && !colorIds.get().isEmpty()) {
-            criteria.and("stocks.colorIds").in(colorIds.get().stream().map(colorId -> new ObjectId(colorId)).collect(Collectors.toList()));
+            criteria.and("stocks.colorId").in(colorIds.get().stream().map(colorId -> new ObjectId(colorId)).collect(Collectors.toList()));
         }
 
         if (productQuery.fromRating() != null && productQuery.toRating() != null){

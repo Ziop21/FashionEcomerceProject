@@ -3,6 +3,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
@@ -12,6 +13,9 @@ import java.util.List;
 
 @RequestMapping("/api/guest/product")
 public interface GuestProductAPI {
+    @GetMapping("/{productId}")
+    ResponseEntity<GuestProductResponse> findById(@PathVariable String productId);
+
     @GetMapping
     ResponseEntity<PageResponse<GuestProductResponse>> findAll(
             @RequestParam(required = false, value = "search", defaultValue = "") String search,

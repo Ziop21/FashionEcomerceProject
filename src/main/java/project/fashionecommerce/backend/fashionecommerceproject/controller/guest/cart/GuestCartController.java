@@ -3,8 +3,8 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestCartUseCaseService;
 
 @RestController
@@ -14,10 +14,18 @@ public class GuestCartController implements GuestCartAPI {
     final GuestCartUseCaseService guestCartUseCaseService;
 
     @Override
-    public ResponseEntity<?> insertToCart(String stockId, HttpServletRequest request) {
-        guestCartUseCaseService.insertToCart(stockId, request);
-        return ResponseEntity
-                .ok()
-                .body("Product have been inserted to your cart");
+    public void deleteCartItem(String stockId, HttpServletRequest request) {
+        guestCartUseCaseService.deleteCartItem(new StockId(stockId), request);
     }
+
+    @Override
+    public void insertToCart(String stockId, Long quantity, HttpServletRequest request) {
+        guestCartUseCaseService.insertToCart(stockId, quantity, request);
+    }
+
+    @Override
+    public void updateQuantity(String stockId, Long quantity, HttpServletRequest request) {
+        guestCartUseCaseService.updateQuantity(stockId, quantity, request);
+    }
+
 }

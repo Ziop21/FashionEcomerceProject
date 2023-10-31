@@ -18,4 +18,5 @@ public class ColorEntity extends FullAuditable implements Serializable {
     @Id
     private String id;
     private String name;
+    private String code;
 }

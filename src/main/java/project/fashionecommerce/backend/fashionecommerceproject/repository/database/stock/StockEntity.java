@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -26,8 +25,8 @@ public class StockEntity extends FullAuditable implements Serializable {
     private String productId;
     @Field(targetType = FieldType.OBJECT_ID)
     private String sizeId;
-    private List<ObjectId> colorIds;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String colorId;
     private Long quantity;
-    private Boolean isMixedColor;
     private List<ReviewEntity> reviews;
 }

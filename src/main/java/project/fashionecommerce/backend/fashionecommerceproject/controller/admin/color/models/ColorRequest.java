@@ -7,7 +7,8 @@ public record ColorRequest(
         String name,
         @NotNull
         Boolean isDeleted,
-
+        @NotNull
+        String code,
         @NotNull
         Boolean isActive
 ) { }

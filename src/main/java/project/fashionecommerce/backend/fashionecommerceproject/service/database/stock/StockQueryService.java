@@ -12,6 +12,9 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.review.ReviewMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockMapper;
@@ -19,6 +22,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQ
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.StockEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.StockRepository;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserEntity;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,8 +32,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockQueryService {
     @NonNull final StockRepository stockRepository;
+    private final UserRepository userRepository;
+
     @NonNull final MongoTemplate mongoTemplate;
+
     @NonNull final StockMapper stockMapper;
+    @NonNull final ReviewMapper reviewMapper;
+
     public Page<Stock> findAll(StockQuery stockQuery, PageRequest pageRequest) {
         Criteria criteria = new Criteria();
 
@@ -46,7 +56,7 @@ public class StockQueryService {
 
         Optional<List<String>> colorIds = Optional.ofNullable(stockQuery.colorIds());
         if (!colorIds.isEmpty() && !colorIds.get().isEmpty()) {
-            criteria.and("colorIds").in(colorIds.get().stream().map(colorId -> new ObjectId(colorId)).collect(Collectors.toList()));
+            criteria.and("colorId").in(colorIds.get().stream().map(colorId -> new ObjectId(colorId)).collect(Collectors.toList()));
         }
 
         Aggregation aggregation = Aggregation.newAggregation(
@@ -74,5 +84,20 @@ public class StockQueryService {
         StockEntity stockEntity = stockRepository.findById(stockId.id())
                 .orElseThrow(MyResourceNotFoundException::new);
         return stockMapper.toDto(stockEntity);
+    }
+
+    public List<Stock> findAllByProductId(ProductId productId) {
+        List<StockEntity> stockEntities = stockRepository.findAllByProductId(productId.id());
+        List<Stock> stocks = stockEntities.stream().map(stockMapper::toDto).collect(Collectors.toList());
+        stocks = stocks.stream().map(stock -> {
+            List<Review> reviews = stock.reviews();
+            reviews = reviews.stream().map(review -> {
+                UserEntity userEntity = userRepository.findById(review.userId()).orElseThrow(MyResourceNotFoundException::new);
+                String username = userEntity.getFirstName() + " " + userEntity.getLastName();
+                return reviewMapper.updateDto(review, username);
+            }).collect(Collectors.toList());
+            return stockMapper.updateDto(stock, reviews);
+        }).collect(Collectors.toList());
+        return stocks;
     }
 }

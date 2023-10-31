@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record Color(
         String id,
         String name,
+        String code,
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,

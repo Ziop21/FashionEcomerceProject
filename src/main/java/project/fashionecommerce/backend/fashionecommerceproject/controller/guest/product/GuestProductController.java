@@ -12,6 +12,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.guest
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.product.models.GuestProductResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.handler.MySortHandler;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductQuery;
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestProductUseCaseService;
 import java.time.LocalDate;
@@ -22,6 +23,13 @@ import java.util.List;
 public class GuestProductController implements GuestProductAPI {
     @NonNull final GuestProductUseCaseService guestProductUseCaseService;
     @NonNull final GuestProductModelMapper guestProductModelMapper;
+
+    @Override
+    public ResponseEntity<GuestProductResponse> findById(String productId) {
+        Product product = guestProductUseCaseService.findById(new ProductId(productId));
+        return new ResponseEntity<>(guestProductModelMapper.toModel(product), HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<PageResponse<GuestProductResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds,
                                                         Long fromRating, Long toRating, Long fromPrice, Long toPrice,

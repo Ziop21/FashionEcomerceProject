@@ -2,7 +2,6 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.admi
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
 
 public record StockRequest(
         @NotNull
@@ -10,11 +9,9 @@ public record StockRequest(
         @NotNull
         String sizeId,
         @NotNull
-        List<String> colorIds,
+        String colorId,
         @NotNull
         Long quantity,
-        @NotNull
-        Boolean isMixedColor,
         Boolean isActive,
         Boolean isDeleted
 ) {

@@ -3,7 +3,12 @@ package project.fashionecommerce.backend.fashionecommerceproject.dto.product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.size.Size;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.product.ProductEntity;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
@@ -14,4 +19,9 @@ public interface ProductMapper {
     void updateExisted(Product product, @MappingTarget ProductEntity foundEntity);
 
     Product toDto(ProductEntity product);
+
+    @Mapping(source = "stocks", target = "stocks")
+    @Mapping(source = "sizes", target = "sizes")
+    @Mapping(source = "colors", target = "colors")
+    Product updateDto(Product product, List<Stock> stocks, List<Size> sizes, List<Color> colors);
 }
