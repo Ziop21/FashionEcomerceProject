@@ -29,10 +29,6 @@ public class CartQueryService {
     @NonNull final CartRepository cartRepository;
     @NonNull final CartMapper cartMapper;
     @NonNull final MongoTemplate mongoTemplate;
-    public Cart findByUserIdAndIsDeleted(String userId, Boolean isDeleted) {
-        CartEntity cartEntity = cartRepository.findByUserIdAndIsDeleted(userId, isDeleted);
-        return cartMapper.toDto(cartEntity);
-    }
 
     public Page<Cart> findAll(CartQuery cartQuery, PageRequest pageRequest) {
         Criteria criteria = new Criteria();

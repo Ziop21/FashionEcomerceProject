@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CartRepository extends MongoRepository<CartEntity, String> {
-    Boolean existsByUserIdAndIsDeleted(String userId, Boolean isDeleted);
-    CartEntity findByUserIdAndIsDeleted(String userId, Boolean isDeleted);
 }

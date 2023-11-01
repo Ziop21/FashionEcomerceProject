@@ -42,9 +42,9 @@ public class GuestOrderUseCaseService {
         if (cartItems == null || cartItems.size() == 0){
             throw new MyForbiddenException();
         }
-        order = orderMapper.updateDto(order, );
-
-        User user = userQueryService.findByEmail();
+//        order = orderMapper.updateDto(order, );
+//
+//        User user = userQueryService.findByEmail();
 
         cart = cartMapper.updateDto(cart,false, true);
         cartCommandService.update(new CartId(cartId), cart);
