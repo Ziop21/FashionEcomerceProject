@@ -10,6 +10,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.Cart;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.CartId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.CartMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.CartItem;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.CartItemMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
@@ -43,6 +44,7 @@ public class GuestCartUseCaseService {
     @NonNull final SizeQueryService sizeQueryService;
 
     @NonNull final CartMapper cartMapper;
+    @NonNull final CartItemMapper cartItemMapper;
 
     @Value("${fashion_ecommerce.app.jwtCartCookieName}")
     private String cartTokenCookieName;
@@ -80,7 +82,7 @@ public class GuestCartUseCaseService {
         List<CartItem> newCartItems = new ArrayList<>();
         for (int i = 0; i < cartItems.size(); i++){
             newCartItems.add(
-                    cartMapper.updateDto(cartItems.get(i), productNames.get(i), colorNames.get(i), sizeNames.get(i),
+                    cartItemMapper.updateDto(cartItems.get(i), productNames.get(i), colorNames.get(i), sizeNames.get(i),
                             prices.get(i), promotionalPrices.get(i))
             );
         }
