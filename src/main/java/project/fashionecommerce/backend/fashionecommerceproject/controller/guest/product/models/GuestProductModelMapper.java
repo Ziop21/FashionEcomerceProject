@@ -9,6 +9,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.guest
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,19 +24,21 @@ public abstract class GuestProductModelMapper {
 
     public GuestProductResponse toModel(Product product){
         List<Stock> stocks = product.stocks();
-        List<GuestReviewResponse> reviewResponses = stocks.stream().map(stock -> {
-                    List<Review> reviews = stock.reviews();
-                    List<GuestReviewResponse> tempResponse = reviews.stream()
-                            .map(review -> {
-                                String colorName = product.colors().stream().filter(color -> color.id().equals(stock.colorId())).findFirst().get().name();
-                                String sizeName = product.sizes().stream().filter(size -> size.id().equals(stock.sizeId())).findFirst().get().name();
-                                return guestReviewModelMapper.toModel(review, colorName, sizeName);
-                            })
-                            .collect(Collectors.toList());
-                    return tempResponse;
-                })
-                .flatMap(Collection::stream).collect(Collectors.toList());
-
+        List<GuestReviewResponse> reviewResponses = new ArrayList<>();
+        if (stocks != null){
+            reviewResponses = stocks.stream().map(stock -> {
+                        List<Review> reviews = stock.reviews();
+                        List<GuestReviewResponse> tempResponse = reviews.stream()
+                                .map(review -> {
+                                    String colorName = product.colors().stream().filter(color -> color.id().equals(stock.colorId())).findFirst().get().name();
+                                    String sizeName = product.sizes().stream().filter(size -> size.id().equals(stock.sizeId())).findFirst().get().name();
+                                    return guestReviewModelMapper.toModel(review, colorName, sizeName);
+                                })
+                                .collect(Collectors.toList());
+                        return tempResponse;
+                    })
+                    .flatMap(Collection::stream).collect(Collectors.toList());
+        }
         GuestProductResponse productResponse = GuestProductResponse.builder()
                 .productId(product.id())
                 .name(product.name())
