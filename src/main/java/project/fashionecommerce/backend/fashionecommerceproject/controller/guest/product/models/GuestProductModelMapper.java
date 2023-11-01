@@ -3,9 +3,11 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.color.models.GuestColorModelMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.color.models.GuestColorResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.review.models.GuestReviewModelMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.review.models.GuestReviewResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.size.models.GuestSizeModelMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.size.models.GuestSizeResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
@@ -39,6 +41,8 @@ public abstract class GuestProductModelMapper {
                     })
                     .flatMap(Collection::stream).collect(Collectors.toList());
         }
+        List<GuestColorResponse> colors = product.colors() == null ? null : product.colors().stream().map(guestColorModelMapper::toModel).collect(Collectors.toList());
+        List<GuestSizeResponse> sizes = product.sizes() == null ? null : product.sizes().stream().map(guestSizeModelMapper::toModel).collect(Collectors.toList());
         GuestProductResponse productResponse = GuestProductResponse.builder()
                 .productId(product.id())
                 .name(product.name())
@@ -47,8 +51,8 @@ public abstract class GuestProductModelMapper {
                 .promotionalPrice(product.promotionalPrice())
                 .images(product.images())
                 .rating(product.rating())
-                .colors(product.colors().stream().map(guestColorModelMapper::toModel).collect(Collectors.toList()))
-                .sizes(product.sizes().stream().map(guestSizeModelMapper::toModel).collect(Collectors.toList()))
+                .colors(colors)
+                .sizes(sizes)
                 .reviews(reviewResponses)
                 .build();
         return productResponse;
