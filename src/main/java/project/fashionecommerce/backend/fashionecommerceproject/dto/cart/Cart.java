@@ -8,11 +8,11 @@ import java.util.List;
 @Builder
 public record Cart(
         String id,
-        String userId,
+
+        List<CartItem> cartItems,
         Boolean isDeleted,
         Boolean isActive,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt,
-        List<CartItem> cartItems
+        LocalDateTime updatedAt
 ) {
 }

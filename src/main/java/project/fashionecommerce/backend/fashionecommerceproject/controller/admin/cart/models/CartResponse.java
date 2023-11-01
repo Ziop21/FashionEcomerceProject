@@ -7,7 +7,6 @@ import java.util.List;
 
 public record CartResponse(
         String id,
-        String userId,
         Boolean isDeleted,
         Boolean isActive,
         List<CartItemRequest> cartItems,
