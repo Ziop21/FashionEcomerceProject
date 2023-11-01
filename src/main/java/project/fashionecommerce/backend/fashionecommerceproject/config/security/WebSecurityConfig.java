@@ -39,11 +39,11 @@ public class WebSecurityConfig {
 //        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
 //        configuration.setAllowedHeaders(Arrays.asList("Content-Type","Accept","Referer","Sec-Ch-Ua",
 //                "Sec-Ch-Ua-Mobile","Sec-Ch-Ua-Platform", "User-Agent"));
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
 
