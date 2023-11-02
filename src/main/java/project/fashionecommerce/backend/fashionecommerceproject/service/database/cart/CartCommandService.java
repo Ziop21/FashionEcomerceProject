@@ -26,6 +26,13 @@ public class CartCommandService {
         cartRepository.deleteById(cartId.id());
     }
 
+    public void updateIsActiveIsDeleted(CartId cartId, Boolean isActive, Boolean isDeleted){
+        CartEntity foundEntity = cartRepository.findById(cartId.id()).orElseThrow(MyResourceNotFoundException::new);
+        foundEntity.setIsDeleted(isDeleted);
+        foundEntity.setIsActive(isActive);
+        cartRepository.save(foundEntity);
+    }
+
     public void update(CartId cartId, Cart cart) {
         CartEntity foundEntity = cartRepository.findById(cartId.id()).orElseThrow(MyResourceNotFoundException::new);
         cartMapper.updateExist(cart, foundEntity);

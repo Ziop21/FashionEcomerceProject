@@ -8,7 +8,6 @@ import java.util.List;
 @Builder
 public record Cart(
         String id,
-
         List<CartItem> cartItems,
         Boolean isDeleted,
         Boolean isActive,

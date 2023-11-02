@@ -39,6 +39,8 @@ public class UserQueryService {
 
         UserEntity userEntity = userRepository.findByEmailAndIsDeleted(email, false)
                 .orElseThrow(MyResourceNotFoundException::new);
+        if (userEntity.getIsActive() == true)
+            return true;
         if (!userEntity.getIsEmailActive()){
             userRepository.deleteById(userEntity.getId());
             tokenRepository.deleteByUserId(userEntity.getId());
@@ -47,8 +49,9 @@ public class UserQueryService {
         return true;
     }
 
-    public User findByEmail(String email) {
-        UserEntity user = userRepository.findByEmailAndIsDeletedAndIsEmailActive(email, false, true)
+    public User findByEmailAndIsEmailActive(String email, Boolean isEmailActive) {
+        UserEntity user = userRepository.findByEmailAndIsDeletedAndIsEmailActive(email,
+                        false, isEmailActive)
                 .orElseThrow(MyResourceNotFoundException::new);
         return userMapper.toDto(user);
     }

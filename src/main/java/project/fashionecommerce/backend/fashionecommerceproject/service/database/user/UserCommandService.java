@@ -42,14 +42,15 @@ public class UserCommandService {
         userRepository.save(foundEntity);
     }
 
-    public void updateHashedPassword(UserId userId, String hashedPassword){
+    public void updateHashedPasswordAndIsActive(UserId userId, String hashedPassword, Boolean isActive){
         UserEntity userEntity = userRepository.findById(userId.id())
                 .orElseThrow(MyResourceNotFoundException::new);
         userEntity.setHashedPassword(hashedPassword);
+        userEntity.setIsActive(isActive);
         userRepository.save(userEntity);
     }
 
-    public void updateIsEmailActive(UserId userId, boolean isEmailActive) {
+    public void updateIsEmailActive(UserId userId, Boolean isEmailActive) {
         UserEntity userEntity = userRepository.findById(userId.id())
                 .orElseThrow(MyResourceNotFoundException::new);
         userEntity.setIsEmailActive(isEmailActive);

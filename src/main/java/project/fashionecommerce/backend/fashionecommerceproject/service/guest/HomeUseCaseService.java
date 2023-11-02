@@ -40,7 +40,7 @@ public class HomeUseCaseService {
         if (currentUser == "anonymousUser") {
             String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
             if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
-                Cart cart = Cart.builder().isDeleted(false).build();
+                Cart cart = Cart.builder().isDeleted(false).isActive(true).build();
                 cart = cartCommandService.save(cart);
                 String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
                 ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
@@ -52,7 +52,7 @@ public class HomeUseCaseService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
         if (oldCartToken == null){
-            Cart cart = Cart.builder().isDeleted(false).build();
+            Cart cart = Cart.builder().isDeleted(false).isActive(true).build();
             cart = cartCommandService.save(cart);
             String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
             ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");

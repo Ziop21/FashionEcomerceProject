@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.authentication.AuthEntryPointJwt;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsServiceImpl;
-
 import java.util.Arrays;
 
 @Configuration
@@ -35,10 +34,6 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-//        configuration.setAllowedHeaders(Arrays.asList("Content-Type","Accept","Referer","Sec-Ch-Ua",
-//                "Sec-Ch-Ua-Mobile","Sec-Ch-Ua-Platform", "User-Agent"));
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));

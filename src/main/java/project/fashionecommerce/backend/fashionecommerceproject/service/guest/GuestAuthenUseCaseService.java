@@ -87,13 +87,11 @@ public class GuestAuthenUseCaseService {
         if (currentUser == "anonymousUser") {
             if (!register.confirmPassword().equals(register.password()))
                 throw new MyConfirmPasswordUnmatchException();
-            User user = userQueryService.findByEmail(register.email());
+            User user = userQueryService.findByEmailAndIsEmailActive(register.email(), true);
             String hashedPassword = passwordEncoder.encode(register.password());
-            userCommandService.updateHashedPassword(new UserId(user.id()), hashedPassword);
+            userCommandService.updateHashedPasswordAndIsActive(new UserId(user.id()), hashedPassword, true);
             return "Success";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return "You have not signed out yet";
 
     }
@@ -117,6 +115,7 @@ public class GuestAuthenUseCaseService {
                     .email(email)
                     .roles(roles)
                     .isEmailActive(false)
+                    .isActive(false)
                     .isDeleted(false)
                     .build();
             user = userCommandService.save(user);
@@ -125,8 +124,6 @@ public class GuestAuthenUseCaseService {
             this.sendEmailVerification(email, token);
             return "Success";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return "You have not signed out yet";
     }
 
@@ -140,8 +137,6 @@ public class GuestAuthenUseCaseService {
             tokenCommandService.deleteByUserId(foundToken.userId());
             return "Success";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return "You have not signed out yet";
     }
 }

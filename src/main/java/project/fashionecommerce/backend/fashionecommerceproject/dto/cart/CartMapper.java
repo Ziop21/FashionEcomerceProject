@@ -20,8 +20,4 @@ public interface CartMapper {
 
     @Mapping(source = "cartItems", target = "cartItems")
     Cart updateCartItems(Cart cart, List<CartItem> cartItems);
-
-    @Mapping(source = "isActive", target = "isActive")
-    @Mapping(source = "isDeleted", target = "isDeleted")
-    Cart updateDto(Cart cart, Boolean isActive, Boolean isDeleted);
 }

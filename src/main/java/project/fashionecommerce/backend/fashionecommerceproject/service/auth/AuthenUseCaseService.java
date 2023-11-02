@@ -38,10 +38,6 @@ public class AuthenUseCaseService {
     @NonNull final UserMapper userMapper;
     @NonNull final JwtUtils jwtUtils;
     @Autowired final PasswordEncoder passwordEncoder;
-    public List<String> getMyRoles(String username) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return securityContext.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-    }
 
     @Transactional
     public String refreshToken(String refreshToken) {
