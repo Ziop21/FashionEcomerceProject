@@ -8,18 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.home.models.UserInfoResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.MyAuthentication;
-import project.fashionecommerce.backend.fashionecommerceproject.service.guest.HomeUseCaseService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestUseCaseService;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class GuestHomeController implements GuestHomeAPI {
-    @NonNull final HomeUseCaseService homeUseCaseService;
+public class GuestController implements GuestAPI {
+    @NonNull final GuestUseCaseService guestUseCaseService;
 
     @Override
     public ResponseEntity<?> index(HttpServletRequest request) {
-        MyAuthentication myAuthentication = homeUseCaseService.index(request);
+        MyAuthentication myAuthentication = guestUseCaseService.index(request);
         if (myAuthentication.userDetails() == null) {
             if (myAuthentication.cartTokenCookieString() == null)
                 return ResponseEntity.ok().body("Home page");

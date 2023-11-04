@@ -18,6 +18,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.color.ColorQueryService;
@@ -52,12 +53,15 @@ public class GuestCartUseCaseService {
     public List<CartItem> findAllCartItem(HttpServletRequest request) {
         String cartId = this.getCartId(request);
         Cart cart = cartQueryService.findById(new CartId(cartId));
+        if (!cart.isActive())
+            throw new MyResourceNotFoundException();
         List<CartItem> cartItems = cart.cartItems();
         if (cart.cartItems() == null) {
             cartItems = new ArrayList<>();
             return cartItems;
         }
-        List<String> stockIds = cartItems.stream().map(CartItem::stockId).collect(Collectors.toList());
+        List<String> stockIds = cartItems.stream()
+                .map(CartItem::stockId).collect(Collectors.toList());
         List<Stock> stocks = stockIds.stream().map(stockId -> stockQueryService.findById(new StockId(stockId))).collect(Collectors.toList());
 
         List<String> productIds = stocks.stream().map(Stock::productId).collect(Collectors.toList());

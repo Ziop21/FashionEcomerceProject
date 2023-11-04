@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class HomeUseCaseService {
+public class GuestUseCaseService {
     @NonNull final JwtUtils jwtUtils;
     @NonNull final CartCommandService cartCommandService;
 

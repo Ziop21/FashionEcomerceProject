@@ -113,4 +113,27 @@ public class ProductQueryService {
 
         return new PageImpl<>(productPage.getContent().stream().map(productMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }
+
+    public List<Product> findAllByIds(List<ProductId> productIds) {
+        Criteria criteria = new Criteria();
+
+        criteria.and("isDeleted").is(false);
+        criteria.and("isActive").is(true);
+        criteria.and("isSelling").is(true);
+
+        if (productIds != null && !productIds.isEmpty()){
+            List<ObjectId> objectIds = productIds.stream().map(productId -> new ObjectId(productId.id())).collect(Collectors.toList());
+            criteria.and("_id").in(objectIds);
+        }
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria)
+        );
+
+        AggregationResults<ProductEntity> results = mongoTemplate.aggregate(aggregation, "product", ProductEntity.class);
+
+        List<ProductEntity> productList = results.getMappedResults();
+
+        return productList.stream().map(productMapper::toDto).collect(Collectors.toList());
+    }
 }
