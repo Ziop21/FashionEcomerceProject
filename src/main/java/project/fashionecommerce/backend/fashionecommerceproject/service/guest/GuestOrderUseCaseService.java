@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GuestOrderUseCaseService {
-    @NonNull final HomeUseCaseService homeUseCaseService;
+    @NonNull final GuestUseCaseService guestUseCaseService;
 
     @NonNull final OrderCommandService orderCommandService;
     @NonNull final CartCommandService cartCommandService;
@@ -64,7 +64,7 @@ public class GuestOrderUseCaseService {
                         .build())
                 .collect(Collectors.toList());
         order = orderMapper.updateDto(order, EOrderStatus.WAITING, orderItems);
-        if (homeUseCaseService.getCurrentUser() != "anonymousUser"){
+        if (guestUseCaseService.getCurrentUser() != "anonymousUser"){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             order = orderMapper.updateDtoUserId(order, userDetails.getId());

@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GuestAuthenUseCaseService {
-    @NonNull final HomeUseCaseService homeUseCaseService;
+    @NonNull final GuestUseCaseService guestUseCaseService;
     @NonNull final JwtUtils jwtUtils;
     @NonNull final UserQueryService userQueryService;
     @NonNull final UserCommandService userCommandService;
@@ -58,20 +58,14 @@ public class GuestAuthenUseCaseService {
 
     @Transactional
     public MyAuthentication login(Login login) {
-        String currentUser = homeUseCaseService.getCurrentUser();
+        String currentUser = guestUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.email(), login.password()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            String username = userDetails.getUsername() == null
-                    ? userDetails.getEmail() : userDetails.getUsername();
 
-            List<String> roles = userDetails.getAuthorities().stream()
-                    .map(item -> item.getAuthority())
-                    .collect(Collectors.toList());
-
-            ResponseCookie usernameCookie = jwtUtils.generateCookie(usernameCookieName, username, "/api");
+            ResponseCookie usernameCookie = jwtUtils.generateCookie(usernameCookieName, userDetails.getEmail(), "/api");
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
             Token refreshToken = tokenCommandService.save(userDetails.getId(), refreshTokenDurationMs);
             ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.token(), "/api/auth/refresh-token");
@@ -83,7 +77,7 @@ public class GuestAuthenUseCaseService {
     }
     @Transactional
     public String register(Register register) {
-        String currentUser = homeUseCaseService.getCurrentUser();
+        String currentUser = guestUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             if (!register.confirmPassword().equals(register.password()))
                 throw new MyConfirmPasswordUnmatchException();
@@ -105,7 +99,7 @@ public class GuestAuthenUseCaseService {
     }
     @Transactional
     public String sendToken(String email) {
-        String currentUser = homeUseCaseService.getCurrentUser();
+        String currentUser = guestUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             if (userQueryService.existsByEmail(email))
                 throw new MyConflictsException();
@@ -129,7 +123,7 @@ public class GuestAuthenUseCaseService {
 
     @Transactional
     public String verifyToken(String token) {
-        String currentUser = homeUseCaseService.getCurrentUser();
+        String currentUser = guestUseCaseService.getCurrentUser();
         if (currentUser == "anonymousUser") {
             Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
             foundToken = tokenCommandService.verifyExpiration(foundToken);

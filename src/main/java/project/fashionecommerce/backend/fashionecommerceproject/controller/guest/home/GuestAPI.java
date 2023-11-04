@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/api/guest")
-public interface GuestHomeAPI {
+public interface GuestAPI {
     @GetMapping
     ResponseEntity<?> index(HttpServletRequest request);
 }

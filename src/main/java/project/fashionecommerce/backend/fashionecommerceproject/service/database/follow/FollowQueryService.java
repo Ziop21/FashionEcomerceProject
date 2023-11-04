@@ -2,6 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.service.databas
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.Follo
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.FollowId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.FollowMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.FollowQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.follow.FollowEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.follow.FollowRepository;
@@ -77,6 +80,37 @@ public class FollowQueryService {
         Page<FollowEntity> followPage = PageableExecutionUtils.getPage(pagedFollowList, pageRequest, () -> total);
 
         return new PageImpl<>(followPage.getContent().stream().map(followMapper::toDto).collect(Collectors.toList()), pageRequest, total);
+    }
 
+    public List<Follow> findAllByUserId(UserId userId, FollowQuery followQuery) {
+        Criteria criteria = new Criteria();
+
+        criteria.and("userId").is(new ObjectId(userId.id()));
+        criteria.and("isActive").is(true);
+
+        if (followQuery.search() != null && !followQuery.search().isBlank()) {
+            criteria.orOperator(
+                    Criteria.where("product.name").regex(".*" + followQuery.search() + ".*", "i"),
+                    Criteria.where("product.description").regex(".*" + followQuery.search() + ".*", "i")
+            );
+        }
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.lookup("product", "productId", "_id", "product"),
+                Aggregation.unwind("product", true),
+                Aggregation.match(criteria)
+        );
+
+        AggregationResults<FollowEntity> results = mongoTemplate.aggregate(aggregation, "follow", FollowEntity.class);
+
+        List<FollowEntity> followList = results.getMappedResults();
+
+        return followList.stream().map(followMapper::toDto).collect(Collectors.toList());
+    }
+
+    public Boolean existByUserIdAndProductIdAndIsActive(UserId userId, ProductId productId, Boolean isActive) {
+        if (followRepository.existsByUserIdAndProductIdAndIsActive(userId.id(), productId.id(), isActive))
+            return true;
+        return false;
     }
 }

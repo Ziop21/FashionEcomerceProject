@@ -13,7 +13,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.Login
 import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.MyAuthentication;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.Register;
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestAuthenUseCaseService;
-import project.fashionecommerce.backend.fashionecommerceproject.service.guest.HomeUseCaseService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestUseCaseService;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class GuestAuthenController implements GuestAuthenAPI {
     @NonNull final GuestAuthenModelMapper guestAuthenModelMapper;
     @NonNull final GuestAuthenUseCaseService guestAuthenUseCaseService;
-    @NonNull final HomeUseCaseService homeUseCaseService;
+    @NonNull final GuestUseCaseService guestUseCaseService;
     @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         Login login = guestAuthenModelMapper.toDto(loginRequest);
