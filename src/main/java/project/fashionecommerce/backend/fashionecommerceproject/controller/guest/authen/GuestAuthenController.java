@@ -36,9 +36,9 @@ public class GuestAuthenController implements GuestAuthenAPI {
         if (myAuthentication.jwtCookieString() != null)
             cookies = cookies + myAuthentication.jwtCookieString();
         if ( myAuthentication.jwtRefreshCookieString() != null)
-            cookies = cookies + "; " + myAuthentication.jwtRefreshCookieString();
+            cookies = cookies + ", " + myAuthentication.jwtRefreshCookieString();
         if (myAuthentication.usernameCookieString() != null)
-            cookies = cookies + "; " + myAuthentication.usernameCookieString();
+            cookies = cookies + ", " + myAuthentication.usernameCookieString();
         headers.add(HttpHeaders.SET_COOKIE, cookies);
 
         return ResponseEntity
