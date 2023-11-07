@@ -31,19 +31,19 @@ public class GuestAuthenController implements GuestAuthenAPI {
         List<String> roles = myAuthentication.userDetails().getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        String cookies = "";
+        HttpHeaders headers = new HttpHeaders();
+        if (myAuthentication.jwtCookieString() != null)
+            cookies = cookies + myAuthentication.jwtCookieString();
+        if ( myAuthentication.jwtRefreshCookieString() != null)
+            cookies = cookies + "; " + myAuthentication.jwtRefreshCookieString();
+        if (myAuthentication.usernameCookieString() != null)
+            cookies = cookies + "; " + myAuthentication.usernameCookieString();
+        headers.add(HttpHeaders.SET_COOKIE, cookies);
 
-        if (myAuthentication.jwtCookieString() == null || myAuthentication.jwtRefreshCookieString() == null)
-            return ResponseEntity
-                    .ok()
-                    .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
-                            myAuthentication.userDetails().getUsername(),
-                            myAuthentication.userDetails().getEmail(),
-                            roles));
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.usernameCookieString())
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString())
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString())
+                .headers(headers)
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),

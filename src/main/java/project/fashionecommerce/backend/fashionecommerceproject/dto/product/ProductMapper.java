@@ -24,4 +24,9 @@ public interface ProductMapper {
     @Mapping(source = "sizes", target = "sizes")
     @Mapping(source = "colors", target = "colors")
     Product updateDto(Product product, List<Stock> stocks, List<Size> sizes, List<Color> colors);
+
+    @Mapping(source = "isActive", target = "isActive")
+    Product updateDtoIsActive(Product product, Boolean isActive);
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    Product updateDtoIsDeleted(Product product, Boolean isDeleted);
 }

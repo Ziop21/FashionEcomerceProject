@@ -115,7 +115,13 @@ public class JwtUtils implements Serializable {
     }
 
     public ResponseCookie generateCookie(String name, String value, String path) {
-        ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(cookieExpirationS).httpOnly(true).build();
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .sameSite("None")
+                .secure(true)
+                .path(path)
+                .maxAge(cookieExpirationS)
+                .httpOnly(true)
+                .build();
         return cookie;
     }
 }
