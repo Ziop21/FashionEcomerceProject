@@ -6,6 +6,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<UserEntity, String> {
+    Optional<UserEntity> findByEmailAndIsActive(String email, Boolean isActive);
     Boolean existsByEmailAndIsDeleted(String email, Boolean isDeleted);
     Optional<UserEntity> findByEmailAndIsDeleted(String email, Boolean isDeleted);
     Optional<UserEntity> findByEmailAndIsDeletedAndIsActive(String email, Boolean isDeleted, Boolean isActive);

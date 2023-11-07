@@ -33,7 +33,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -19,13 +19,13 @@ public record UserRequest(
         @NotNull
         @Email
         String email,
-        List<String> phone,
+        List<String> phones,
         @NotNull
         String hashedPassword,
         @NotNull
         Boolean isEmailActive,
         Boolean isPhoneActive,
-        List<String> address,
+        List<String> addresses,
         String avatar,
         Long point,
         String eWallet,

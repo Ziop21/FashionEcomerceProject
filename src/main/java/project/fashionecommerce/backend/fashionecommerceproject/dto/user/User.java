@@ -14,11 +14,11 @@ public record User (
         String slug,
         String idCard,
         String email,
-        List<String> phone,
+        List<String> phones,
         String hashedPassword,
         Boolean isEmailActive,
         Boolean isPhoneActive,
-        List<String> address,
+        List<String> addresses,
         String avatar,
         Long point,
         String eWallet,
@@ -28,6 +28,7 @@ public record User (
         String createdBy,
         String updatedBy,
         Boolean isDeleted,
-        Boolean isActive
+        Boolean isActive,
+        String userLevelName
 ){
 }
