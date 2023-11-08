@@ -31,19 +31,12 @@ public class GuestAuthenController implements GuestAuthenAPI {
         List<String> roles = myAuthentication.userDetails().getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        String cookies = "";
-        HttpHeaders headers = new HttpHeaders();
-        if (myAuthentication.jwtCookieString() != null)
-            cookies = cookies + myAuthentication.jwtCookieString();
-//        if ( myAuthentication.jwtRefreshCookieString() != null)
-//            cookies = cookies + ", " + myAuthentication.jwtRefreshCookieString();
-//        if (myAuthentication.usernameCookieString() != null)
-//            cookies = cookies + ", " + myAuthentication.usernameCookieString();
-        headers.add(HttpHeaders.SET_COOKIE, cookies);
-
         return ResponseEntity
                 .ok()
-                .headers(headers)
+                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString(),
+                        myAuthentication.jwtRefreshCookieString(),
+                        myAuthentication.usernameCookieString())
+//                .headers(headers)
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),
