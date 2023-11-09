@@ -77,6 +77,12 @@ public class ProductQueryService {
             criteria.and("isSelling").is(true);
         }
 
+        if (role.equals(ERole.STAFF)){
+            criteria.and("isDeleted").is(false);
+            criteria.and("isActive").is(false);
+            criteria.and("isSelling").is(false);
+        }
+
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.lookup("stock", "_id", "productId", "stocks"),
                 Aggregation.unwind("stocks", true),

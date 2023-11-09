@@ -6,4 +6,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Prod
 @Mapper(componentModel = "spring")
 public interface StaffProductModelMapper {
     Product toDto(StaffProductRequest staffProductRequest);
+
+    StaffProductResponse toModel(Product product);
 }
