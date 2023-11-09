@@ -9,7 +9,7 @@ public record CategoryRequest(
         @NotNull
         String name,
         String slug,
-        String image,
+        List<String> images,
         Boolean isDeleted,
         Boolean isActive
 ) {

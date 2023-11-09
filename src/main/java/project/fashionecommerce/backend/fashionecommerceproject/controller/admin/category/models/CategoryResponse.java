@@ -8,7 +8,7 @@ public record CategoryResponse(
         List<String> categoryIds,
         String name,
         String slug,
-        String image,
+        List<String> images,
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,

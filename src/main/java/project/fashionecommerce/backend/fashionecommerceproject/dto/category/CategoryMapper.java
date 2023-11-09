@@ -26,7 +26,7 @@ public abstract class CategoryMapper {
         categoryEntity.setCategoryIds(objectIds);
         categoryEntity.setName(category.name());
         categoryEntity.setSlug(category.slug());
-        categoryEntity.setImage(category.image());
+        categoryEntity.setImages(category.images());
         categoryEntity.setIsActive(category.isActive());
         categoryEntity.setIsDeleted(category.isDeleted());
 
@@ -46,7 +46,7 @@ public abstract class CategoryMapper {
                 .categoryIds(stringIds)
                 .name(categoryEntity.getName())
                 .slug(categoryEntity.getSlug())
-                .image(categoryEntity.getImage())
+                .images(categoryEntity.getImages())
                 .isActive(categoryEntity.getIsActive())
                 .isDeleted(categoryEntity.getIsDeleted())
                 .createdAt(categoryEntity.getCreatedAt())
@@ -69,7 +69,7 @@ public abstract class CategoryMapper {
         categoryEntity.setCategoryIds(objectIds);
         categoryEntity.setName(category.name());
         categoryEntity.setSlug(category.slug());
-        categoryEntity.setImage(category.image());
+        categoryEntity.setImages(category.images());
         categoryEntity.setIsActive(category.isActive());
         categoryEntity.setIsDeleted(category.isDeleted());
     }

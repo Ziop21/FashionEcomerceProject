@@ -11,7 +11,7 @@ public record Category (
         List<String> categoryIds,
         String name,
         String slug,
-        String image,
+        List<String> images,
         String updatedBy,
         String createdBy,
         LocalDateTime createdAt,
