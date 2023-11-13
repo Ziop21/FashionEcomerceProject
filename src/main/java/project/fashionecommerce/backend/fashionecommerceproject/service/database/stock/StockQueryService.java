@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.ReviewMapper;
@@ -39,7 +40,7 @@ public class StockQueryService {
     @NonNull final StockMapper stockMapper;
     @NonNull final ReviewMapper reviewMapper;
 
-    public Page<Stock> findAll(StockQuery stockQuery, PageRequest pageRequest) {
+    public Page<Stock> findAll(StockQuery stockQuery, PageRequest pageRequest, ERole role) {
         Criteria criteria = new Criteria();
 
         if (stockQuery.search() != null && !stockQuery.search().isBlank()) {
@@ -57,6 +58,13 @@ public class StockQueryService {
         Optional<List<String>> colorIds = Optional.ofNullable(stockQuery.colorIds());
         if (!colorIds.isEmpty() && !colorIds.get().isEmpty()) {
             criteria.and("colorId").in(colorIds.get().stream().map(colorId -> new ObjectId(colorId)).collect(Collectors.toList()));
+        }
+
+        if (role.equals(ERole.STAFF)){
+            if (role.equals(ERole.STAFF)){
+                criteria.and("isActive").is(false);
+                criteria.and("isDeleted").is(false);
+            }
         }
 
         Aggregation aggregation = Aggregation.newAggregation(
