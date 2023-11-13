@@ -5,13 +5,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQuery;
-import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockQueryService;
 
@@ -25,7 +28,12 @@ public class StaffStockUseCaseService {
     public void update(StockId stockId, Stock newStock) {
         Stock foundStock = stockQueryService.findById(stockId);
         if (foundStock.isDeleted() || foundStock.isActive()) {
-            throw new MyResourceNotFoundException();
+            throw new MyForbiddenException();
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (!userDetails.getId().equals(foundStock.createdBy())){
+            throw new MyForbiddenException();
         }
         foundStock = stockMapper.updateDto(foundStock, newStock.productId(), newStock.colorId(),
                 newStock.sizeId(), newStock.quantity());
@@ -35,7 +43,12 @@ public class StaffStockUseCaseService {
     public void delete(StockId stockId) {
         Stock stock = stockQueryService.findById(stockId);
         if (stock.isDeleted() || stock.isActive()) {
-            throw new MyResourceNotFoundException();
+            throw new MyForbiddenException();
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (!userDetails.getId().equals(stock.createdBy())){
+            throw new MyForbiddenException();
         }
         stock = stockMapper.updateDtoIsDeleted(stock, true);
         stockCommandService.update(stockId, stock);
@@ -55,7 +68,12 @@ public class StaffStockUseCaseService {
     public Stock findById(StockId stockId) {
         Stock stock = stockQueryService.findById(stockId);
         if (stock.isDeleted() || stock.isActive()) {
-            throw new MyResourceNotFoundException();
+            throw new MyForbiddenException();
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (!userDetails.getId().equals(stock.createdBy())){
+            throw new MyForbiddenException();
         }
         return stock;
     }

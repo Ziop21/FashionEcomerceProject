@@ -2,6 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.service.databas
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +11,11 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiary;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiaryId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiaryMapper;
@@ -31,7 +36,7 @@ public class StockDiaryQueryService {
     final StockDiaryMapper stockDiaryMapper;
     @NonNull
     final MongoTemplate mongoTemplate;
-    public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
+    public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest, ERole role) {
         Criteria criteria = new Criteria();
 
         if (stockDiaryQuery.search() != null && !stockDiaryQuery.search().isBlank()) {
@@ -45,6 +50,13 @@ public class StockDiaryQueryService {
             LocalDateTime newFromDate = LocalDateTime.parse(stockDiaryQuery.fromDate() + "T00:00:00");
             LocalDateTime newToDate = LocalDateTime.parse(stockDiaryQuery.toDate() + "T23:59:59");
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
+        }
+        if (role.equals(ERole.STAFF)){
+            criteria.and("isActive").is(false);
+            criteria.and("isDeleted").is(false);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
         Aggregation aggregation = Aggregation.newAggregation(

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiary;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiaryId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.diary.StockDiaryQuery;
@@ -33,6 +34,6 @@ public class StockDiaryUseCaseService {
         return stockDiaryQueryService.findById(stockDiaryId);
     }
     public Page<StockDiary> findAll(StockDiaryQuery stockDiaryQuery, PageRequest pageRequest) {
-        return stockDiaryQueryService.findAll(stockDiaryQuery, pageRequest);
+        return stockDiaryQueryService.findAll(stockDiaryQuery, pageRequest, ERole.ADMIN);
     }
 }

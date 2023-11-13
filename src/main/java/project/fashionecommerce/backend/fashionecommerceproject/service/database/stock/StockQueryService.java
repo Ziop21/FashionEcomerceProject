@@ -11,7 +11,10 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
@@ -20,6 +23,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.StockEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.StockRepository;
@@ -61,10 +65,11 @@ public class StockQueryService {
         }
 
         if (role.equals(ERole.STAFF)){
-            if (role.equals(ERole.STAFF)){
-                criteria.and("isActive").is(false);
-                criteria.and("isDeleted").is(false);
-            }
+            criteria.and("isActive").is(false);
+            criteria.and("isDeleted").is(false);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
         Aggregation aggregation = Aggregation.newAggregation(

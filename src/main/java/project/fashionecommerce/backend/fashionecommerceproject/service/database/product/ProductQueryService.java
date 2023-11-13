@@ -11,7 +11,10 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
@@ -81,6 +84,9 @@ public class ProductQueryService {
             criteria.and("isDeleted").is(false);
             criteria.and("isActive").is(false);
             criteria.and("isSelling").is(false);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
         Aggregation aggregation = Aggregation.newAggregation(
