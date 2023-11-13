@@ -79,4 +79,16 @@ public abstract class StockMapper {
     }
     @Mapping(source = "reviews", target = "reviews")
     public abstract Stock updateDto(Stock stock, List<Review> reviews);
+
+    @Mapping(source = "isActive", target = "isActive")
+    public abstract Stock updateDtoIsActive(Stock stock, Boolean isActive);
+
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    public abstract Stock updateDtoIsDeleted(Stock stock, Boolean isDeleted);
+
+    @Mapping(source = "productId", target = "productId")
+    @Mapping(source = "colorId", target = "colorId")
+    @Mapping(source = "sizeId", target = "sizeId")
+    @Mapping(source = "quantity", target = "quantity")
+    public abstract Stock updateDto(Stock foundStock, String productId, String colorId, String sizeId, Long quantity);
 }
