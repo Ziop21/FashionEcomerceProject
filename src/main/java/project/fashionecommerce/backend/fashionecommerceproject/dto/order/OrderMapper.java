@@ -6,7 +6,6 @@ import org.mapstruct.MappingTarget;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrderStatus;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.items.OrderItem;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.order.OrderEntity;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -24,4 +23,12 @@ public interface OrderMapper {
 
     @Mapping(source = "userId", target = "userId")
     Order updateDtoUserId(Order order, String userId);
+
+    @Mapping(source = "deliveryName", target = "deliveryName")
+    Order updateDtoDeliveryName(Order foundOrder, String deliveryName);
+
+    @Mapping(source = "isActive", target = "isActive")
+    Order updateDtoIsActive(Order order, Boolean isActive);
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    Order updateDtoIsDeleted(Order order, Boolean isDeleted);
 }

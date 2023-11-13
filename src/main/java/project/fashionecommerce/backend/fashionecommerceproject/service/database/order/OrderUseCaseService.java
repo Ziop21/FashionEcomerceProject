@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.Order;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderQuery;
@@ -29,7 +30,7 @@ public class OrderUseCaseService {
     }
 
     public Page<Order> findAll(OrderQuery orderQuery, PageRequest pageRequest) {
-        return orderQueryService.findAll(orderQuery, pageRequest);
+        return orderQueryService.findAll(orderQuery, pageRequest , ERole.ADMIN);
     }
     public Order findById(OrderId orderId) {
         return orderQueryService.findById(orderId);

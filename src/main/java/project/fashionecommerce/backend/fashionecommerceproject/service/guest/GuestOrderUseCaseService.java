@@ -24,7 +24,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.order.OrderCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +63,8 @@ public class GuestOrderUseCaseService {
                         .build())
                 .collect(Collectors.toList());
         order = orderMapper.updateDto(order, EOrderStatus.WAITING, orderItems);
+        order = orderMapper.updateDtoIsActive(order, true);
+        order = orderMapper.updateDtoIsDeleted(order, false);
         if (guestUseCaseService.getCurrentUser() != "anonymousUser"){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
