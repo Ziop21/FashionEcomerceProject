@@ -11,8 +11,6 @@ public record StaffStockResponse(
         String sizeId,
         String colorId,
         Long quantity,
-        Boolean isActive,
-        Boolean isDeleted,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String createdBy,

@@ -9,7 +9,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.staff
 import project.fashionecommerce.backend.fashionecommerceproject.controller.staff.stock.models.StaffStockResponse;
 import java.util.List;
 
-@RequestMapping("/api/staff/stock")
+@RequestMapping("/api/staff/stocks")
 public interface StaffStocksAPI {
     @PostMapping
     void save(@RequestBody @Valid StaffStockRequest stockRequest);
