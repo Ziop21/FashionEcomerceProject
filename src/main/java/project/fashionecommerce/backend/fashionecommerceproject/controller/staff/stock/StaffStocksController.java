@@ -8,15 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.models.StockModelMapper;
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.stock.models.StockResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.staff.stock.models.StaffStockModelMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.staff.stock.models.StaffStockRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.staff.stock.models.StaffStockResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.handler.MySortHandler;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQuery;
-import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockUseCaseService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.staff.StaffStockUseCaseService;
 
 import java.util.List;
