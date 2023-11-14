@@ -4,5 +4,6 @@ public enum ERole {
     GUEST,
     CUSTOMER,
     ADMIN,
+    MANAGER,
     STAFF;
 }
