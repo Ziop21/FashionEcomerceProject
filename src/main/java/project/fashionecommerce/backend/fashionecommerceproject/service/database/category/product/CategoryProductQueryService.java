@@ -19,6 +19,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.category.pro
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.product.CategoryProductMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,7 +58,27 @@ public class CategoryProductQueryService {
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+//        Aggregation aggregation = Aggregation.newAggregation(
+//                Aggregation.lookup("user", "createdBy", "_id", "user"),
+//                Aggregation.unwind("user", true),
+//                Aggregation.lookup("product", "productId", "_id", "product"),
+//                Aggregation.unwind("product", true),
+//                Aggregation.lookup("category", "categoryId", "_id", "category"),
+//                Aggregation.unwind("category", true),
+//                Aggregation.match(criteria),
+//                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+//                Aggregation.limit(pageRequest.getPageSize())
+//        );
+//
+//        AggregationResults<CategoryProductEntity> results = mongoTemplate.aggregate(aggregation, "category_product", CategoryProductEntity.class);
+//
+//        List<CategoryProductEntity> categoryProductList = results.getMappedResults();
+//
+//        Long total = (long) categoryProductList.size();
+//
+//        List<CategoryProductEntity> pagedCategoryProductList = categoryProductList.subList(0, Math.min(pageRequest.getPageSize(), categoryProductList.size()));
+//        Page<CategoryProductEntity> categoryProductPage = PageableExecutionUtils.getPage(pagedCategoryProductList, pageRequest, () -> total);
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "createdBy", "_id", "user"),
                 Aggregation.unwind("user", true),
                 Aggregation.lookup("product", "productId", "_id", "product"),
@@ -65,19 +86,38 @@ public class CategoryProductQueryService {
                 Aggregation.lookup("category", "categoryId", "_id", "category"),
                 Aggregation.unwind("category", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "category_product", Map.class);
+
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("user", "createdBy", "_id", "user"),
+                Aggregation.unwind("user", true),
+                Aggregation.lookup("product", "productId", "_id", "product"),
+                Aggregation.unwind("product", true),
+                Aggregation.lookup("category", "categoryId", "_id", "category"),
+                Aggregation.unwind("category", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<CategoryProductEntity> results = mongoTemplate.aggregate(aggregation, "category_product", CategoryProductEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
+        AggregationResults<CategoryProductEntity> results = mongoTemplate.aggregate(mainAggregation, "category_product", CategoryProductEntity.class);
         List<CategoryProductEntity> categoryProductList = results.getMappedResults();
 
-        Long total = (long) categoryProductList.size();
-
         List<CategoryProductEntity> pagedCategoryProductList = categoryProductList.subList(0, Math.min(pageRequest.getPageSize(), categoryProductList.size()));
-        Page<CategoryProductEntity> categoryProductPage = PageableExecutionUtils.getPage(pagedCategoryProductList, pageRequest, () -> total);
-
+        Page<CategoryProductEntity> categoryProductPage = PageableExecutionUtils.getPage(pagedCategoryProductList, newPageRequest, () -> total);
         return new PageImpl<>(categoryProductPage.getContent().stream().map(categoryProductMapper::toDto).collect(Collectors.toList()), pageRequest, total);
 
     }

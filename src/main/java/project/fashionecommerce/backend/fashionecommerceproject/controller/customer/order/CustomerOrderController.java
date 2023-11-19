@@ -31,7 +31,7 @@ public class CustomerOrderController implements CustomerOrderAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<CustomerOrderResponse>> findAll(String search, List<String> deliveryIds, List<EOrderStatus> statuses, Boolean isPaidBefore, LocalDate fromDate, LocalDate toDate, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<CustomerOrderResponse>> findAll(String search, List<String> deliveryIds, List<EOrderStatus> statuses, Boolean isPaidBefore, LocalDate fromDate, LocalDate toDate, String sort, Integer currentPage, Integer pageSize) {
         OrderQuery orderQuery = OrderQuery.builder()
                 .search(search)
                 .deliveryIds(deliveryIds)
@@ -41,7 +41,7 @@ public class CustomerOrderController implements CustomerOrderAPI {
                 .toDate(toDate)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage-1, pageSize, MySortHandler.of(sort));
 
         Page<Order> orderPage = customerOrderUseCaseService.findAll(orderQuery, pageRequest);
 

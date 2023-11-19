@@ -1,6 +1,6 @@
 package project.fashionecommerce.backend.fashionecommerceproject.dto.order;
 
-import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.order.items.models.OrderItemResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.manager.order.items.models.OrderItemResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrderStatus;
 import java.time.LocalDateTime;
 import java.util.List;

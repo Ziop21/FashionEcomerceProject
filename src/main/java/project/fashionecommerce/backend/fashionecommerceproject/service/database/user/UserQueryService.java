@@ -22,6 +22,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -99,20 +100,33 @@ public class UserQueryService {
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "user", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<UserEntity> results = mongoTemplate.aggregate(aggregation, "user", UserEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
+        AggregationResults<UserEntity> results = mongoTemplate.aggregate(mainAggregation, "user", UserEntity.class);
         List<UserEntity> userList = results.getMappedResults();
 
-        Long total = (long) userList.size();
-
         List<UserEntity> pagedUserList = userList.subList(0, Math.min(pageRequest.getPageSize(), userList.size()));
-        Page<UserEntity> userPage = PageableExecutionUtils.getPage(pagedUserList, pageRequest, () -> total);
+        Page<UserEntity> userPage = PageableExecutionUtils.getPage(pagedUserList, newPageRequest, () -> total);
 
         return new PageImpl<>(userPage.getContent().stream().map(userMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }

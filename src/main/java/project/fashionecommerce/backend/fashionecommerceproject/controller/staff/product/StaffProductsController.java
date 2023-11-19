@@ -28,12 +28,12 @@ public class StaffProductsController implements StaffProductsAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<StaffProductResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<StaffProductResponse>> findAll(String search, String sort, Integer currentPage, Integer pageSize) {
         ProductQuery productQuery = ProductQuery
                 .builder()
                 .search(search)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<Product> productPage = staffProductUseCaseService.findAll(productQuery, pageRequest);
 

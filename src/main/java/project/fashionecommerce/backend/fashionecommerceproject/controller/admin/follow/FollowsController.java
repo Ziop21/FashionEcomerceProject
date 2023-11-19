@@ -33,13 +33,13 @@ public class FollowsController implements FollowsAPI {
     @Override
     public ResponseEntity<PageResponse<FollowResponse>> findAll(String search, LocalDate fromDate,
                                                                 LocalDate toDate, String sort,
-                                                                Integer pageCurrent, Integer pageFollow) {
+                                                                Integer currentPage, Integer pageFollow) {
         FollowQuery followQuery = FollowQuery.builder()
                 .search(search)
                 .fromDate(fromDate)
                 .toDate(toDate)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageFollow, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageFollow, MySortHandler.of(sort));
 
         Page<Follow> followPage = followUseCaseService.findAll(followQuery, pageRequest);
 

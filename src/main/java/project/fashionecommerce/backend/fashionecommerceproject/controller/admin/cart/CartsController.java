@@ -28,9 +28,9 @@ public class CartsController implements CartsAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<CartResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<CartResponse>> findAll(String search, String sort, Integer currentPage, Integer pageSize) {
         CartQuery cartQuery = new CartQuery(search);
-        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage-1, pageSize, MySortHandler.of(sort));
         Page<Cart> cartPage = cartUseCaseService.findAll(cartQuery, pageRequest);
         PageResponse<CartResponse> cartResponsePageResponse = new PageResponse<>(cartPage.map(cartModelMapper::toModel));
         return new ResponseEntity<>(cartResponsePageResponse, HttpStatus.OK) ;
