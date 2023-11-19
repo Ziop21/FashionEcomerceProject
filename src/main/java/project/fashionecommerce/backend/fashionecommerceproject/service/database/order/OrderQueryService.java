@@ -26,6 +26,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.order.OrderEntity;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,24 +77,39 @@ public class OrderQueryService {
             criteria.and("isDeleted").is(false);
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "userId", "_id", "user"),
                 Aggregation.unwind("user", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "order", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("user", "userId", "_id", "user"),
+                Aggregation.unwind("user", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
-        AggregationResults<OrderEntity> results = mongoTemplate.aggregate(aggregation, "order", OrderEntity.class);
 
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
+
+        AggregationResults<OrderEntity> results = mongoTemplate.aggregate(mainAggregation, "order", OrderEntity.class);
         List<OrderEntity> orderList = results.getMappedResults();
 
-        Long total = (long) orderList.size();
-
         List<OrderEntity> pagedOrderList = orderList.subList(0, Math.min(pageRequest.getPageSize(), orderList.size()));
-        Page<OrderEntity> orderPage = PageableExecutionUtils.getPage(pagedOrderList, pageRequest, () -> total);
+        Page<OrderEntity> orderPage = PageableExecutionUtils.getPage(pagedOrderList, newPageRequest, () -> total);
 
-        return new PageImpl<>(orderPage.getContent().stream().map(orderMapper::toDto).collect(Collectors.toList()), pageRequest, total);
-
+        return new PageImpl<>(orderPage.getContent().stream().map(orderMapper::toDto).collect(Collectors.toList()), newPageRequest, total);
     }
 
     public Order findById(OrderId orderId) {

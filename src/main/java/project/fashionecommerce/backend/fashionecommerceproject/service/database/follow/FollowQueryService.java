@@ -23,6 +23,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.follow.FollowRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,24 +61,41 @@ public class FollowQueryService {
             criteria.and("createdAt").gte(newFromDate).lte(newToDate);
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "userId", "_id", "user"),
                 Aggregation.unwind("user", true),
                 Aggregation.lookup("product", "productId", "_id", "product"),
                 Aggregation.unwind("product", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "follow", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("user", "userId", "_id", "user"),
+                Aggregation.unwind("user", true),
+                Aggregation.lookup("product", "productId", "_id", "product"),
+                Aggregation.unwind("product", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<FollowEntity> results = mongoTemplate.aggregate(aggregation, "follow", FollowEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
+        AggregationResults<FollowEntity> results = mongoTemplate.aggregate(mainAggregation, "follow", FollowEntity.class);
         List<FollowEntity> followList = results.getMappedResults();
 
-        Long total = (long) followList.size();
-
         List<FollowEntity> pagedFollowList = followList.subList(0, Math.min(pageRequest.getPageSize(), followList.size()));
-        Page<FollowEntity> followPage = PageableExecutionUtils.getPage(pagedFollowList, pageRequest, () -> total);
+        Page<FollowEntity> followPage = PageableExecutionUtils.getPage(pagedFollowList, newPageRequest, () -> total);
 
         return new PageImpl<>(followPage.getContent().stream().map(followMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }

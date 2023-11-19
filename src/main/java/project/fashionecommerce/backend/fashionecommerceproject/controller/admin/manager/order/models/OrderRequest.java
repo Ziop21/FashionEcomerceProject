@@ -22,7 +22,6 @@ public record OrderRequest(
         Boolean isPaidBefore,
         @NotNull
         Boolean isDeleted,
-
         @NotNull
         Boolean isActive
 ) {

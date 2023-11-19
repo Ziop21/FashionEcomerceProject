@@ -28,10 +28,10 @@ public class DeliveriesController implements DeliveriesAPI{
     }
 
     @Override
-    public ResponseEntity<PageResponse<DeliveryResponse>> findAll(String search, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<DeliveryResponse>> findAll(String search, String sort, Integer currentPage, Integer pageSize) {
         DeliveryQuery deliveryQuery = new DeliveryQuery(search);
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage-1, pageSize, MySortHandler.of(sort));
 
         Page<Delivery> deliveryPage = deliveryUseCaseService.findAll(deliveryQuery, pageRequest);
 

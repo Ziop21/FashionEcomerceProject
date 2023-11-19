@@ -29,14 +29,16 @@ public class StocksController implements StocksAPI {
     }
 
     @Override
-    public ResponseEntity<PageResponse<StockResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds, String sort, Integer pageCurrent, Integer pageSize) {
+    public ResponseEntity<PageResponse<StockResponse>> findAll(String search, List<String> sizeIds,
+                                                               List<String> colorIds, String sort, Integer currentPage,
+                                                               Integer pageSize) {
         StockQuery stockQuery = StockQuery.builder()
                 .search(search)
                 .sizeIds(sizeIds)
                 .colorIds(colorIds)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<Stock> stockPage = stockUseCaseService.findAll(stockQuery, pageRequest);
 

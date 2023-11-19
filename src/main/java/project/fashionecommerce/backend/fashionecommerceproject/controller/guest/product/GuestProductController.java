@@ -33,14 +33,14 @@ public class GuestProductController implements GuestProductAPI {
     @Override
     public ResponseEntity<PageResponse<GuestProductResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds,
                                                         Long fromRating, Long toRating, Long fromPrice, Long toPrice,
-                                                        LocalDate fromDate, LocalDate toDate, String sort, Integer pageCurrent,
+                                                        LocalDate fromDate, LocalDate toDate, String sort, Integer currentPage,
                                                         Integer pageSize) {
         ProductQuery productQuery = ProductQuery.builder()
                 .search(search).sizeIds(sizeIds).colorIds(colorIds).fromRating(fromRating).toRating(toRating)
                 .fromPrice(fromPrice).toPrice(toPrice).fromDate(fromDate).toDate(toDate)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<Product> productPage = guestProductUseCaseService.findAllProduct(productQuery, pageRequest);
 

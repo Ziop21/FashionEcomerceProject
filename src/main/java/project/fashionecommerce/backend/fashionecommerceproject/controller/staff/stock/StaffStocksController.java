@@ -31,14 +31,14 @@ public class StaffStocksController implements StaffStocksAPI{
 
     @Override
     public ResponseEntity<PageResponse<StaffStockResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds,
-                                                                    String sort, Integer pageCurrent, Integer pageSize) {
+                                                                    String sort, Integer currentPage, Integer pageSize) {
         StockQuery stockQuery = StockQuery.builder()
                 .search(search)
                 .sizeIds(sizeIds)
                 .colorIds(colorIds)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<Stock> stockPage = staffStockUseCaseService.findAll(stockQuery, pageRequest);
 

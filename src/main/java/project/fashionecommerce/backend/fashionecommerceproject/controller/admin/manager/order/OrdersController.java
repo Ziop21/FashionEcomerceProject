@@ -36,7 +36,7 @@ public class OrdersController implements OrdersAPI{
                                                                List<EOrderStatus> statuses,
                                                                Boolean isPaidBefore, LocalDate fromDate,
                                                                LocalDate toDate, String sort,
-                                                               Integer pageCurrent, Integer pageSize) {
+                                                               Integer currentPage, Integer pageSize) {
         OrderQuery orderQuery = OrderQuery.builder()
                 .search(search)
                 .deliveryIds(deliveryIds)
@@ -46,7 +46,7 @@ public class OrdersController implements OrdersAPI{
                 .toDate(toDate)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent-1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage-1, pageSize, MySortHandler.of(sort));
 
         Page<Order> orderPage = orderUseCaseService.findAll(orderQuery, pageRequest);
 

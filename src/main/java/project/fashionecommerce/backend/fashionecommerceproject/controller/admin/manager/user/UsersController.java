@@ -35,7 +35,7 @@ public class UsersController implements UsersAPI {
                                                               List<String> userLevelIds,
                                                               LocalDate fromDate,
                                                               LocalDate toDate,
-                                                              String sort, Integer pageCurrent, Integer pageSize) {
+                                                              String sort, Integer currentPage, Integer pageSize) {
         UserQuery userQuery = UserQuery.builder()
                 .search(search)
                 .isDeleted(isDeleted)
@@ -46,7 +46,7 @@ public class UsersController implements UsersAPI {
                 .toDate(toDate)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<User> userPage = userUseCaseService.findAll(userQuery, pageRequest);
 

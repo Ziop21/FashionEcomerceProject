@@ -30,6 +30,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -72,23 +73,37 @@ public class StockQueryService {
             criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("product", "productId", "_id", "products"),
                 Aggregation.unwind("products", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "stock", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("product", "productId", "_id", "products"),
+                Aggregation.unwind("products", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<StockEntity> results = mongoTemplate.aggregate(aggregation, "stock", StockEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
+        AggregationResults<StockEntity> results = mongoTemplate.aggregate(mainAggregation, "stock", StockEntity.class);
         List<StockEntity> stockList = results.getMappedResults();
 
-        Long total = (long) stockList.size();
-
         List<StockEntity> pagedStockList = stockList.subList(0, Math.min(pageRequest.getPageSize(), stockList.size()));
-        Page<StockEntity> stockPage = PageableExecutionUtils.getPage(pagedStockList, pageRequest, () -> total);
-
+        Page<StockEntity> stockPage = PageableExecutionUtils.getPage(pagedStockList, newPageRequest, () -> total);
         return new PageImpl<>(stockPage.getContent().stream().map(stockMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }
 

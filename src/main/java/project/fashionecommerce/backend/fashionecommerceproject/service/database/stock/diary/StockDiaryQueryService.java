@@ -25,6 +25,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.stock.diary.StockDiaryRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,22 +60,37 @@ public class StockDiaryQueryService {
             criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "createdBy", "_id", "users"),
                 Aggregation.unwind("users", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "stockDiary", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("user", "createdBy", "_id", "users"),
+                Aggregation.unwind("users", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
-        AggregationResults<StockDiaryEntity> results = mongoTemplate.aggregate(aggregation, "stock_diary", StockDiaryEntity.class);
 
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
+
+        AggregationResults<StockDiaryEntity> results = mongoTemplate.aggregate(mainAggregation, "stockDiary", StockDiaryEntity.class);
         List<StockDiaryEntity> stockDiaryList = results.getMappedResults();
 
-        Long total = (long) stockDiaryList.size();
-
-        List<StockDiaryEntity> pagedstockDiaryList = stockDiaryList.subList(0, Math.min(pageRequest.getPageSize(), stockDiaryList.size()));
-        Page<StockDiaryEntity> stockDiaryPage = PageableExecutionUtils.getPage(pagedstockDiaryList, pageRequest, () -> total);
-
+        List<StockDiaryEntity> pagedStockDiaryList = stockDiaryList.subList(0, Math.min(pageRequest.getPageSize(), stockDiaryList.size()));
+        Page<StockDiaryEntity> stockDiaryPage = PageableExecutionUtils.getPage(pagedStockDiaryList, newPageRequest, () -> total);
         return new PageImpl<>(stockDiaryPage.getContent().stream().map(stockDiaryMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }
     public StockDiary findById(StockDiaryId stockDiaryId) {

@@ -25,6 +25,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.repository.datab
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.product.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,7 +90,41 @@ public class ProductQueryService {
             criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+//        Aggregation aggregation = Aggregation.newAggregation(
+//                Aggregation.lookup("stock", "_id", "productId", "stocks"),
+//                Aggregation.unwind("stocks", true),
+//                Aggregation.match(criteria),
+//                Aggregation.group("_id")
+//                        .first("name").as("name")
+//                        .first("slug").as("slug")
+//                        .first("description").as("description")
+//                        .first("price").as("price")
+//                        .first("promotionalPrice").as("promotionalPrice")
+//                        .first("view").as("view")
+//                        .first("isSelling").as("isSelling")
+//                        .first("images").as("images")
+//                        .first("rating").as("rating")
+//                        .first("isDeleted").as("isDeleted")
+//                        .first("isActive").as("isActive")
+//                        .first("createdAt").as("createdAt")
+//                        .first("updatedAt").as("updatedAt")
+//                        .first("createdBy").as("createdBy")
+//                        .first("updatedBy").as("updatedBy")
+//                ,
+//                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+//                Aggregation.limit(pageRequest.getPageSize())
+//        );
+//
+//        AggregationResults<ProductEntity> results = mongoTemplate.aggregate(aggregation, "product", ProductEntity.class);
+//
+//        List<ProductEntity> productList = results.getMappedResults();
+//
+//        Long total = (long) productList.size();
+//
+//        List<ProductEntity> pagedProductList = productList.subList(0, Math.min(pageRequest.getPageSize(), productList.size()));
+//        Page<ProductEntity> productPage = PageableExecutionUtils.getPage(pagedProductList, pageRequest, () -> total);
+
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("stock", "_id", "productId", "stocks"),
                 Aggregation.unwind("stocks", true),
                 Aggregation.match(criteria),
@@ -108,21 +143,51 @@ public class ProductQueryService {
                         .first("createdAt").as("createdAt")
                         .first("updatedAt").as("updatedAt")
                         .first("createdBy").as("createdBy")
-                        .first("updatedBy").as("updatedBy")
-                ,
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                        .first("updatedBy").as("updatedBy"),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "product", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("stock", "_id", "productId", "stocks"),
+                Aggregation.unwind("stocks", true),
+                Aggregation.match(criteria),
+                Aggregation.group("_id")
+                        .first("name").as("name")
+                        .first("slug").as("slug")
+                        .first("description").as("description")
+                        .first("price").as("price")
+                        .first("promotionalPrice").as("promotionalPrice")
+                        .first("view").as("view")
+                        .first("isSelling").as("isSelling")
+                        .first("images").as("images")
+                        .first("rating").as("rating")
+                        .first("isDeleted").as("isDeleted")
+                        .first("isActive").as("isActive")
+                        .first("createdAt").as("createdAt")
+                        .first("updatedAt").as("updatedAt")
+                        .first("createdBy").as("createdBy")
+                        .first("updatedBy").as("updatedBy"),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<ProductEntity> results = mongoTemplate.aggregate(aggregation, "product", ProductEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
+        AggregationResults<ProductEntity> results = mongoTemplate.aggregate(mainAggregation, "product", ProductEntity.class);
         List<ProductEntity> productList = results.getMappedResults();
 
-        Long total = (long) productList.size();
-
         List<ProductEntity> pagedProductList = productList.subList(0, Math.min(pageRequest.getPageSize(), productList.size()));
-        Page<ProductEntity> productPage = PageableExecutionUtils.getPage(pagedProductList, pageRequest, () -> total);
-
+        Page<ProductEntity> productPage = PageableExecutionUtils.getPage(pagedProductList, newPageRequest, () -> total);
+        
         return new PageImpl<>(productPage.getContent().stream().map(productMapper::toDto).collect(Collectors.toList()), pageRequest, total);
     }
 

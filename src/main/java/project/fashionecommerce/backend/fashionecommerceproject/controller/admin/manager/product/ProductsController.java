@@ -32,7 +32,7 @@ public class ProductsController implements ProductsAPI{
     @Override
     public ResponseEntity<PageResponse<ProductResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds,
                                                                  Long fromRating, Long toRating, Long fromPrice, Long toPrice,
-                                                                 LocalDate fromDate, LocalDate toDate, String sort, Integer pageCurrent,
+                                                                 LocalDate fromDate, LocalDate toDate, String sort, Integer currentPage,
                                                                  Integer pageSize) {
         ProductQuery productQuery = ProductQuery.builder()
                 .search(search)
@@ -43,7 +43,7 @@ public class ProductsController implements ProductsAPI{
                 .fromDate(fromDate).toDate(toDate)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageSize, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<Product> productPage = productUseCaseService.findAll(productQuery, pageRequest);
 
