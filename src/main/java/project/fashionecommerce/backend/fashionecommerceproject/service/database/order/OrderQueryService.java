@@ -100,7 +100,7 @@ public class OrderQueryService {
                 Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
-
+ 
         PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
         AggregationResults<OrderEntity> results = mongoTemplate.aggregate(mainAggregation, "order", OrderEntity.class);

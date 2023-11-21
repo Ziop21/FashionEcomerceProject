@@ -34,9 +34,7 @@ public class GuestAuthenController implements GuestAuthenAPI {
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString(),
-                        myAuthentication.jwtRefreshCookieString(),
-                        myAuthentication.usernameCookieString())
-//                .headers(headers)
+                        myAuthentication.jwtRefreshCookieString())
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),

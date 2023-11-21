@@ -7,7 +7,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.config.security.
 public record MyAuthentication(
         UserDetailsImpl userDetails,
         String cartTokenCookieString,
-        String usernameCookieString,
         String jwtCookieString,
         String jwtRefreshCookieString
 ) {

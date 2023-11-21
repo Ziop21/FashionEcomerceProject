@@ -60,11 +60,10 @@ public class AuthenUseCaseService {
             String userId = ((UserDetailsImpl) principle).getId();
             tokenCommandService.deleteByUserId(userId);
         }
-        ResponseCookie usernameCookie = jwtUtils.getCleanUsernameCookie();
         ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 
-        return new MyAuthentication(null, null, usernameCookie.toString(), jwtCookie.toString(), jwtRefreshCookie.toString());
+        return new MyAuthentication(null, null, jwtCookie.toString(), jwtRefreshCookie.toString());
     }
 
 }

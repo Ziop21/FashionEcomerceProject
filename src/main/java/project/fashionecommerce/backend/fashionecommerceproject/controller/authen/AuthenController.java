@@ -32,7 +32,6 @@ public class AuthenController implements AuthenAPI {
         MyAuthentication myAuthentication = authenUseCaseService.logout();
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.usernameCookieString())
                 .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString())
                 .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString())
                 .body("You've been signed out!");
