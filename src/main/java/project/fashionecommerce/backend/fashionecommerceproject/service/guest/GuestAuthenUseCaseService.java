@@ -48,8 +48,6 @@ public class GuestAuthenUseCaseService {
     @Autowired final PasswordEncoder passwordEncoder;
     @Autowired private JavaMailSender javaMailSender;
 
-    @Value("${fashion_ecommerce.app.username}")
-    private String usernameCookieName;
     @Value("${fashion_ecommerce.app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
     @Value("${fashion_ecommerce.app.jwtEmailExpirationS}")

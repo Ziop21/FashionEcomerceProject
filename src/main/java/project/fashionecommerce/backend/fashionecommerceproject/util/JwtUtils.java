@@ -18,9 +18,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.config.security.
 public class JwtUtils implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${fashion_ecommerce.app.username}")
-    private String username;
-
     @Value("${fashion_ecommerce.app.jwtSecret}")
     private String jwtSecret;
 
@@ -52,10 +49,7 @@ public class JwtUtils implements Serializable {
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
         return getCookieValueByName(request, jwtRefreshCookie);
     }
-    public ResponseCookie getCleanUsernameCookie() {
-        ResponseCookie cookie = ResponseCookie.from(username, null).path("/api").build();
-        return cookie;
-    }
+
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
         return cookie;
