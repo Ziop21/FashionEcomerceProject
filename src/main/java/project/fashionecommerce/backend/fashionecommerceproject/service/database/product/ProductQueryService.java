@@ -90,40 +90,6 @@ public class ProductQueryService {
             criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
         }
 
-//        Aggregation aggregation = Aggregation.newAggregation(
-//                Aggregation.lookup("stock", "_id", "productId", "stocks"),
-//                Aggregation.unwind("stocks", true),
-//                Aggregation.match(criteria),
-//                Aggregation.group("_id")
-//                        .first("name").as("name")
-//                        .first("slug").as("slug")
-//                        .first("description").as("description")
-//                        .first("price").as("price")
-//                        .first("promotionalPrice").as("promotionalPrice")
-//                        .first("view").as("view")
-//                        .first("isSelling").as("isSelling")
-//                        .first("images").as("images")
-//                        .first("rating").as("rating")
-//                        .first("isDeleted").as("isDeleted")
-//                        .first("isActive").as("isActive")
-//                        .first("createdAt").as("createdAt")
-//                        .first("updatedAt").as("updatedAt")
-//                        .first("createdBy").as("createdBy")
-//                        .first("updatedBy").as("updatedBy")
-//                ,
-//                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
-//                Aggregation.limit(pageRequest.getPageSize())
-//        );
-//
-//        AggregationResults<ProductEntity> results = mongoTemplate.aggregate(aggregation, "product", ProductEntity.class);
-//
-//        List<ProductEntity> productList = results.getMappedResults();
-//
-//        Long total = (long) productList.size();
-//
-//        List<ProductEntity> pagedProductList = productList.subList(0, Math.min(pageRequest.getPageSize(), productList.size()));
-//        Page<ProductEntity> productPage = PageableExecutionUtils.getPage(pagedProductList, pageRequest, () -> total);
-
         Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("stock", "_id", "productId", "stocks"),
                 Aggregation.unwind("stocks", true),
