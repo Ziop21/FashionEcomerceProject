@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 public record GuestProductResponse(
-        String id,
+        String productId,
         String name,
         String description,
         Double price,
