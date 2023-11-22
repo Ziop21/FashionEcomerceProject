@@ -44,7 +44,7 @@ public abstract class GuestProductModelMapper {
         List<GuestColorResponse> colors = product.colors() == null ? null : product.colors().stream().map(guestColorModelMapper::toModel).collect(Collectors.toList());
         List<GuestSizeResponse> sizes = product.sizes() == null ? null : product.sizes().stream().map(guestSizeModelMapper::toModel).collect(Collectors.toList());
         GuestProductResponse productResponse = GuestProductResponse.builder()
-                .productId(product.id())
+                .id(product.id())
                 .name(product.name())
                 .description(product.description())
                 .price(product.price())
