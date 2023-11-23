@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +34,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
                 String jwt = parseJwt(request);
-                if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                if (jwt != null && jwtUtils.validateJwtToken(jwt, request)) {
                     Claims claims = jwtUtils.getClaimsFromJwtToken(jwt);
                     UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get("email", String.class));
                     if (userDetails != null) {

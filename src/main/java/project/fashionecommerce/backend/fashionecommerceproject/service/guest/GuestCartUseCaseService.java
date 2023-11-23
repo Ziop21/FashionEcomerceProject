@@ -130,7 +130,7 @@ public class GuestCartUseCaseService {
     }
     public String getCartId(HttpServletRequest request){
         String cartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-        if (cartToken == null || jwtUtils.validateJwtToken(cartToken) == false) {
+        if (cartToken == null || jwtUtils.validateJwtToken(cartToken, request) == false) {
             throw new MyForbiddenException();
         }
         String cartId = jwtUtils.getClaimsFromJwtToken(cartToken).getSubject();

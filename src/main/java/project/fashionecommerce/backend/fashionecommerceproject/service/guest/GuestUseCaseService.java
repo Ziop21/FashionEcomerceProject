@@ -39,7 +39,7 @@ public class GuestUseCaseService {
         String currentUser = getCurrentUser();
         if (currentUser == "anonymousUser") {
             String oldCartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-            if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
+            if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken, request) == false) {
                 Cart cart = Cart.builder().isDeleted(false).isActive(true).build();
                 cart = cartCommandService.save(cart);
                 String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
@@ -58,7 +58,7 @@ public class GuestUseCaseService {
             ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
             return MyAuthentication.builder().userDetails(userDetails).cartTokenCookieString(cartTokenCookie.toString()).build();
         }
-        if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken) == false) {
+        if (oldCartToken == null || jwtUtils.validateJwtToken(oldCartToken, request) == false) {
             throw new MyForbiddenException();
         }
         return MyAuthentication.builder().userDetails(userDetails).build();

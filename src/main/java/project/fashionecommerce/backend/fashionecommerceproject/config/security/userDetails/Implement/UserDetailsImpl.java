@@ -46,6 +46,13 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
+    public List<String> getRoles(){
+        List<String> roles = authorities.stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+        return roles;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

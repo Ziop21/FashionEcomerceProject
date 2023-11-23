@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 import io.jsonwebtoken.*;
-import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
 
 @Component
@@ -52,11 +51,12 @@ public class JwtUtils implements Serializable {
         return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(String authToken, HttpServletRequest request) {
         try {
             Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parse(authToken);
             return true;
-        } catch (SignatureException e) {
+        }
+        catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
@@ -67,14 +67,12 @@ public class JwtUtils implements Serializable {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 
     public String generateTokenFromUser(UserDetailsImpl userDetails) {
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        List<String> roles = userDetails.getRoles();
+
         Map<String, Object> tokenData = new HashMap<>();
         tokenData.put("userId", userDetails.getEmail());
         tokenData.put("email", userDetails.getEmail());

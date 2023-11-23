@@ -29,9 +29,7 @@ public class GuestAuthenController implements GuestAuthenAPI {
         Login login = guestAuthenModelMapper.toDto(loginRequest);
         MyAuthentication myAuthentication = guestAuthenUseCaseService.login(login);
 
-        List<String> roles = myAuthentication.userDetails().getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        List<String> roles = myAuthentication.userDetails().getRoles();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
