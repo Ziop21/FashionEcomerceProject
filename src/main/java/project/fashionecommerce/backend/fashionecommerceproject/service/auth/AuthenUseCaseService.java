@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.TokenRefreshException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenQueryService;
@@ -45,9 +47,13 @@ public class AuthenUseCaseService {
                 .map(tokenCommandService::verifyExpiration)
                 .map(Token::userId)
                 .map(userId -> {
-                    User user = userQueryService.findById(new UserId(userId));
-                    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user, "/api");
-                    return jwtCookie.toString();
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                    if (userId.equals(userDetails.getId())){
+                        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
+                        return jwtCookie.toString();
+                    }
+                    throw new MyForbiddenException();
                 })
                 .orElseThrow(() -> new TokenRefreshException(refreshToken,
                         "Refresh token is not in database!"));

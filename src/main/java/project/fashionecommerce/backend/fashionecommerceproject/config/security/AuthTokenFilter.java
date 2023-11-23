@@ -1,6 +1,8 @@
 package project.fashionecommerce.backend.fashionecommerceproject.config.security;
 
 import java.io.IOException;
+
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,8 +37,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
                 String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String email = jwtUtils.getValueFromJwtToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                Claims claims = jwtUtils.getValueFromJwtToken(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get("email", String.class));
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

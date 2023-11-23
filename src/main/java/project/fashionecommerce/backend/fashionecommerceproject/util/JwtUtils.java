@@ -2,6 +2,11 @@ package project.fashionecommerce.backend.fashionecommerceproject.util;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -33,12 +38,7 @@ public class JwtUtils implements Serializable {
     private String jwtRefreshCookie;
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, String path) {
-        String jwt = generateTokenFromEmail(userPrincipal.getEmail());
-        return generateCookie(jwtCookie, jwt, path);
-    }
-
-    public ResponseCookie generateJwtCookie(User user, String path) {
-        String jwt = generateTokenFromEmail(user.email());
+        String jwt = generateTokenFromUser(userPrincipal);
         return generateCookie(jwtCookie, jwt, path);
     }
 
@@ -60,8 +60,8 @@ public class JwtUtils implements Serializable {
         return cookie;
     }
 
-    public String getValueFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody().getSubject();
+    public Claims getValueFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody();
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -83,9 +83,16 @@ public class JwtUtils implements Serializable {
         return false;
     }
 
-    public String generateTokenFromEmail(String email) {
+    public String generateTokenFromUser(UserDetailsImpl userDetails) {
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+        Map<String, Object> tokenData = new HashMap<>();
+        tokenData.put("userId", userDetails.getEmail());
+        tokenData.put("email", userDetails.getEmail());
+        tokenData.put("roles", roles);
         return Jwts.builder()
-                .setSubject(email)
+                .setClaims(tokenData)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes())
