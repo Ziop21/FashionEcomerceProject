@@ -38,13 +38,13 @@ public class GuestController implements GuestAPI {
                     .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                             myAuthentication.userDetails().getUsername(),
                             myAuthentication.userDetails().getEmail(),
-                            roles));
+                            roles, null));
         return ResponseEntity
                 .ok()
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),
-                        roles));
+                        roles, null));
     }
 
 }

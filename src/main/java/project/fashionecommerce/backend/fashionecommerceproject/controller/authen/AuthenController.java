@@ -23,8 +23,7 @@ public class AuthenController implements AuthenAPI {
         if ((refreshToken != null) && (refreshToken.length() > 0)) {
             String jwt = authenUseCaseService.refreshToken(refreshToken);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, jwt)
-                    .body("Token is refreshed successfully!");
+                    .body(jwt);
         }
         return ResponseEntity.badRequest().body("Refresh Token is empty!");
     }

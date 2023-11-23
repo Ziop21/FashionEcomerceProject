@@ -35,7 +35,6 @@ public class GuestAuthenController implements GuestAuthenAPI {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + myAuthentication.jwt());
         headers.add(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString());
 
         return ResponseEntity
@@ -44,7 +43,7 @@ public class GuestAuthenController implements GuestAuthenAPI {
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),
-                        roles));
+                        roles, myAuthentication.jwt()));
     }
     @Override
     public ResponseEntity<?> register(RegisterRequest registerRequest) {
