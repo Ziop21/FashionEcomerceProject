@@ -133,7 +133,7 @@ public class GuestCartUseCaseService {
         if (cartToken == null || jwtUtils.validateJwtToken(cartToken) == false) {
             throw new MyForbiddenException();
         }
-        String cartId = jwtUtils.getValueFromJwtToken(cartToken).getSubject();
+        String cartId = jwtUtils.getClaimsFromJwtToken(cartToken).getSubject();
         return cartId;
     }
     public List<CartItem> updateQuantity(List<CartItem> cartItems, String stockId, Long quantity){

@@ -21,9 +21,9 @@ public class AuthenController implements AuthenAPI {
         String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
 
         if ((refreshToken != null) && (refreshToken.length() > 0)) {
-            String jwtCookieString = authenUseCaseService.refreshToken(refreshToken);
+            String jwt = authenUseCaseService.refreshToken(refreshToken);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, jwtCookieString)
+                    .header(HttpHeaders.AUTHORIZATION, jwt)
                     .body("Token is refreshed successfully!");
         }
         return ResponseEntity.badRequest().body("Refresh Token is empty!");
@@ -32,7 +32,7 @@ public class AuthenController implements AuthenAPI {
         MyAuthentication myAuthentication = authenUseCaseService.logout();
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString())
+                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwt())
                 .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString())
                 .body("You've been signed out!");
     }

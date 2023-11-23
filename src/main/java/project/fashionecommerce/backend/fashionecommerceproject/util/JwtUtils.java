@@ -31,16 +31,9 @@ public class JwtUtils implements Serializable {
     @Value("${fashion_ecommerce.app.cookieExpirationS}")
     private Long cookieExpirationS;
 
-    @Value("${fashion_ecommerce.app.jwtCookieName}")
-    private String jwtCookie;
-
     @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
     private String jwtRefreshCookie;
 
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal, String path) {
-        String jwt = generateTokenFromUser(userPrincipal);
-        return generateCookie(jwtCookie, jwt, path);
-    }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken, String path) {
         return generateCookie(jwtRefreshCookie, refreshToken, path);
@@ -50,17 +43,12 @@ public class JwtUtils implements Serializable {
         return getCookieValueByName(request, jwtRefreshCookie);
     }
 
-    public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
-        return cookie;
-    }
-
     public ResponseCookie getCleanJwtRefreshCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api/auth/refresh-token").build();
         return cookie;
     }
 
-    public Claims getValueFromJwtToken(String token) {
+    public Claims getClaimsFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody();
     }
 

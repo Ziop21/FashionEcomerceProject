@@ -3,6 +3,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.GuestAuthenModelMapper;
@@ -31,10 +32,15 @@ public class GuestAuthenController implements GuestAuthenAPI {
         List<String> roles = myAuthentication.userDetails().getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + myAuthentication.jwt());
+        headers.add(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString());
+
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtCookieString(),
-                        myAuthentication.jwtRefreshCookieString())
+                .headers(headers)
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),

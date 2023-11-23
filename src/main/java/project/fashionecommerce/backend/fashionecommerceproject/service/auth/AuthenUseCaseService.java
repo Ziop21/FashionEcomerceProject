@@ -50,8 +50,8 @@ public class AuthenUseCaseService {
                     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
                     if (userId.equals(userDetails.getId())){
-                        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, "/api");
-                        return jwtCookie.toString();
+                        String jwt = jwtUtils.generateTokenFromUser(userDetails);
+                        return jwt;
                     }
                     throw new MyForbiddenException();
                 })
@@ -66,10 +66,9 @@ public class AuthenUseCaseService {
             String userId = ((UserDetailsImpl) principle).getId();
             tokenCommandService.deleteByUserId(userId);
         }
-        ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 
-        return new MyAuthentication(null, null, jwtCookie.toString(), jwtRefreshCookie.toString());
+        return new MyAuthentication(null, null, null, jwtRefreshCookie.toString());
     }
 
 }
