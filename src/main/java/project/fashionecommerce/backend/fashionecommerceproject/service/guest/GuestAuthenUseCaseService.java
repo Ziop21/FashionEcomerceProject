@@ -52,6 +52,8 @@ public class GuestAuthenUseCaseService {
     private Long refreshTokenDurationMs;
     @Value("${fashion_ecommerce.app.jwtEmailExpirationS}")
     private Long emailTokenDurationS;
+    @Value("${fashion_ecommerce.app.FE_SERVER.url}")
+    private String FE_SERVER_URL;
 
     @Transactional
     public MyAuthentication login(Login login) {
@@ -89,7 +91,7 @@ public class GuestAuthenUseCaseService {
         message.setTo(email);
         message.setSubject("FASHION ECOMMERCE WEBSITE: EMAIL CONFIRMATION");
         message.setText("Thank you for choosing our website!! Please click the following link to verify your email: "
-                + "http://localhost:8081/api/guest/auth/register/verify?token=" + token.token());
+                + FE_SERVER_URL + "/register/verify?token=" + token.token());
         javaMailSender.send(message);
     }
     @Transactional

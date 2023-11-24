@@ -22,7 +22,7 @@ public interface GuestAuthenAPI {
     @PostMapping("/register/send-token/{email}")
     ResponseEntity<?> sendToken(@PathVariable @Email String email);
 
-    @GetMapping("/register/verify")
+    @PostMapping("/register/verify")
     ResponseEntity<?> verifyEmailToken(
             @RequestParam(required = false, value = "token", defaultValue = "") String token
     );
