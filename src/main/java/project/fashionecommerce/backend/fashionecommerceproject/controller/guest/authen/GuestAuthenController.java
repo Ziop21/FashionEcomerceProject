@@ -2,6 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.authen.Regis
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestAuthenUseCaseService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestUseCaseService;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +24,10 @@ public class GuestAuthenController implements GuestAuthenAPI {
     @NonNull final GuestAuthenModelMapper guestAuthenModelMapper;
     @NonNull final GuestAuthenUseCaseService guestAuthenUseCaseService;
     @NonNull final GuestUseCaseService guestUseCaseService;
+
+    @Value("${fashion_ecommerce.app.authenTokenType}")
+    private String authenTokenType;
+
     @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         Login login = guestAuthenModelMapper.toDto(loginRequest);
@@ -41,7 +45,7 @@ public class GuestAuthenController implements GuestAuthenAPI {
                 .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
                         myAuthentication.userDetails().getUsername(),
                         myAuthentication.userDetails().getEmail(),
-                        roles, myAuthentication.jwt()));
+                        roles, myAuthentication.jwt(), authenTokenType));
     }
     @Override
     public ResponseEntity<?> register(RegisterRequest registerRequest) {
