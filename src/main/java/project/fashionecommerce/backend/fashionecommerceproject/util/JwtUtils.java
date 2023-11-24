@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 import io.jsonwebtoken.*;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 
 @Component
 public class JwtUtils implements Serializable {
@@ -29,13 +30,26 @@ public class JwtUtils implements Serializable {
     private Long jwtExpirationMs;
     @Value("${fashion_ecommerce.app.cookieExpirationS}")
     private Long cookieExpirationS;
+    @Value("${fashion_ecommerce.app.jwtRefreshExpirationMs}")
+    private Long refreshJWTExpirationS;
 
     @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
     private String jwtRefreshCookie;
 
 
+
     public ResponseCookie generateRefreshJwtCookie(String refreshToken, String path) {
-        return generateCookie(jwtRefreshCookie, refreshToken, path);
+        String jwtRefresh = generateRefreshJWT(refreshToken);
+        return generateCookie(jwtRefreshCookie, jwtRefresh, path);
+    }
+
+    private String generateRefreshJWT(String refreshToken) {
+        return Jwts.builder()
+                .setSubject(refreshToken)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + refreshJWTExpirationS))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes())
+                .compact();
     }
 
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
@@ -51,7 +65,7 @@ public class JwtUtils implements Serializable {
         return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody();
     }
 
-    public boolean validateJwtToken(String authToken, HttpServletRequest request) {
+    public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parse(authToken);
             return true;
@@ -62,6 +76,7 @@ public class JwtUtils implements Serializable {
             logger.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
+            throw new ExpiredJwtException(null, null, "Token is expired");
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -70,11 +85,26 @@ public class JwtUtils implements Serializable {
         return false;
     }
 
-    public String generateTokenFromUser(UserDetailsImpl userDetails) {
+    public String generateTokenFromUser(User user) {
+        List<String> roles = user.roles().stream().map(role -> role.toString()).collect(Collectors.toList());
+
+        Map<String, Object> tokenData = new HashMap<>();
+        tokenData.put("userId", user.id());
+        tokenData.put("email", user.email());
+        tokenData.put("roles", roles);
+        return Jwts.builder()
+                .setClaims(tokenData)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes())
+                .compact();
+    }
+
+    public String generateTokenFromUserDetail(UserDetailsImpl userDetails) {
         List<String> roles = userDetails.getRoles();
 
         Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("userId", userDetails.getEmail());
+        tokenData.put("userId", userDetails.getId());
         tokenData.put("email", userDetails.getEmail());
         tokenData.put("roles", roles);
         return Jwts.builder()

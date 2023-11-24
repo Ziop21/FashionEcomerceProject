@@ -128,9 +128,9 @@ public class GuestCartUseCaseService {
         cart = cartMapper.updateCartItems(cart, cartItems);
         cartCommandService.save(cart);
     }
-    public String getCartId(HttpServletRequest request){
+    public String getCartId(HttpServletRequest request) {
         String cartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
-        if (cartToken == null || jwtUtils.validateJwtToken(cartToken, request) == false) {
+        if (cartToken == null || jwtUtils.validateJwtToken(cartToken) == false) {
             throw new MyForbiddenException();
         }
         String cartId = jwtUtils.getClaimsFromJwtToken(cartToken).getSubject();

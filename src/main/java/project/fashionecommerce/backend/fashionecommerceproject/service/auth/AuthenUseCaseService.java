@@ -42,18 +42,16 @@ public class AuthenUseCaseService {
     @Autowired final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String refreshToken(String refreshToken) {
+    public String refreshToken(String refreshTokenJWT) {
+        String refreshToken = jwtUtils.getClaimsFromJwtToken(refreshTokenJWT).getSubject();
+
         return tokenQueryService.findByToken(refreshToken)
                 .map(tokenCommandService::verifyExpiration)
                 .map(Token::userId)
                 .map(userId -> {
-                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-                    if (userId.equals(userDetails.getId())){
-                        String jwt = jwtUtils.generateTokenFromUser(userDetails);
-                        return jwt;
-                    }
-                    throw new MyForbiddenException();
+                    User foundUser = userQueryService.findById(new UserId(userId));
+                    String jwt = jwtUtils.generateTokenFromUser(foundUser);
+                    return jwt;
                 })
                 .orElseThrow(() -> new TokenRefreshException(refreshToken,
                         "Refresh token is not in database!"));
