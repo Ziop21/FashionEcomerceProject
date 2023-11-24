@@ -77,12 +77,11 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth
+                        auth.requestMatchers("/api/guest/**").permitAll()
                             .requestMatchers("/api/auth/refresh-token").permitAll()
                             .requestMatchers("/api/auth/**").hasAnyAuthority("ADMIN", "CUSTOMER", "STAFF", "MANAGER")
                             .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                             .requestMatchers("/api/admin/manager/**").hasAnyAuthority("MANAGER")
-                            .requestMatchers("/api/guest/**").permitAll()
                             .requestMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER")
                             .requestMatchers("/api/staff/**").hasAnyAuthority("STAFF")
                             .anyRequest().authenticated()
