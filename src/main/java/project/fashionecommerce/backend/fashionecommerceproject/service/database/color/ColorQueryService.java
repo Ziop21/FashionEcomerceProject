@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
@@ -19,6 +20,9 @@ public class ColorQueryService {
     final ColorRepository colorRepository;
     @NonNull
     final ColorMapper colorMapper;
+    @NonNull
+    final MongoTemplate mongoTemplate;
+
     public Page<Color> findAll(ColorQuery colorQuery, PageRequest pageRequest) {
         Page<ColorEntity> colorEntityPage = colorRepository.customFindAll(colorQuery.search(), pageRequest);
         return colorEntityPage.map(colorMapper::toDto);

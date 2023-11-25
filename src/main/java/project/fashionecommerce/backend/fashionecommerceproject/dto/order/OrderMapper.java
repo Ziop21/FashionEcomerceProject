@@ -3,7 +3,10 @@ package project.fashionecommerce.backend.fashionecommerceproject.dto.order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrderStatus;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.order.items.OrderItem;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.order.OrderEntity;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -13,4 +16,19 @@ public interface OrderMapper {
     @Mapping(source = "id", target = "id", ignore = true)
     @Mapping(source = "createdAt", target = "createdAt", ignore = true)
     void updateExisted(Order order, @MappingTarget OrderEntity foundEntity);
+
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "orderItems", target = "orderItems")
+    Order updateDto(Order order, EOrderStatus status, List<OrderItem> orderItems);
+
+    @Mapping(source = "userId", target = "userId")
+    Order updateDtoUserId(Order order, String userId);
+
+    @Mapping(source = "deliveryName", target = "deliveryName")
+    Order updateDtoDeliveryName(Order foundOrder, String deliveryName);
+
+    @Mapping(source = "isActive", target = "isActive")
+    Order updateDtoIsActive(Order order, Boolean isActive);
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    Order updateDtoIsDeleted(Order order, Boolean isDeleted);
 }

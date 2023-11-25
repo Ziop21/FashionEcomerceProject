@@ -6,8 +6,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.admin
 import java.util.List;
 
 public record CartRequest(
-        @NotNull
-        String userId,
         List<CartItemRequest> cartItems,
 
         @NotNull

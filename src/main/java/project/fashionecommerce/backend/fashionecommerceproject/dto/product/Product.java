@@ -1,5 +1,8 @@
 package project.fashionecommerce.backend.fashionecommerceproject.dto.product;
 
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.Color;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.size.Size;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +22,9 @@ public record Product (
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Boolean isDeleted,
-        Boolean isActive
+        Boolean isActive,
+        List<Color> colors,
+        List<Size> sizes,
+        List<Stock> stocks
 ) {
 }

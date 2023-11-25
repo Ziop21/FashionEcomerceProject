@@ -25,4 +25,21 @@ public interface UserMapper {
     @Mapping(source = "createdAt", target = "createdAt", ignore = true)
     @Mapping(source = "createdBy", target = "createdBy", ignore = true)
     void updateExisted(User user, @MappingTarget UserEntity foundEntity);
+    @Mapping(source = "userLevelName", target = "userLevelName")
+    User updateDtoUserLevelName(User user, String userLevelName);
+
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
+    @Mapping(source = "idCard", target = "idCard")
+    @Mapping(source = "phones", target = "phones")
+    @Mapping(source = "addresses", target = "addresses")
+    @Mapping(source = "avatar", target = "avatar")
+    @Mapping(source = "eWallet", target = "eWallet")
+    User updateDto(User user, String firstName, String lastName, String idCard,
+                   List<String> phones, List<String> addresses, String avatar, String eWallet);
+
+    @Mapping(source = "isActive", target = "isActive")
+    User updateDtoIsActive(User user, Boolean isActive);
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    User updateDtoIsDeleted(User user, Boolean isDeleted);
 }

@@ -4,6 +4,6 @@ import org.springframework.http.HttpStatus;
 
 public class MyForbiddenException extends ApplicationException{
     public MyForbiddenException(){
-        super("SYS_301", "forbidden...", HttpStatus.FORBIDDEN);
+        super("SYS_301", "Don't have permission", HttpStatus.FORBIDDEN);
     }
 }

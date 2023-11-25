@@ -17,9 +17,9 @@ public class StockCommandService {
     @NonNull final StockRepository stockRepository;
     @NonNull final StockMapper stockMapper;
     public void save(Stock stock) {
-        if (stockRepository.existsByProductIdAndSizeIdAndColorIds(stock.productId(),
+        if (stockRepository.existsByProductIdAndSizeIdAndColorId(stock.productId(),
                 stock.sizeId(),
-                stock.colorIds()))
+                stock.colorId()))
             throw new MyConflictsException();
         StockEntity stockEntity = stockMapper.toEntity(stock);
         stockRepository.save(stockEntity);
@@ -34,10 +34,10 @@ public class StockCommandService {
                 .orElseThrow(MyResourceNotFoundException::new);
         if (!(foundEntity.getProductId().equals(stock.productId())
                         && foundEntity.getSizeId().equals(stock.sizeId())
-                        && foundEntity.getColorIds().equals(stock.colorIds()))
-                && stockRepository.existsByProductIdAndSizeIdAndColorIds(stock.productId(),
+                        && foundEntity.getColorId().equals(stock.colorId()))
+                && stockRepository.existsByProductIdAndSizeIdAndColorId(stock.productId(),
                 stock.sizeId(),
-                stock.colorIds())
+                stock.colorId())
         )
             throw new MyConflictsException();
 

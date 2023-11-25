@@ -6,7 +6,8 @@ public record UserInfoResponse(
         String id,
         String username,
         String email,
-        List<String> role
-
+        List<String> role,
+        String jwt,
+        String authenTokenType
 ) {
 }

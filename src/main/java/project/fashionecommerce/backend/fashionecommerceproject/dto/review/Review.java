@@ -11,6 +11,7 @@ public record Review(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Boolean isDeleted,
-        Boolean isActive
+        Boolean isActive,
+        String username
 ) {
 }

@@ -22,5 +22,5 @@ public class CategoryEntity extends FullAuditable implements Serializable {
     private List<ObjectId> categoryIds;
     private String name;
     private String slug;
-    private String image;
+    private List<String> images;
 }

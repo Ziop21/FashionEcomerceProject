@@ -15,4 +15,16 @@ public interface StockDiaryMapper {
     @Mapping(source = "createdAt", target = "createdAt", ignore = true)
     @Mapping(source = "createdBy", target = "createdBy", ignore = true)
     void updateExisted(StockDiary stockDiary, @MappingTarget StockDiaryEntity foundEntity);
+
+    @Mapping(source = "isActive", target = "isActive")
+    StockDiary updateDtoIsActive(StockDiary stockDiary, Boolean isActive);
+
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    StockDiary updateDtoIsDeleted(StockDiary stockDiary, Boolean isDeleted);
+
+    @Mapping(source = "stockId", target = "stockId")
+    @Mapping(source = "quantity", target = "quantity")
+    @Mapping(source = "errorQuantity", target = "errorQuantity")
+    @Mapping(source = "note", target = "note")
+    StockDiary updateDto(StockDiary foundStockDiary, String stockId, Long quantity, Long errorQuantity, String note);
 }

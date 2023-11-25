@@ -27,11 +27,11 @@ public class UserEntity extends FullAuditable implements Serializable {
     private String slug;
     private String idCard;
     private String email;
-    private List<String> phone;
+    private List<String> phones;
     private String hashedPassword;
     private Boolean isEmailActive = false;
     private Boolean isPhoneActive = false;
-    private List<String> address;
+    private List<String> addresses;
     private String avatar;
     private Long point;
     private String eWallet;

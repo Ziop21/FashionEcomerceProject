@@ -18,8 +18,6 @@ public class CartCommandService {
     @NonNull final CartMapper cartMapper;
     public Cart save(Cart cart) {
         CartEntity cartEntity = cartMapper.toEntity(cart);
-        if (cart.userId() != null && cart.isDeleted().equals(false) && cartRepository.existsByUserIdAndIsDeleted(cart.userId(), false))
-            throw new MyConflictsException();
         cartRepository.save(cartEntity);
         return cartMapper.toDto(cartEntity);
     }
@@ -28,11 +26,15 @@ public class CartCommandService {
         cartRepository.deleteById(cartId.id());
     }
 
+    public void updateIsActiveIsDeleted(CartId cartId, Boolean isActive, Boolean isDeleted){
+        CartEntity foundEntity = cartRepository.findById(cartId.id()).orElseThrow(MyResourceNotFoundException::new);
+        foundEntity.setIsDeleted(isDeleted);
+        foundEntity.setIsActive(isActive);
+        cartRepository.save(foundEntity);
+    }
+
     public void update(CartId cartId, Cart cart) {
         CartEntity foundEntity = cartRepository.findById(cartId.id()).orElseThrow(MyResourceNotFoundException::new);
-        if (!cart.userId().equals(foundEntity.getUserId())
-        && cartRepository.existsByUserIdAndIsDeleted(cart.userId(), false))
-            throw new MyConflictsException();
         cartMapper.updateExist(cart, foundEntity);
         cartRepository.save(foundEntity);
     }

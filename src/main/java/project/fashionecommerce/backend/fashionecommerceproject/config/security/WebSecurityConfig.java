@@ -14,8 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.authentication.AuthEntryPointJwt;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsServiceImpl;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +33,19 @@ public class WebSecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final var source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
+        corsConfiguration.setExposedHeaders(List.of("*"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowCredentials(true);
+        return source;
+    }
+
+    @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
@@ -35,10 +53,8 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 
@@ -55,15 +71,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cor -> cor.disable())
+                .cors(cor -> cor.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth
-                            .requestMatchers("/api/auth/**").hasAnyAuthority("ADMIN", "CUSTOMER", "STAFF")
+                        auth.requestMatchers("/api/guest/**").permitAll()
+                            .requestMatchers("/api/auth/refresh-token").permitAll()
+                            .requestMatchers("/api/auth/**").hasAnyAuthority("ADMIN", "CUSTOMER", "STAFF", "MANAGER")
                             .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
-                            .requestMatchers("/api/guest/**").permitAll()
+                            .requestMatchers("/api/admin/manager/**").hasAnyAuthority("MANAGER")
                             .requestMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER")
                             .requestMatchers("/api/staff/**").hasAnyAuthority("STAFF")
                             .anyRequest().authenticated()

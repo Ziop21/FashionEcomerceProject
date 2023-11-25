@@ -18,9 +18,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.CartQue
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.cart.CartEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.cart.CartRepository;
-
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,10 +28,6 @@ public class CartQueryService {
     @NonNull final CartRepository cartRepository;
     @NonNull final CartMapper cartMapper;
     @NonNull final MongoTemplate mongoTemplate;
-    public Cart findByUserIdAndIsDeleted(String userId, Boolean isDeleted) {
-        CartEntity cartEntity = cartRepository.findByUserIdAndIsDeleted(userId, isDeleted);
-        return cartMapper.toDto(cartEntity);
-    }
 
     public Page<Cart> findAll(CartQuery cartQuery, PageRequest pageRequest) {
         Criteria criteria = new Criteria();
@@ -44,24 +39,39 @@ public class CartQueryService {
             );
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.lookup("user", "userId", "_id", "users"),
-                Aggregation.unwind("users"),
+                Aggregation.unwind("users", true),
                 Aggregation.match(criteria),
-                Aggregation.skip(pageRequest.getPageNumber() * pageRequest.getPageSize()),
+                Aggregation.group().count().as("totalRecords")
+        );
+
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "cart", Map.class);
+        Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
+
+        int currentPage = pageRequest.getPageNumber();
+        int totalPages = (int) Math.ceil((double) total / pageRequest.getPageSize());
+        if (currentPage > totalPages) {
+            currentPage = totalPages - 1;
+        }
+
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.lookup("user", "userId", "_id", "users"),
+                Aggregation.unwind("users", true),
+                Aggregation.match(criteria),
+                Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
 
-        AggregationResults<CartEntity> results = mongoTemplate.aggregate(aggregation, "cart", CartEntity.class);
+        PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
-        List<CartEntity> cartEntities = results.getMappedResults();
+        AggregationResults<CartEntity> results = mongoTemplate.aggregate(mainAggregation, "cart", CartEntity.class);
+        List<CartEntity> cartList = results.getMappedResults();
 
-        Long total = (long) cartEntities.size();
+        List<CartEntity> pagedCartList = cartList.subList(0, Math.min(pageRequest.getPageSize(), cartList.size()));
+        Page<CartEntity> cartPage = PageableExecutionUtils.getPage(pagedCartList, newPageRequest, () -> total);
 
-        List<CartEntity> pagedStockList = cartEntities.subList(0, Math.min(pageRequest.getPageSize(), cartEntities.size()));
-        Page<CartEntity> stockPage = PageableExecutionUtils.getPage(pagedStockList, pageRequest, () -> total);
-
-        return new PageImpl<>(stockPage.getContent().stream()
+        return new PageImpl<>(cartPage.getContent().stream()
                 .map(cartMapper::toDto)
                 .collect(Collectors.toList()), pageRequest, total);
     }

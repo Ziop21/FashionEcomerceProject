@@ -1,7 +1,7 @@
 package project.fashionecommerce.backend.fashionecommerceproject.dto.stock;
 
-import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
@@ -18,15 +18,6 @@ public abstract class StockMapper {
     @Autowired
     ReviewMapper reviewMapper;
     public StockEntity toEntity(Stock stock){
-        Optional<List<String>> colorsIds = Optional.ofNullable(stock.colorIds());
-        List<ObjectId> objectIds = new ArrayList<>();
-
-        if (!colorsIds.isEmpty()){
-            objectIds = colorsIds.get().stream()
-                    .map(colorsId -> new ObjectId(colorsId))
-                    .collect(Collectors.toList());
-        }
-
         Optional<List<Review>> reviews = Optional.ofNullable(stock.reviews());
         List<ReviewEntity> reviewEntities = new ArrayList<>();
         if (!reviews.isEmpty()){
@@ -37,9 +28,8 @@ public abstract class StockMapper {
         StockEntity stockEntity = new StockEntity();
         stockEntity.setProductId(stock.productId());
         stockEntity.setSizeId(stock.sizeId());
-        stockEntity.setColorIds(objectIds);
+        stockEntity.setColorId(stock.colorId());
         stockEntity.setQuantity(stock.quantity());
-        stockEntity.setIsMixedColor(stock.isMixedColor());
         stockEntity.setIsActive(stock.isActive());
         stockEntity.setIsDeleted(stock.isDeleted());
         stockEntity.setReviews(reviewEntities);
@@ -47,15 +37,6 @@ public abstract class StockMapper {
     }
 
     public Stock toDto(StockEntity stockEntity){
-        Optional<List<ObjectId>> colorsIds = Optional.ofNullable(stockEntity.getColorIds());
-        List<String> stringIds = new ArrayList<>();
-
-        if (!colorsIds.isEmpty()){
-            stringIds = colorsIds.get().stream()
-                    .map(colorsId -> colorsId.toHexString())
-                    .collect(Collectors.toList());
-        }
-
         Optional<List<ReviewEntity>> reviewEntities = Optional.ofNullable(stockEntity.getReviews());
         List<Review> reviews = new ArrayList<>();
         if (!reviewEntities.isEmpty()){
@@ -67,9 +48,8 @@ public abstract class StockMapper {
                 .id(stockEntity.getId())
                 .productId(stockEntity.getProductId())
                 .sizeId(stockEntity.getSizeId())
-                .colorIds(stringIds)
+                .colorId(stockEntity.getColorId())
                 .quantity(stockEntity.getQuantity())
-                .isMixedColor(stockEntity.getIsMixedColor())
                 .isDeleted(stockEntity.getIsDeleted())
                 .isActive(stockEntity.getIsActive())
                 .reviews(reviews)
@@ -82,15 +62,6 @@ public abstract class StockMapper {
     }
 
     public void updateExisted(Stock stock, @MappingTarget StockEntity foundEntity){
-        Optional<List<String>> colorsIds = Optional.ofNullable(stock.colorIds());
-        List<ObjectId> objectIds = new ArrayList<>();
-
-        if (!colorsIds.isEmpty()){
-            objectIds = colorsIds.get().stream()
-                    .map(colorsId -> new ObjectId(colorsId))
-                    .collect(Collectors.toList());
-        }
-
         Optional<List<Review>> reviews = Optional.ofNullable(stock.reviews());
         List<ReviewEntity> reviewEntities = new ArrayList<>();
         if (!reviews.isEmpty()){
@@ -100,11 +71,24 @@ public abstract class StockMapper {
 
         foundEntity.setProductId(stock.productId());
         foundEntity.setSizeId(stock.sizeId());
-        foundEntity.setColorIds(objectIds);
+        foundEntity.setColorId(stock.colorId());
         foundEntity.setQuantity(stock.quantity());
-        foundEntity.setIsMixedColor(stock.isMixedColor());
         foundEntity.setIsActive(stock.isActive());
         foundEntity.setIsDeleted(stock.isDeleted());
         foundEntity.setReviews(reviewEntities);
     }
+    @Mapping(source = "reviews", target = "reviews")
+    public abstract Stock updateDto(Stock stock, List<Review> reviews);
+
+    @Mapping(source = "isActive", target = "isActive")
+    public abstract Stock updateDtoIsActive(Stock stock, Boolean isActive);
+
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    public abstract Stock updateDtoIsDeleted(Stock stock, Boolean isDeleted);
+
+    @Mapping(source = "productId", target = "productId")
+    @Mapping(source = "colorId", target = "colorId")
+    @Mapping(source = "sizeId", target = "sizeId")
+    @Mapping(source = "quantity", target = "quantity")
+    public abstract Stock updateDto(Stock foundStock, String productId, String colorId, String sizeId, Long quantity);
 }

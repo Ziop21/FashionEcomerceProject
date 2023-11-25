@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FollowRepository extends MongoRepository<FollowEntity, String> {
+    Boolean existsByUserIdAndProductIdAndIsActive(String userId, String productId, Boolean isActive);
 }

@@ -14,4 +14,14 @@ public interface FollowMapper {
     void updateExisted(Follow follow, @MappingTarget FollowEntity foundEntity);
 
     Follow toDto(FollowEntity followEntity);
+
+    @Mapping(source = "name", target = "productName")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "promotionalPrice", target = "promotionalPrice")
+    @Mapping(source = "image", target = "image")
+    Follow updateDto(Follow follow, String name, Double price, Double promotionalPrice, String image);
+
+    @Mapping(source = "isActive", target = "isActive")
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    Follow updateIsActiveAndIsDeleted(Follow foundDto, Boolean isActive, Boolean isDeleted);
 }

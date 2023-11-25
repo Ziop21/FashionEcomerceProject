@@ -21,7 +21,5 @@ import java.util.List;
 public class CartEntity extends TimeAuditable implements Serializable {
     @Id
     private String id;
-    @Field(targetType = FieldType.OBJECT_ID)
-    private String userId;
     List<CartItemEntity> cartItems;
 }
