@@ -8,6 +8,6 @@ public record UserInfoResponse(
         String email,
         List<String> role,
         String jwt,
-        String authenType
+        String authenTokenType
 ) {
 }
