@@ -25,9 +25,6 @@ public class GuestAuthenController implements GuestAuthenAPI {
     @NonNull final GuestAuthenUseCaseService guestAuthenUseCaseService;
     @NonNull final GuestUseCaseService guestUseCaseService;
 
-    @Value("${fashion_ecommerce.app.authenTokenType}")
-    private String authenTokenType;
-
     @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         Login login = guestAuthenModelMapper.toDto(loginRequest);
@@ -35,17 +32,9 @@ public class GuestAuthenController implements GuestAuthenAPI {
 
         List<String> roles = myAuthentication.userDetails().getRoles();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefreshCookieString());
-
         return ResponseEntity
                 .ok()
-                .headers(headers)
-                .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
-                        myAuthentication.userDetails().getUsername(),
-                        myAuthentication.userDetails().getEmail(),
-                        roles, myAuthentication.jwt(), authenTokenType));
+                .body(new UserInfoResponse(myAuthentication.jwt(), myAuthentication.jwtRefresh()));
     }
     @Override
     public ResponseEntity<?> register(RegisterRequest registerRequest) {

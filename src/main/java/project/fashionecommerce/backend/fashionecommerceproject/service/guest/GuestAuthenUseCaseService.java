@@ -65,8 +65,8 @@ public class GuestAuthenUseCaseService {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             String jwt = jwtUtils.generateTokenFromUserDetail(userDetails);
             Token refreshToken = tokenCommandService.save(userDetails.getId(), refreshTokenDurationMs);
-            ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.token(), "/api/auth/refresh-token");
-            return new MyAuthentication(userDetails, null, jwt, jwtRefreshCookie.toString());
+            String jwtRefresh = jwtUtils.generateRefreshJWT(refreshToken.token());
+            return new MyAuthentication(userDetails, null, jwt, jwtRefresh.toString());
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

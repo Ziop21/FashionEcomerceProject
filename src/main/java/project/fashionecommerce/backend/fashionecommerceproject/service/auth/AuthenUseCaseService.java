@@ -1,5 +1,6 @@
 package project.fashionecommerce.backend.fashionecommerceproject.service.auth;
 
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.config.security.
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,9 +45,17 @@ public class AuthenUseCaseService {
 
     @Transactional
     public String refreshToken(String refreshTokenJWT) {
-        String refreshToken = jwtUtils.getClaimsFromJwtToken(refreshTokenJWT).getSubject();
+        JWTClaimsSet claims = jwtUtils.getClaimsFromJwtToken(refreshTokenJWT);
+        String tokenId = null;
+        try {
+            tokenId = claims.getStringClaim("tokenId");
+            if (tokenId == null)
+                return "Token is null";
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
-        return tokenQueryService.findByToken(refreshToken)
+        return tokenQueryService.findByToken(tokenId)
                 .map(tokenCommandService::verifyExpiration)
                 .map(Token::userId)
                 .map(userId -> {
@@ -53,7 +63,7 @@ public class AuthenUseCaseService {
                     String jwt = jwtUtils.generateTokenFromUser(foundUser);
                     return jwt;
                 })
-                .orElseThrow(() -> new TokenRefreshException(refreshToken,
+                .orElseThrow(() -> new TokenRefreshException(refreshTokenJWT,
                         "Refresh token is not in database!"));
     }
 
@@ -64,9 +74,7 @@ public class AuthenUseCaseService {
             String userId = ((UserDetailsImpl) principle).getId();
             tokenCommandService.deleteByUserId(userId);
         }
-        ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
-
-        return new MyAuthentication(null, null, null, jwtRefreshCookie.toString());
+        return new MyAuthentication(null, null, null, null);
     }
 
 }

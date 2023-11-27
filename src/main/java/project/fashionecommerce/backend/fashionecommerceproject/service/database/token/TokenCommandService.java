@@ -27,14 +27,14 @@ public class TokenCommandService {
         }
         return token;
     }
-    public Token save(String userId, Long durationS) {
+    public Token save(String userId, Long durationMS) {
         if (tokenRepository.existsByUserId(userId))
             tokenRepository.deleteByUserId(userId);
 
         TokenEntity tokenEntity = new TokenEntity();
 
         tokenEntity.setUserId(userId);
-        tokenEntity.setExpiryDateTime(LocalDateTime.now().plusSeconds(durationS));
+        tokenEntity.setExpiryDateTime(LocalDateTime.now().plusSeconds(durationMS/1000));
         tokenEntity.setToken(UUID.randomUUID().toString());
 
         tokenEntity = tokenRepository.save(tokenEntity);

@@ -76,7 +76,8 @@ public class GuestOrderUseCaseService {
         Cart newCart = Cart.builder().isActive(true).isDeleted(false).build();
         newCart = cartCommandService.save(newCart);
         String cartToken = jwtUtils.generateTokenFromCartId(newCart.id());
-        ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
-        return cartTokenCookie;
+//        ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
+//        return cartTokenCookie;
+        return null;
     }
 }

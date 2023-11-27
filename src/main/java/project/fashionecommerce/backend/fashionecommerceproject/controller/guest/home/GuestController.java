@@ -35,16 +35,10 @@ public class GuestController implements GuestAPI {
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE, myAuthentication.cartTokenCookieString())
-                    .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
-                            myAuthentication.userDetails().getUsername(),
-                            myAuthentication.userDetails().getEmail(),
-                            roles, null, null));
+                    .body(null);
         return ResponseEntity
                 .ok()
-                .body(new UserInfoResponse(myAuthentication.userDetails().getId(),
-                        myAuthentication.userDetails().getUsername(),
-                        myAuthentication.userDetails().getEmail(),
-                        roles, null, null));
+                .body(null);
     }
 
 }

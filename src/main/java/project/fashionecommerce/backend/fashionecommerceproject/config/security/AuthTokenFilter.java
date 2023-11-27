@@ -2,7 +2,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.config.security
 
 import java.io.IOException;
 
-import io.jsonwebtoken.Claims;
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsServiceImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
@@ -26,21 +25,21 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @Value("${fashion_ecommerce.app.authenTokenType}")
-    private String authenTokenType;
-
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    @Value("${fashion_ecommerce.app.jwtCookieName}")
+    private String jwtCookieName;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-                String jwt = parseJwt(request);
+                    String jwt = parseJwt(request);
                 if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                    Claims claims = jwtUtils.getClaimsFromJwtToken(jwt);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get("email", String.class));
+                    JWTClaimsSet claims = jwtUtils.getClaimsFromJwtToken(jwt);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getStringClaim("email"));
                     if (userDetails != null) {
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                                 userDetails.getAuthorities());
@@ -55,10 +54,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(authenTokenType + " ")) {
-            return bearerToken.substring(authenTokenType.length() + 1);
-        }
-        return null;
+        String jwt = jwtUtils.getCookieValueByName(request, jwtCookieName);
+        return jwt;
     }
 }

@@ -8,6 +8,6 @@ public record MyAuthentication(
         UserDetailsImpl userDetails,
         String cartTokenCookieString,
         String jwt,
-        String jwtRefreshCookieString
+        String jwtRefresh
 ) {
 }

@@ -26,6 +26,8 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.size.SizeQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -133,7 +135,12 @@ public class GuestCartUseCaseService {
         if (cartToken == null || jwtUtils.validateJwtToken(cartToken) == false) {
             throw new MyForbiddenException();
         }
-        String cartId = jwtUtils.getClaimsFromJwtToken(cartToken).getSubject();
+        String cartId = null;
+        try {
+            cartId = jwtUtils.getClaimsFromJwtToken(cartToken).getStringClaim("cartId");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         return cartId;
     }
     public List<CartItem> updateQuantity(List<CartItem> cartItems, String stockId, Long quantity){
