@@ -69,6 +69,7 @@ public class JwtUtils implements Serializable {
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
         return getCookieValueByName(request, jwtRefreshCookie);
     }
+
     public JWTClaimsSet getClaimsFromJwtToken(String token) {
         JWTClaimsSet claims = null;
         try {

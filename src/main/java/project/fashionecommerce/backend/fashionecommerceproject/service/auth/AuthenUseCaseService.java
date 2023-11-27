@@ -68,13 +68,12 @@ public class AuthenUseCaseService {
     }
 
     @Transactional
-    public MyAuthentication logout() {
+    public void logout() {
         Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principle.toString() != "anonymousUser") {
             String userId = ((UserDetailsImpl) principle).getId();
             tokenCommandService.deleteByUserId(userId);
         }
-        return new MyAuthentication(null, null, null, null);
     }
 
 }

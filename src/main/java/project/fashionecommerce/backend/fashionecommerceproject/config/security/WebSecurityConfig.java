@@ -78,8 +78,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/guest/**").permitAll()
-                            .requestMatchers("/api/auth/refresh-token").permitAll()
-                            .requestMatchers("/api/auth/**").hasAnyAuthority("ADMIN", "CUSTOMER", "STAFF", "MANAGER")
+                            .requestMatchers("/api/auth/**").permitAll()
                             .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                             .requestMatchers("/api/admin/manager/**").hasAnyAuthority("MANAGER")
                             .requestMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER")

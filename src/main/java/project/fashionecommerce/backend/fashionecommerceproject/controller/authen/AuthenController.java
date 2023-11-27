@@ -31,11 +31,9 @@ public class AuthenController implements AuthenAPI {
         return ResponseEntity.badRequest().body("Refresh Token is empty!");
     }
     public ResponseEntity<?> logout() {
-        MyAuthentication myAuthentication = authenUseCaseService.logout();
+        authenUseCaseService.logout();
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwt())
-                .header(HttpHeaders.SET_COOKIE, myAuthentication.jwtRefresh())
                 .body("You've been signed out!");
     }
 }
