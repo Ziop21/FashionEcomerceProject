@@ -23,7 +23,7 @@ public class TokenCommandService {
     public Token verifyExpiration(Token token) {
         if (token.expiryDateTime().compareTo(LocalDateTime.now()) < 0) {
             tokenRepository.delete(tokenMapper.toEntity(token));
-            throw new TokenRefreshException(token.token(), "Refresh token was expired. Please make a new signin request");
+            throw new TokenRefreshException(token.token(), "Refresh token was expired. Please make a new sign in request");
         }
         return token;
     }

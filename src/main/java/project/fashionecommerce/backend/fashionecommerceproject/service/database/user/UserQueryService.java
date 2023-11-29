@@ -16,7 +16,9 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.level.UserQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConflictsException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
+import project.fashionecommerce.backend.fashionecommerceproject.repository.database.token.TokenEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserEntity;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.token.TokenRepository;
 import project.fashionecommerce.backend.fashionecommerceproject.repository.database.user.UserRepository;
@@ -40,14 +42,14 @@ public class UserQueryService {
 
         UserEntity userEntity = userRepository.findByEmailAndIsDeleted(email, false)
                 .orElseThrow(MyResourceNotFoundException::new);
-        if (userEntity.getIsActive() == true)
+        if (userEntity.getIsActive())
             return true;
-        if (!userEntity.getIsEmailActive()){
-            userRepository.deleteById(userEntity.getId());
-            tokenRepository.deleteByUserId(userEntity.getId());
-            return false;
-        }
-        return true;
+        TokenEntity foundToken = tokenRepository.findByUserId(userEntity.getId());
+        if (foundToken != null && foundToken.getExpiryDateTime().isAfter(LocalDateTime.now().minusSeconds(60)))
+            throw new MyConflictsException();
+        userRepository.deleteById(userEntity.getId());
+        tokenRepository.deleteByUserId(userEntity.getId());
+        return false;
     }
 
     public User findByEmailAndIsEmailActive(String email, Boolean isEmailActive) {

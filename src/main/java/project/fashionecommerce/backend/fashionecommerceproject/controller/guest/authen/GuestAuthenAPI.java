@@ -16,6 +16,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.guest
 public interface GuestAuthenAPI {
     @PostMapping("/login")
     ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest);
+
     @PostMapping("/register")
     ResponseEntity<?>  register(@RequestBody @Valid RegisterRequest registerRequest);
 
@@ -25,5 +26,14 @@ public interface GuestAuthenAPI {
     @PostMapping("/register/verify")
     ResponseEntity<?> verifyEmailToken(
             @RequestParam(required = false, value = "token", defaultValue = "") String token
+    );
+
+    @PostMapping("/forgot-password/send-token/{email}")
+    ResponseEntity<?> sendTokenForgotPassword(@PathVariable @Email String email);
+
+    @PostMapping("/forgot-password/verify")
+    ResponseEntity<?> verifyForgotPasswordToken(
+            @RequestParam(required = false, value = "token", defaultValue = "") String token,
+            @RequestBody @Valid RegisterRequest registerRequest
     );
 }

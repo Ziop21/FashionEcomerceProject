@@ -11,4 +11,6 @@ public interface TokenRepository extends MongoRepository<TokenEntity, String> {
     void deleteByUserId(String userId);
 
     boolean existsByUserId(String userId);
+
+    TokenEntity findByUserId(String userId);
 }

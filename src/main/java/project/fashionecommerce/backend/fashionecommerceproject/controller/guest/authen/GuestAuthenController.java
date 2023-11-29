@@ -44,12 +44,25 @@ public class GuestAuthenController implements GuestAuthenAPI {
     }
     @Override
     public ResponseEntity<?> sendToken(String email) {
-        String status = guestAuthenUseCaseService.sendToken(email);
+        String status = guestAuthenUseCaseService.sendToken(email, false);
         return ResponseEntity.ok().body(status);
     }
     @Override
     public ResponseEntity<?> verifyEmailToken(String token) {
         String status = guestAuthenUseCaseService.verifyToken(token);
+        return ResponseEntity.ok().body(status);
+    }
+
+    @Override
+    public ResponseEntity<?> sendTokenForgotPassword(String email) {
+        String status = guestAuthenUseCaseService.sendToken(email, true);
+        return ResponseEntity.ok().body(status);
+    }
+
+    @Override
+    public ResponseEntity<?> verifyForgotPasswordToken(String token, RegisterRequest registerRequest) {
+        Register register = guestAuthenModelMapper.toDto(registerRequest);
+        String status = guestAuthenUseCaseService.verifyForgotPasswordToken(token, register);
         return ResponseEntity.ok().body(status);
     }
 }
