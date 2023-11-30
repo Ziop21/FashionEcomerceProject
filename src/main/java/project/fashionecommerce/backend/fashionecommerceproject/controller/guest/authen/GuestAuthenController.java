@@ -65,4 +65,10 @@ public class GuestAuthenController implements GuestAuthenAPI {
         String status = guestAuthenUseCaseService.verifyForgotPasswordToken(token, register);
         return ResponseEntity.ok().body(status);
     }
+
+    @Override
+    public ResponseEntity<?> findEmail(String token) {
+        String email = guestAuthenUseCaseService.findEmail(token);
+        return ResponseEntity.ok().body(email);
+    }
 }

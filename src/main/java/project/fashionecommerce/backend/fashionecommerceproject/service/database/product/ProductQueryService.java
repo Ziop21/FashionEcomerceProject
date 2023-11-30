@@ -142,6 +142,7 @@ public class ProductQueryService {
                         .first("updatedAt").as("updatedAt")
                         .first("createdBy").as("createdBy")
                         .first("updatedBy").as("updatedBy"),
+                Aggregation.sort(pageRequest.getSort()),
                 Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );

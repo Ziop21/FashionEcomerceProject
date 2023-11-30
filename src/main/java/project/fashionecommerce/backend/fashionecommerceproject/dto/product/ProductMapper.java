@@ -38,4 +38,6 @@ public interface ProductMapper {
     @Mapping(source = "images", target = "images")
     Product updateDto(Product foundProduct, String name, String description,
                       Double price, Double promotionalPrice, List<String> images);
+    @Mapping(source = "view", target = "view")
+    Product updateDtoView(Product product, Long view);
 }

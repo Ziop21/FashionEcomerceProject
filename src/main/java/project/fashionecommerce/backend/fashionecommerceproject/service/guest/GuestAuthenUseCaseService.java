@@ -147,10 +147,11 @@ public class GuestAuthenUseCaseService {
             Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
             foundToken = tokenCommandService.verifyExpiration(foundToken);
             userCommandService.updateIsEmailActive(new UserId(foundToken.userId()), true);
+            User user = userQueryService.findById(new UserId(foundToken.userId()));
             tokenCommandService.deleteByUserId(foundToken.userId());
-            return "Success";
+            return user.email();
         }
-        return "You have not signed out yet";
+        throw new MyForbiddenException();
     }
 
     public String verifyForgotPasswordToken(String token, Register register) {
@@ -167,9 +168,18 @@ public class GuestAuthenUseCaseService {
             }
             String hashedPassword = passwordEncoder.encode(register.password());
             userCommandService.updateHashedPasswordAndIsActive(new UserId(user.id()), hashedPassword, true);
-            return "Success";
-
+            return user.email();
         }
-        return "You have not signed out yet";
+        throw new MyForbiddenException();
+    }
+
+    public String findEmail(String token) {
+        String currentUser = guestUseCaseService.getCurrentUser();
+        if (currentUser == "anonymousUser") {
+            Token foundToken = tokenQueryService.findByToken(token).orElseThrow(MyResourceNotFoundException::new);
+            User user = userQueryService.findById(new UserId(foundToken.userId()));
+            return user.email();
+        }
+        throw new MyForbiddenException();
     }
 }

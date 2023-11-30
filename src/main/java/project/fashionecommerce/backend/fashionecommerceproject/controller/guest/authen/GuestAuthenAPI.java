@@ -36,4 +36,9 @@ public interface GuestAuthenAPI {
             @RequestParam(required = false, value = "token", defaultValue = "") String token,
             @RequestBody @Valid RegisterRequest registerRequest
     );
+
+    @PostMapping("/forgot-password/find-email")
+    ResponseEntity<?> findEmail(
+            @RequestParam(required = false, value = "token", defaultValue = "") String token
+    );
 }

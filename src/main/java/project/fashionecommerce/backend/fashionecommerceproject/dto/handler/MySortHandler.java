@@ -9,7 +9,7 @@ public record MySortHandler(Sort sort) {
             if(sorterSplit[1].equals("ASC")) {
                 return Sort.by(sorterSplit[0]).ascending();
             }
-            if(sorterSplit[1].equals("DECS")) {
+            if(sorterSplit[1].equals("DESC")) {
                 return Sort.by(sorterSplit[0]).descending();
             }
         }
