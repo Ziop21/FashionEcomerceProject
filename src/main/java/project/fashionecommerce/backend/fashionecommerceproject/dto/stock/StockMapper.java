@@ -91,4 +91,13 @@ public abstract class StockMapper {
     @Mapping(source = "sizeId", target = "sizeId")
     @Mapping(source = "quantity", target = "quantity")
     public abstract Stock updateDto(Stock foundStock, String productId, String colorId, String sizeId, Long quantity);
+
+    @Mapping(source = "productName", target = "productName")
+    public abstract Stock updateDtoProductName(Stock stock, String productName);
+
+    @Mapping(source = "sizeName", target = "sizeName")
+    public abstract Stock updateDtoSizeName(Stock stock, String sizeName);
+
+    @Mapping(source = "colorName", target = "colorName")
+    public abstract Stock updateDtoColorName(Stock stock, String colorName);
 }

@@ -8,8 +8,11 @@ import java.util.List;
 public record StockResponse(
         String id,
         String productId,
+        String productName,
         String sizeId,
+        String sizeName,
         String colorId,
+        String colorName,
         Long quantity,
         Boolean isActive,
         Boolean isDeleted,
