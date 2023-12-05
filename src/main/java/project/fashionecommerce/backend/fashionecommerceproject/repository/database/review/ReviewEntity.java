@@ -21,6 +21,6 @@ public class ReviewEntity extends TimeAuditable implements Serializable {
     @Field(targetType = FieldType.OBJECT_ID)
     private String userId;
     private String content;
-    private Double rating;
+    private Long rating;
     private List<String> images;
 }
