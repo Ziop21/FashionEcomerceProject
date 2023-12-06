@@ -6,7 +6,7 @@ import java.util.List;
 
 public record ReviewRequest(
         @NotNull
-        String userId,
+        String orderId,
         String content,
         @NotNull
         Double rating,

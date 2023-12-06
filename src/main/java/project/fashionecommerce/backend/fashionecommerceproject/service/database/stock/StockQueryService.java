@@ -122,7 +122,7 @@ public class StockQueryService {
             reviews = reviews.stream().map(review -> {
                 UserEntity userEntity = userRepository.findById(review.userId()).orElseThrow(MyResourceNotFoundException::new);
                 String username = userEntity.getFirstName() + " " + userEntity.getLastName();
-                return reviewMapper.updateDto(review, username);
+                return reviewMapper.updateDto(review, username, userEntity.getId());
             }).collect(Collectors.toList());
             return stockMapper.updateDto(stock, reviews);
         }).collect(Collectors.toList());

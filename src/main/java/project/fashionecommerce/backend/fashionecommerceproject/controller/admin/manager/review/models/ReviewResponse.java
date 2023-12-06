@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReviewResponse(
-        String userId,
+        String orderId,
         String content,
         Double rating,
         List<String> images,

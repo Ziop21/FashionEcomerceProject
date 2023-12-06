@@ -10,5 +10,6 @@ public interface ReviewMapper {
 
     Review toDto(ReviewEntity reviewEntity);
     @Mapping(source = "username", target = "username")
-    Review updateDto(Review review, String username);
+    @Mapping(source = "userId", target = "userId")
+    Review updateDto(Review review, String username, String userId);
 }

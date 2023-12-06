@@ -19,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class ReviewEntity extends TimeAuditable implements Serializable {
     @Field(targetType = FieldType.OBJECT_ID)
-    private String userId;
+    private String orderId;
     private String content;
     private Long rating;
     private List<String> images;
