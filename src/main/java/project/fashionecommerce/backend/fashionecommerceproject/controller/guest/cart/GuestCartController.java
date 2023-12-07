@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.CartTokenResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemModelMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.CartItem;
@@ -22,6 +23,12 @@ public class GuestCartController implements GuestCartAPI {
     final GuestCartUseCaseService guestCartUseCaseService;
     @NonNull
     final GuestCartItemModelMapper guestCartItemModelMapper;
+
+    @Override
+    public ResponseEntity<?> save() {
+        String cartJWT = guestCartUseCaseService.save();
+        return ResponseEntity.ok().body(new CartTokenResponse(cartJWT));
+    }
 
     @Override
     public ResponseEntity<List<GuestCartItemResponse>> findAllCartItem(HttpServletRequest request) {

@@ -13,6 +13,9 @@ import java.util.List;
 
 @RequestMapping("/api/guest/cart")
 public interface GuestCartAPI {
+    @PostMapping
+    ResponseEntity<?> save();
+
     @GetMapping
     ResponseEntity<List<GuestCartItemResponse>> findAllCartItem(HttpServletRequest request);
 

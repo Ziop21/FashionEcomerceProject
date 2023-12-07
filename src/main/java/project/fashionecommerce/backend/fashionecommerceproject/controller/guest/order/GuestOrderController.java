@@ -20,9 +20,8 @@ public class GuestOrderController implements GuestOrderAPI {
     @Override
     public ResponseEntity<?> save(GuestOrderRequest guestOrderRequest, HttpServletRequest request) {
         Order order = guestOrderModelMapper.toDto(guestOrderRequest);
-        ResponseCookie newCartTokenCookie = guestOrderUseCaseService.save(order, request);
+        guestOrderUseCaseService.save(order, request);
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, newCartTokenCookie.toString())
                 .body("Success");
     }
 }

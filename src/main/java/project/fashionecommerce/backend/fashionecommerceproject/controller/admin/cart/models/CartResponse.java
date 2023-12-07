@@ -11,6 +11,8 @@ public record CartResponse(
         Boolean isActive,
         List<CartItemRequest> cartItems,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String createdBy,
+        String updatedBy
 ) {
 }

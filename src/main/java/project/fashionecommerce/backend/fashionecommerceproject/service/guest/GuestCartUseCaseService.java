@@ -176,4 +176,12 @@ public class GuestCartUseCaseService {
         cart = cartMapper.updateCartItems(cart, cartItems);
         cartCommandService.save(cart);
     }
+
+    @Transactional
+    public String save() {
+        Cart cart = Cart.builder().isDeleted(false).isActive(true).build();
+        cart = cartCommandService.save(cart);
+        String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
+        return cartToken;
+    }
 }

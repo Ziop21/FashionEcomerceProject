@@ -59,6 +59,9 @@ public class GuestOrderUseCaseService {
     public ResponseCookie save(Order order, HttpServletRequest request) {
         String cartId = guestCartUseCaseService.getCartId(request);
         Cart cart = cartQueryService.findById(new CartId(cartId));
+        if (cart.isDeleted() || !cart.isActive()){
+            throw new MyResourceNotFoundException();
+        }
         List<CartItem> cartItems = cart.cartItems();
         if (cartItems == null || cartItems.size() == 0){
             throw new MyResourceNotFoundException();
@@ -81,16 +84,11 @@ public class GuestOrderUseCaseService {
         orderCommandService.save(order);
         cartCommandService.updateIsActiveIsDeleted(new CartId(cartId), false, true);
 
-        Cart newCart = Cart.builder().isActive(true).isDeleted(false).build();
-        newCart = cartCommandService.save(newCart);
-        String cartToken = jwtUtils.generateTokenFromCartId(newCart.id());
         if (guestUseCaseService.getCurrentUser() != "anonymousUser"){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             this.sendEmailOrderInformation(order, userDetails.getEmail());
         }
-//        ResponseCookie cartTokenCookie = jwtUtils.generateCookie(cartTokenCookieName, cartToken, "/api");
-//        return cartTokenCookie;
         return null;
     }
 
@@ -103,8 +101,14 @@ public class GuestOrderUseCaseService {
         text.append("Order ID: ").append(order.id()).append("\n");
         text.append("Address: ").append(order.address()).append("\n");
         text.append("Phone: ").append(order.phone()).append("\n");
-        text.append("Items: ").append(deliveryName).append("\n");
-        text.append("Delivery: ").append(order.orderItems()).append("\n");
+        text.append("Delivery: ").append(deliveryName).append("\n");
+        text.append("Items: ").append("\n");
+        order.orderItems().forEach((item) -> {
+                text.append("\t StockId: ").append(item.stockId()).append("\n");
+                text.append("\t Quantity: ").append(item.quantity()).append("\n");
+                text.append("\n");
+            }
+        );
         text.append("Shipping fee: ").append(order.shippingFee()).append("\n");
         text.append("Paid before: ").append(order.isPaidBefore()).append("\n");
         message.setText(text.toString());

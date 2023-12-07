@@ -34,9 +34,16 @@ public class JwtUtils implements Serializable {
     private Long jwtExpirationMs;
     @Value("${fashion_ecommerce.app.jwtRefreshExpirationMs}")
     private Long refreshJWTExpirationS;
+    @Value("${fashion_ecommerce.app.jwtCartExpiration}")
+    private Long cartTokenExpirationMs;
 
     @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
     private String jwtRefreshCookie;
+    @Value("${fashion_ecommerce.app.jwt.issuer}")
+    private String issuer;
+    @Value("${fashion_ecommerce.app.jwt.audience}")
+    private String audience;
+
 
     private byte[] generateShareSecret() {
         return jwtSecret.getBytes();
@@ -54,8 +61,8 @@ public class JwtUtils implements Serializable {
             builder.claim("tokenId", refreshToken);
             builder.expirationTime(generateExpirationDate(refreshJWTExpirationS));
             builder.issueTime(new Date());
-            builder.issuer("fashion_ecommerce");
-            builder.audience("fashion_ecommerce");
+            builder.issuer(issuer);
+            builder.audience(audience);
             JWTClaimsSet claimsSet = builder.build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
             signedJWT.sign(signer);
@@ -104,8 +111,8 @@ public class JwtUtils implements Serializable {
             builder.claim("userId", user.id());
             builder.claim("email", user.email());
             builder.claim("roles", roles);
-            builder.issuer("fashion_ecommerce");
-            builder.audience("fashion_ecommerce");
+            builder.issuer(issuer);
+            builder.audience(audience);
             builder.issueTime(new Date());
             builder.expirationTime(generateExpirationDate(jwtExpirationMs));
             JWTClaimsSet claimsSet = builder.build();
@@ -127,8 +134,8 @@ public class JwtUtils implements Serializable {
             builder.claim("userId", userDetails.getId());
             builder.claim("email", userDetails.getEmail());
             builder.claim("roles", roles);
-            builder.issuer("fashion_ecommerce");
-            builder.audience("fashion_ecommerce");
+            builder.issuer(issuer);
+            builder.audience(audience);
             builder.issueTime(new Date());
             builder.expirationTime(generateExpirationDate(jwtExpirationMs));
             JWTClaimsSet claimsSet = builder.build();
@@ -147,8 +154,9 @@ public class JwtUtils implements Serializable {
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
             builder.claim("cartId", cartId);
             builder.issueTime(new Date());
-            builder.issuer("fashion_ecommerce");
-            builder.audience("fashion_ecommerce");
+            builder.expirationTime(generateExpirationDate(cartTokenExpirationMs));
+            builder.issuer(issuer);
+            builder.audience(audience);
             JWTClaimsSet claimsSet = builder.build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
             signedJWT.sign(signer);
