@@ -1,5 +1,6 @@
 package project.fashionecommerce.backend.fashionecommerceproject.controller.guest.review.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record GuestReviewResponse(
@@ -10,6 +11,8 @@ public record GuestReviewResponse(
         String username,
         String content,
         Double rating,
-        List<String> images
+        List<String> images,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }

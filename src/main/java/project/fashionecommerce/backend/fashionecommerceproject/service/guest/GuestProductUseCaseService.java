@@ -74,4 +74,8 @@ public class GuestProductUseCaseService {
     public Page<Product> findAllProduct(ProductQuery productQuery, PageRequest pageRequest) {
         return productQueryService.findAll(productQuery, pageRequest, ERole.GUEST);
     }
+
+    public List<ProductId> findAllProductIds(ProductQuery productQuery, PageRequest pageRequest) {
+        return productQueryService.findAllProductIds(productQuery, pageRequest, ERole.GUEST);
+    }
 }

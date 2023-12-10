@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.Category;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.CategoryId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.category.CategoryQuery;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class CategoryUseCaseService {
     }
 
     public Page<Category> findAll(CategoryQuery categoryQuery, PageRequest pageRequest) {
-        return categoryQueryService.findAll(categoryQuery, pageRequest);
+        return categoryQueryService.findAll(categoryQuery, pageRequest, ERole.ADMIN);
     }
 
     public Category findById(CategoryId categoryId) {

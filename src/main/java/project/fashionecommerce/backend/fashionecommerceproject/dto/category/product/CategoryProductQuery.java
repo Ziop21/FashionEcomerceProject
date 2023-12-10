@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 @Builder
 public record CategoryProductQuery(
+        String productId,
         String search,
         LocalDate fromDate,
         LocalDate toDate

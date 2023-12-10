@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.manager.product.models.ProductRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.admin.manager.product.models.ProductResponse;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("/api/admin/manager/product")
@@ -29,8 +27,6 @@ public interface ProductsAPI {
             @RequestParam(required = false, value = "fromRating", defaultValue = "") Long toRating,
             @RequestParam(required = false, value = "fromPrice", defaultValue = "") Long fromPrice,
             @RequestParam(required = false, value = "toPrice", defaultValue = "") Long toPrice,
-            @RequestParam(required = false, value = "fromDate", defaultValue = "") LocalDate fromDate,
-            @RequestParam(required = false, value = "toDate", defaultValue = "") LocalDate toDate,
             @RequestParam(required = false, value = "sort", defaultValue = "") String sort,
             @RequestParam(required = false, value = "currentPage", defaultValue = "1") @Min(1) Integer currentPage,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize

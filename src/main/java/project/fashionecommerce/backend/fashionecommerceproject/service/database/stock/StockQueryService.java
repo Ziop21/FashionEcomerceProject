@@ -48,6 +48,10 @@ public class StockQueryService {
     public Page<Stock> findAll(StockQuery stockQuery, PageRequest pageRequest, ERole role) {
         Criteria criteria = new Criteria();
 
+        if (stockQuery.productId() != null){
+            criteria.and("productId").is(new ObjectId(stockQuery.productId()));
+        }
+
         if (stockQuery.search() != null && !stockQuery.search().isBlank()) {
             criteria.orOperator(
                     Criteria.where("products.name").regex(".*" + stockQuery.search() + ".*", "i"),
@@ -71,6 +75,11 @@ public class StockQueryService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             criteria.and("createdBy").is(new ObjectId(userDetails.getId()));
+        }
+
+        if (role.equals(ERole.GUEST)){
+            criteria.and("isActive").is(true);
+            criteria.and("isDeleted").is(false);
         }
 
         Aggregation countAggregation = Aggregation.newAggregation(

@@ -15,7 +15,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.handler.MySo
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductQuery;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.product.ProductUseCaseService;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class ProductsController implements ProductsAPI{
     @Override
     public ResponseEntity<PageResponse<ProductResponse>> findAll(String search, List<String> sizeIds, List<String> colorIds,
                                                                  Long fromRating, Long toRating, Long fromPrice, Long toPrice,
-                                                                 LocalDate fromDate, LocalDate toDate, String sort, Integer currentPage,
+                                                                 String sort, Integer currentPage,
                                                                  Integer pageSize) {
         ProductQuery productQuery = ProductQuery.builder()
                 .search(search)
@@ -40,7 +39,6 @@ public class ProductsController implements ProductsAPI{
                 .colorIds(colorIds)
                 .fromRating(toRating).toRating(toRating)
                 .fromPrice(fromPrice).toPrice(toPrice)
-                .fromDate(fromDate).toDate(toDate)
                 .build();
 
         PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
