@@ -12,9 +12,9 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.guest
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/api/guest/stock/product")
+@RequestMapping("/api/guest/stock")
 public interface GuestStockAPI {
-    @GetMapping("/{productId}")
+    @GetMapping("/product/{productId}")
     ResponseEntity<PageResponse<GuestStockResponse>> findAlByProductId(
             @PathVariable String productId,
             @RequestParam(required = false, value = "search", defaultValue = "") String search,
@@ -23,5 +23,12 @@ public interface GuestStockAPI {
             @RequestParam(required = false, value = "sort", defaultValue = "") String sort,
             @RequestParam(required = false, value = "currentPage", defaultValue = "1") @Min(1) Integer currentPage,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize
+    );
+
+    @GetMapping
+    ResponseEntity<GuestStockResponse> findByProductIdSizeIdColorId(
+            @RequestParam(required = true, value = "productId", defaultValue = "") String productId,
+            @RequestParam(required = true, value = "colorId", defaultValue = "") String colorId,
+            @RequestParam(required = true, value = "sizeId", defaultValue = "") String sizeId
     );
 }

@@ -15,10 +15,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Review;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.review.ReviewMapper;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockMapper;
@@ -136,5 +138,10 @@ public class StockQueryService {
             return stockMapper.updateDto(stock, reviews);
         }).collect(Collectors.toList());
         return stocks;
+    }
+
+    public Stock findByProductIdSizeIdColorId(ProductId productId, SizeId sizeId, ColorId colorId) {
+        StockEntity stockEntity = stockRepository.findByProductIdAndSizeIdAndColorId(productId.id(), sizeId.id(), colorId.id());
+        return stockMapper.toDto(stockEntity);
     }
 }

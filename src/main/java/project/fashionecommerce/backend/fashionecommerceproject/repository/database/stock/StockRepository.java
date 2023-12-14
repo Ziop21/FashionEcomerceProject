@@ -10,4 +10,6 @@ public interface StockRepository extends MongoRepository<StockEntity, String> {
     Boolean existsByProductIdAndSizeIdAndColorId(String productId, String sizeId, String colorId);
 
     List<StockEntity> findAllByProductId(String productId);
+
+    StockEntity findByProductIdAndSizeIdAndColorId(String productId, String sizeId, String colorId);
 }
