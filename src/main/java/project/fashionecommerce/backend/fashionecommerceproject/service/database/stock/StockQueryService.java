@@ -128,6 +128,9 @@ public class StockQueryService {
     public List<Stock> findAllByProductId(ProductId productId) {
         List<StockEntity> stockEntities = stockRepository.findAllByProductId(productId.id());
         List<Stock> stocks = stockEntities.stream().map(stockMapper::toDto).collect(Collectors.toList());
+        stocks = stocks.stream().filter((stock -> stock.isActive() && !stock.isDeleted())).collect(Collectors.toList());
+        if (stocks == null)
+            return null;
         stocks = stocks.stream().map(stock -> {
             List<Review> reviews = stock.reviews();
             reviews = reviews.stream().map(review -> {
