@@ -4,6 +4,8 @@ import lombok.Builder;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.color.models.GuestColorResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.review.models.GuestReviewResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.size.models.GuestSizeResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.stock.models.GuestStockResponse;
+
 import java.util.List;
 
 @Builder
@@ -15,8 +17,6 @@ public record GuestProductResponse(
         Double promotionalPrice,
         List<String> images,
         Double rating,
-        List<GuestColorResponse> colors,
-        List<GuestSizeResponse> sizes,
-        List<GuestReviewResponse> reviews
+        List<GuestStockResponse> stocks
 ) {
 }

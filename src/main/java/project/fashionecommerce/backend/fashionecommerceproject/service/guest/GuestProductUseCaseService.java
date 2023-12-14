@@ -50,23 +50,7 @@ public class GuestProductUseCaseService {
             throw new MyForbiddenException();
         List<Stock> stocks = stockQueryService.findAllByProductId(productId);
 
-        List<ColorId> colorIds = stocks.stream()
-                .map(Stock::colorId)
-                .distinct()
-                .map(ColorId::new)
-                .collect(Collectors.toList());
-        List<Color> colors = colorIds.stream().map(colorId -> colorQueryService.findById(colorId))
-                .collect(Collectors.toList());
-
-        List<SizeId> sizeIds = stocks.stream()
-                .map(Stock::sizeId)
-                .distinct()
-                .map(SizeId::new)
-                .collect(Collectors.toList());
-        List<Size> sizes = sizeIds.stream().map(sizeId -> sizeQueryService.findById(sizeId))
-                .collect(Collectors.toList());
-
-        product = productMapper.updateDto(product, stocks, sizes, colors);
+        product = productMapper.updateDto(product, stocks);
 
         return product;
     }

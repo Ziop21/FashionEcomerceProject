@@ -20,9 +20,7 @@ public interface ProductMapper {
     Product toDto(ProductEntity product);
 
     @Mapping(source = "stocks", target = "stocks")
-    @Mapping(source = "sizes", target = "sizes")
-    @Mapping(source = "colors", target = "colors")
-    Product updateDto(Product product, List<Stock> stocks, List<Size> sizes, List<Color> colors);
+    Product updateDto(Product product, List<Stock> stocks);
 
     @Mapping(source = "isActive", target = "isActive")
     Product updateDtoIsActive(Product product, Boolean isActive);
