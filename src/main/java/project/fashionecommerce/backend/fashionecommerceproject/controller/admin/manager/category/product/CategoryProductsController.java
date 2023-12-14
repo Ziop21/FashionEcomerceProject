@@ -33,13 +33,13 @@ public class CategoryProductsController implements CategoryProductsAPI {
     @Override
     public ResponseEntity<PageResponse<CategoryProductResponse>> findAll(String search, LocalDate fromDate,
                                                                          LocalDate toDate, String sort,
-                                                                         Integer pageCurrent, Integer pageCategoryProduct) {
+                                                                         Integer currentPage, Integer pageSize) {
         CategoryProductQuery categoryProductQuery = CategoryProductQuery.builder()
                 .search(search)
                 .fromDate(fromDate)
                 .toDate(toDate)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageCurrent - 1, pageCategoryProduct, MySortHandler.of(sort));
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, MySortHandler.of(sort));
 
         Page<CategoryProduct> categoryProductPage = categoryProductUseCaseService.findAll(categoryProductQuery, pageRequest);
 
