@@ -97,6 +97,7 @@ public class OrderQueryService {
                 Aggregation.lookup("user", "userId", "_id", "user"),
                 Aggregation.unwind("user", true),
                 Aggregation.match(criteria),
+                Aggregation.sort(pageRequest.getSort()),
                 Aggregation.skip(currentPage * pageRequest.getPageSize()),
                 Aggregation.limit(pageRequest.getPageSize())
         );
