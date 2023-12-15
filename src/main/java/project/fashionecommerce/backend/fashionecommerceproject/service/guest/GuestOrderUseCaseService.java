@@ -17,16 +17,25 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.Cart;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.CartId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.CartMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.CartItem;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.color.ColorId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.delivery.DeliveryId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrderStatus;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.Order;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.items.OrderItem;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartQueryService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.color.ColorQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.delivery.DeliveryQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.order.OrderCommandService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.product.ProductQueryService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.size.SizeQueryService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
 import java.util.List;
@@ -41,9 +50,13 @@ public class GuestOrderUseCaseService {
     @NonNull final CartCommandService cartCommandService;
     @NonNull final GuestCartUseCaseService guestCartUseCaseService;
 
+    @NonNull final StockQueryService stockQueryService;
     @NonNull final CartQueryService cartQueryService;
     @NonNull final UserQueryService userQueryService;
+    @NonNull final ProductQueryService productQueryService;
     @NonNull final DeliveryQueryService deliveryQueryService;
+    @NonNull final SizeQueryService sizeQueryService;
+    @NonNull final ColorQueryService colorQueryService;
 
     @NonNull final OrderMapper orderMapper;
     @NonNull final CartMapper cartMapper;
@@ -98,13 +111,19 @@ public class GuestOrderUseCaseService {
         message.setTo(email);
         message.setSubject("FASHION ECOMMERCE WEBSITE: ORDER INFORMATION");
         StringBuilder text = new StringBuilder("Thank you for choosing our website!! This is your order information:\n\n");
-        text.append("Order ID: ").append(order.id()).append("\n");
+//        text.append("Order ID: ").append(order.id()).append("\n");
         text.append("Address: ").append(order.address()).append("\n");
         text.append("Phone: ").append(order.phone()).append("\n");
         text.append("Delivery: ").append(deliveryName).append("\n");
         text.append("Items: ").append("\n");
         order.orderItems().forEach((item) -> {
-                text.append("\t StockId: ").append(item.stockId()).append("\n");
+                Stock stock = stockQueryService.findById(new StockId(item.stockId()));
+                String productName = productQueryService.findById(new ProductId(stock.productId())).name();
+                String sizeName = sizeQueryService.findById(new SizeId(stock.sizeId())).name();
+                String colorName = colorQueryService.findById(new ColorId(stock.colorId())).name();
+                text.append("\t Product: ").append(productName).append("\n");
+                text.append("\t Size: ").append(sizeName).append("\n");
+                text.append("\t Color: ").append(colorName).append("\n");
                 text.append("\t Quantity: ").append(item.quantity()).append("\n");
                 text.append("\n");
             }
