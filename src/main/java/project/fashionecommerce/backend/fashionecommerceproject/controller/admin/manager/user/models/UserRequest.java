@@ -20,8 +20,8 @@ public record UserRequest(
         @Email
         String email,
         List<String> phones,
-        @NotNull
         String hashedPassword,
+        String password,
         @NotNull
         Boolean isEmailActive,
         Boolean isPhoneActive,
@@ -32,7 +32,6 @@ public record UserRequest(
         String userLevelId,
         @NotNull
         Boolean isDeleted,
-
         @NotNull
         Boolean isActive
 ){

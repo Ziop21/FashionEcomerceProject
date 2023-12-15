@@ -22,6 +22,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.role.Role;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.token.Token;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConfirmPasswordUnmatchException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConflictsException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyForbiddenException;
@@ -44,6 +45,8 @@ public class GuestAuthenUseCaseService {
     @NonNull final TokenCommandService tokenCommandService;
     @NonNull final TokenQueryService tokenQueryService;
     @NonNull final AuthenticationManager authenticationManager;
+
+    @NonNull final UserMapper userMapper;
 
     @Autowired final PasswordEncoder passwordEncoder;
     @Autowired private JavaMailSender javaMailSender;
@@ -85,6 +88,8 @@ public class GuestAuthenUseCaseService {
             if (user.isActive()) {
                 throw new MyForbiddenException();
             }
+            user = userMapper.updateDto(user, register.firstName(), register.lastName(), null, List.of(register.phone()), List.of(register.address()), null, null);
+            userCommandService.update(new UserId(user.id()), user);
             String hashedPassword = passwordEncoder.encode(register.password());
             userCommandService.updateHashedPasswordAndIsActive(new UserId(user.id()), hashedPassword, true);
             return "Success";

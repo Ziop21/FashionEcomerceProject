@@ -10,6 +10,14 @@ public record RegisterRequest(
         @NotNull
         String password,
         @NotNull
-        String confirmPassword
+        String confirmPassword,
+        @NotNull
+        String firstName,
+        @NotNull
+        String lastName,
+        @NotNull
+        String phone,
+        @NotNull
+        String address
 ) {
 }

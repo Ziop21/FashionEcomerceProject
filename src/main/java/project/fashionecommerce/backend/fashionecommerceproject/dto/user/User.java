@@ -29,6 +29,7 @@ public record User (
         String updatedBy,
         Boolean isDeleted,
         Boolean isActive,
-        String userLevelName
+        String userLevelName,
+        String password
 ){
 }
