@@ -6,4 +6,5 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.C
 @Mapper(componentModel = "spring")
 public interface GuestCartItemModelMapper {
     GuestCartItemResponse toModel(CartItem cartItem);
+    CartItem toDto(GuestCartItemRequest guestCartItemRequest);
 }

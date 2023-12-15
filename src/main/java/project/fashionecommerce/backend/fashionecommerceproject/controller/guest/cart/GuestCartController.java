@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.CartTokenResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemModelMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.cart.items.CartItem;
@@ -41,6 +42,13 @@ public class GuestCartController implements GuestCartAPI {
     @Override
     public void deleteCartItem(String stockId, HttpServletRequest request) {
         guestCartUseCaseService.deleteCartItem(new StockId(stockId), request);
+    }
+
+    @Override
+    public void addCartItems(List<GuestCartItemRequest> cartItems, HttpServletRequest request) {
+        List<CartItem> cartItemList = cartItems.stream().map(item -> guestCartItemModelMapper.toDto(item))
+                .collect(Collectors.toList());
+        guestCartUseCaseService.addCartItems(cartItemList, request);
     }
 
     @Override

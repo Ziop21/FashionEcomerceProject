@@ -184,4 +184,11 @@ public class GuestCartUseCaseService {
         String cartToken = jwtUtils.generateTokenFromCartId(cart.id());
         return cartToken;
     }
+
+    public void addCartItems(List<CartItem> cartItemList, HttpServletRequest request) {
+        String cartId = this.getCartId(request);
+        Cart cart = cartQueryService.findById(new CartId(cartId));
+        cart = cartMapper.updateCartItems(cart, cartItemList);
+        cartCommandService.save(cart);
+    }
 }
