@@ -6,7 +6,6 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrder
 import java.util.List;
 
 public record OrderRequest(
-        @NotNull
         String userId,
         @NotNull
         String address,
