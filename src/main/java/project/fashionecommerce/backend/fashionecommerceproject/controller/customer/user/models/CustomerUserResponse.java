@@ -3,7 +3,6 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.cust
 import java.util.List;
 
 public record CustomerUserResponse(
-        String id,
         String firstName,
         String lastName,
         String idCard,

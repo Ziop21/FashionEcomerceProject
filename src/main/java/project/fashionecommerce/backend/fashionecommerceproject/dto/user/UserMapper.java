@@ -42,4 +42,6 @@ public interface UserMapper {
     User updateDtoIsActive(User user, Boolean isActive);
     @Mapping(source = "isDeleted", target = "isDeleted")
     User updateDtoIsDeleted(User user, Boolean isDeleted);
+    @Mapping(source = "point", target = "point")
+    User updateDtoPoint(User user, Long point);
 }

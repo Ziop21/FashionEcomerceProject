@@ -13,7 +13,7 @@ public record CustomerUserRequest(
         String lastName,
         String idCard,
         List<String> phones,
-        List<String> address,
+        List<String> addresses,
         String avatar,
         String eWallet
 ) {

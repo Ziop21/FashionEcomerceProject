@@ -88,7 +88,10 @@ public class GuestAuthenUseCaseService {
             if (user.isActive()) {
                 throw new MyForbiddenException();
             }
-            user = userMapper.updateDto(user, register.firstName(), register.lastName(), null, List.of(register.phone()), List.of(register.address()), null, null);
+            user = userMapper.updateDto(user, register.firstName(), register.lastName(), null,
+                    List.of(register.phone()), List.of(register.address()), null, null);
+
+            user = userMapper.updateDtoPoint(user, 0L);
             userCommandService.update(new UserId(user.id()), user);
             String hashedPassword = passwordEncoder.encode(register.password());
             userCommandService.updateHashedPasswordAndIsActive(new UserId(user.id()), hashedPassword, true);

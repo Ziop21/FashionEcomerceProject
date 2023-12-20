@@ -41,8 +41,10 @@ public class CustomerUserUseCaseService {
         if (user.isDeleted() || !user.isActive()){
             throw new MyResourceNotFoundException();
         }
-        UserLevel userLevel = userLevelQueryService.findById(new UserLevelId(user.userLevelId()));
-        user = userMapper.updateDtoUserLevelName(user, userLevel.name());
+        if (user.userLevelId() != null){
+            UserLevel userLevel = userLevelQueryService.findById(new UserLevelId(user.userLevelId()));
+            user = userMapper.updateDtoUserLevelName(user, userLevel.name());
+        }
         return user;
     }
     @Transactional
