@@ -61,6 +61,13 @@ public class StockUseCaseService {
     }
 
     public Stock findById(StockId stockId) {
-        return stockQueryService.findById(stockId);
+        Stock stock = stockQueryService.findById(stockId);
+        String colorName = colorQueryService.findById(new ColorId(stock.colorId())).name();
+        String productName = productQueryService.findById(new ProductId(stock.productId())).name();
+        String sizeName = sizeQueryService.findById(new SizeId(stock.sizeId())).name();
+        stock = stockMapper.updateDtoSizeName(stock, sizeName);
+        stock = stockMapper.updateDtoColorName(stock, colorName);
+        stock = stockMapper.updateDtoProductName(stock, productName);
+        return stock;
     }
 }

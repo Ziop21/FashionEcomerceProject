@@ -67,7 +67,7 @@ public class StockDiaryQueryService {
                 Aggregation.group().count().as("totalRecords")
         );
 
-        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "stockDiary", Map.class);
+        AggregationResults<Map> countResults = mongoTemplate.aggregate(countAggregation, "stock_diary", Map.class);
         Long total = countResults.getMappedResults().size() == 0 ? 0 : Long.parseLong(countResults.getMappedResults().get(0).get("totalRecords").toString());
 
         int currentPage = pageRequest.getPageNumber();
@@ -86,7 +86,7 @@ public class StockDiaryQueryService {
 
         PageRequest newPageRequest = PageRequest.of(currentPage, pageRequest.getPageSize(), pageRequest.getSort());
 
-        AggregationResults<StockDiaryEntity> results = mongoTemplate.aggregate(mainAggregation, "stockDiary", StockDiaryEntity.class);
+        AggregationResults<StockDiaryEntity> results = mongoTemplate.aggregate(mainAggregation, "stock_diary", StockDiaryEntity.class);
         List<StockDiaryEntity> stockDiaryList = results.getMappedResults();
 
         List<StockDiaryEntity> pagedStockDiaryList = stockDiaryList.subList(0, Math.min(pageRequest.getPageSize(), stockDiaryList.size()));
