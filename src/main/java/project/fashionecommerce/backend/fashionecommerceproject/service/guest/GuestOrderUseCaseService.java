@@ -27,7 +27,9 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Prod
 import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.OutOfQuantityException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.cart.CartQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.color.ColorQueryService;
@@ -35,6 +37,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.order.OrderCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.product.ProductQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.size.SizeQueryService;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.util.JwtUtils;
@@ -45,10 +48,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GuestOrderUseCaseService {
     @NonNull final GuestUseCaseService guestUseCaseService;
+    @NonNull final GuestCartUseCaseService guestCartUseCaseService;
 
     @NonNull final OrderCommandService orderCommandService;
     @NonNull final CartCommandService cartCommandService;
-    @NonNull final GuestCartUseCaseService guestCartUseCaseService;
+    @NonNull final StockCommandService stockCommandService;
 
     @NonNull final StockQueryService stockQueryService;
     @NonNull final CartQueryService cartQueryService;
@@ -60,6 +64,7 @@ public class GuestOrderUseCaseService {
 
     @NonNull final OrderMapper orderMapper;
     @NonNull final CartMapper cartMapper;
+    @NonNull final StockMapper stockMapper;
 
     @NonNull final JwtUtils jwtUtils;
     @Autowired
@@ -86,6 +91,11 @@ public class GuestOrderUseCaseService {
                         .isActive(true)
                         .build())
                 .collect(Collectors.toList());
+        orderItems.forEach((orderItem) -> {
+            Stock foundStock = stockQueryService.findById(new StockId(orderItem.stockId()));
+            if (foundStock.quantity() - orderItem.quantity() < 0)
+                throw new OutOfQuantityException();
+        });
         order = orderMapper.updateDto(order, EOrderStatus.WAITING, orderItems);
         order = orderMapper.updateDtoIsActive(order, true);
         order = orderMapper.updateDtoIsDeleted(order, false);
@@ -96,7 +106,11 @@ public class GuestOrderUseCaseService {
         }
         orderCommandService.save(order);
         cartCommandService.updateIsActiveIsDeleted(new CartId(cartId), false, true);
-
+        orderItems.forEach((orderItem) -> {
+            Stock foundStock = stockQueryService.findById(new StockId(orderItem.stockId()));
+            foundStock = stockMapper.updateDtoQuantity(foundStock, foundStock.quantity() - orderItem.quantity());
+            stockCommandService.update(new StockId(foundStock.id()), foundStock);
+        });
         if (guestUseCaseService.getCurrentUser() != "anonymousUser"){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

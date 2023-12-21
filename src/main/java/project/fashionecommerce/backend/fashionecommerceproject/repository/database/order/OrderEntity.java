@@ -25,6 +25,7 @@ public class OrderEntity extends TimeAuditable implements Serializable {
     private String id;
     @Field(targetType = FieldType.OBJECT_ID)
     private String userId;
+    private String username;
     private String address;
     private String phone;
     private List<OrderItemEntity> orderItems;

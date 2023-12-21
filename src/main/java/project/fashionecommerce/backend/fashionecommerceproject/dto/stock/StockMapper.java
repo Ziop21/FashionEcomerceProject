@@ -100,4 +100,6 @@ public abstract class StockMapper {
 
     @Mapping(source = "colorName", target = "colorName")
     public abstract Stock updateDtoColorName(Stock stock, String colorName);
+    @Mapping(source = "quantity", target = "quantity")
+    public abstract Stock updateDtoQuantity(Stock foundStock, Long quantity);
 }

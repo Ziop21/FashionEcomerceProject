@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public record CustomerOrderResponse(
         String id,
         String address,
+        String username,
         String phone,
         String deliveryId,
         String deliveryName,

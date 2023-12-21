@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 public record GuestOrderRequest(
         @NotNull
+        String username,
+        @NotNull
         String address,
         @NotNull
         @Pattern(regexp = "^0[0-9]{9}$", message = "Is not a phone number")
