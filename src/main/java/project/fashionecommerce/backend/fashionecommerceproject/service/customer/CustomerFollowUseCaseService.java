@@ -36,7 +36,7 @@ public class CustomerFollowUseCaseService {
     public void delete(FollowId followId) {
         Follow foundDto = followQueryService.findById(followId);
         foundDto = followMapper.updateIsActiveAndIsDeleted(foundDto,false, true);
-        followCommandService.save(foundDto);
+        followCommandService.update(new FollowId(foundDto.id()), foundDto);
     }
     @Transactional
     public void save(ProductId productId) {
@@ -65,8 +65,11 @@ public class CustomerFollowUseCaseService {
         List<Product> products = productQueryService.findAllByIds(productIds);
         List<Follow> updatedFollow = new ArrayList<>();
         for (int i = 0; i < follows.size(); i++){
-            Product product = products.get(i);
-            updatedFollow.add(followMapper.updateDto(follows.get(i), product.name(),
+            Follow follow = follows.get(i);
+            Product product = products.stream()
+                    .filter(product1 -> product1.id().equals(follow.productId()))
+                    .findFirst().get();
+            updatedFollow.add(followMapper.updateDto(follow, product.name(),
                     product.price(), product.promotionalPrice(), product.images() == null ? null : product.images().get(0)));
         }
         return updatedFollow;
