@@ -10,6 +10,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.ERole;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQuery;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.stock.StockQueryService;
@@ -19,6 +20,12 @@ import project.fashionecommerce.backend.fashionecommerceproject.service.database
 public class GuestStockUseCaseService {
     @NonNull
     final StockQueryService stockQueryService;
+    public Stock findById(StockId stockId){
+        Stock stock = stockQueryService.findById(stockId);
+        if (stock.isDeleted() || !stock.isActive())
+            throw new MyResourceNotFoundException();
+        return stock;
+    }
     public Page<Stock> findAllByProductId(StockQuery query, PageRequest pageRequest) {
         Page<Stock> stocks = stockQueryService.findAll(query, pageRequest, ERole.GUEST);
         return stocks;
