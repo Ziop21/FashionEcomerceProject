@@ -45,10 +45,15 @@ public class UserCommandService {
             foundEntity.setHashedPassword(hashedPassword);
         }
         if (user.isDeleted() == false){
-            UserEntity entity = userRepository.findByEmailAndIsDeleted(user.email(), false)
-                    .orElseThrow(MyResourceNotFoundException::new);
-            if (!userId.id().equals(entity.getId()))
-                throw new MyConflictsException();
+            try {
+                UserEntity entity = userRepository.findByEmailAndIsDeleted(user.email(), false)
+                        .orElseThrow(MyResourceNotFoundException::new);
+                if (!userId.id().equals(entity.getId()))
+                    throw new MyConflictsException();
+            } catch (MyResourceNotFoundException e) {
+                userMapper.updateExisted(user, foundEntity);
+                userRepository.save(foundEntity);
+            }
         }
         userMapper.updateExisted(user, foundEntity);
         userRepository.save(foundEntity);

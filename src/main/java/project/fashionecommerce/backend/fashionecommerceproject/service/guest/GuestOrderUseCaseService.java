@@ -23,6 +23,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.enums.EOrder
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.Order;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.OrderMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.order.items.OrderItem;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.product.Product;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
@@ -132,13 +133,15 @@ public class GuestOrderUseCaseService {
         text.append("Items: ").append("\n");
         order.orderItems().forEach((item) -> {
                 Stock stock = stockQueryService.findById(new StockId(item.stockId()));
-                String productName = productQueryService.findById(new ProductId(stock.productId())).name();
+                Product product = productQueryService.findById(new ProductId(stock.productId()));
                 String sizeName = sizeQueryService.findById(new SizeId(stock.sizeId())).name();
                 String colorName = colorQueryService.findById(new ColorId(stock.colorId())).name();
-                text.append("\t Product: ").append(productName).append("\n");
+                text.append("\t Product: ").append(product.name()).append("\n");
                 text.append("\t Size: ").append(sizeName).append("\n");
                 text.append("\t Color: ").append(colorName).append("\n");
+                text.append("\t Price: ").append(product.price()).append("\n");
                 text.append("\t Quantity: ").append(item.quantity()).append("\n");
+                text.append("\t Subtotal: ").append(item.quantity() * product.price()).append("\n");
                 text.append("\n");
             }
         );

@@ -17,6 +17,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.user.level.U
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.level.UserLevelId;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConfirmPasswordUnmatchException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
+import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.level.UserLevelQueryService;
@@ -28,6 +29,7 @@ public class CustomerUserUseCaseService {
 
     @NonNull final UserQueryService userQueryService;
     @NonNull final UserLevelQueryService userLevelQueryService;
+    @NonNull final TokenCommandService tokenCommandService;
 
     @NonNull final UserMapper userMapper;
 
@@ -72,6 +74,7 @@ public class CustomerUserUseCaseService {
         }
         foundUser = userMapper.updateDtoIsActive(foundUser, false);
         foundUser = userMapper.updateDtoIsDeleted(foundUser, true);
+        tokenCommandService.deleteByUserId(foundUser.id());
         userCommandService.update(new UserId(userDetails.getId()), foundUser);
     }
     @Transactional

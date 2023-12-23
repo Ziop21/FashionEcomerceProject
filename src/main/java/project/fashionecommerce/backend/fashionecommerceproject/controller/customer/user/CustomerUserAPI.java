@@ -22,6 +22,6 @@ public interface CustomerUserAPI {
     @PutMapping("/password")
     void updatePassword(@RequestBody @Valid CustomerPasswordRequest customerPasswordRequest);
 
-    @DeleteMapping
+    @PutMapping("/delete")
     void delete(@RequestBody @Valid CustomerPasswordRequest customerPasswordRequest);
 }
