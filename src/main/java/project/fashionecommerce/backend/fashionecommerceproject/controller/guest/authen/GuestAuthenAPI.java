@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.ChangePasswordRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.LoginRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.RegisterRequest;
 
@@ -33,8 +34,8 @@ public interface GuestAuthenAPI {
 
     @PostMapping("/forgot-password/verify")
     ResponseEntity<?> verifyForgotPasswordToken(
-            @RequestParam(required = false, value = "token", defaultValue = "") String token,
-            @RequestBody @Valid RegisterRequest registerRequest
+            @RequestParam(required = true, value = "token", defaultValue = "") String token,
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest
     );
 
     @PostMapping("/forgot-password/find-email")

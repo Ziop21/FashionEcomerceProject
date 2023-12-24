@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.ChangePasswordRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.GuestAuthenModelMapper;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.LoginRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.RegisterRequest;
@@ -60,8 +61,8 @@ public class GuestAuthenController implements GuestAuthenAPI {
     }
 
     @Override
-    public ResponseEntity<?> verifyForgotPasswordToken(String token, RegisterRequest registerRequest) {
-        Register register = guestAuthenModelMapper.toDto(registerRequest);
+    public ResponseEntity<?> verifyForgotPasswordToken(String token, ChangePasswordRequest changePasswordRequest) {
+        Register register = guestAuthenModelMapper.toDto(changePasswordRequest);
         String status = guestAuthenUseCaseService.verifyForgotPasswordToken(token, register);
         return ResponseEntity.ok().body(status);
     }

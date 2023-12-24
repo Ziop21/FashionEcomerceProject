@@ -106,11 +106,11 @@ public class GuestAuthenUseCaseService {
         message.setSubject("FASHION ECOMMERCE WEBSITE: EMAIL CONFIRMATION");
         if (isResetPassword) {
             message.setText("Thank you for choosing our website!! Please click the following link to verify your email: "
-                    + FE_SERVER_URL + "/forgot-password/verify?token=" + token.token());
+                    + FE_SERVER_URL + "/forgot-password/verifyEmail?token=" + token.token());
         }
         else {
             message.setText("Thank you for choosing our website!! Please click the following link to verify your email: "
-                    + FE_SERVER_URL + "/register/verify?token=" + token.token());
+                    + FE_SERVER_URL + "/register/verifyEmail?token=" + token.token());
         }
         javaMailSender.send(message);
     }

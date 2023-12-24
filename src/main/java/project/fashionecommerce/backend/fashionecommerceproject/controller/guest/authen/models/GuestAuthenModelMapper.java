@@ -9,4 +9,6 @@ public interface GuestAuthenModelMapper {
     Login toDto(LoginRequest loginRequest);
 
     Register toDto(RegisterRequest registerRequest);
+
+    Register toDto(ChangePasswordRequest changePasswordRequest);
 }
