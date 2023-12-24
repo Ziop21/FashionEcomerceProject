@@ -18,7 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.authentication.AuthEntryPointJwt;
-import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsServiceImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Impl.UserDetailsServiceImpl;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Impl.UserDetailsImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.Follow;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.FollowId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.follow.FollowMapper;

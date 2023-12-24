@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement.UserDetailsImpl;
+import project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Impl.UserDetailsImpl;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.customer.user.models.CustomerPasswordRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.User;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserId;

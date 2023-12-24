@@ -1,4 +1,4 @@
-package project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Implement;
+package project.fashionecommerce.backend.fashionecommerceproject.config.security.userDetails.Impl;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
