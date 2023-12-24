@@ -32,7 +32,7 @@ public class OrderUseCaseService {
     @Transactional
     public void update(OrderId orderId, Order newOrder) {
         Order oldOrder = orderQueryService.findById(orderId);
-        if (oldOrder.status().equals(EOrderStatus.WAITING) && oldOrder.status().equals(EOrderStatus.SHIPPING)){
+        if (oldOrder.status().equals(EOrderStatus.WAITING) && newOrder.status().equals(EOrderStatus.SHIPPING)){
             oldOrder.orderItems().forEach((item) -> {
                 Stock foundStock = stockQueryService.findById(new StockId(item.stockId()));
                 if (foundStock.quantity() < item.quantity())
