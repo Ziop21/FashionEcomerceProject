@@ -107,11 +107,6 @@ public class GuestOrderUseCaseService {
         }
         orderCommandService.save(order);
         cartCommandService.updateIsActiveIsDeleted(new CartId(cartId), false, true);
-        orderItems.forEach((orderItem) -> {
-            Stock foundStock = stockQueryService.findById(new StockId(orderItem.stockId()));
-            foundStock = stockMapper.updateDtoQuantity(foundStock, foundStock.quantity() - orderItem.quantity());
-            stockCommandService.update(new StockId(foundStock.id()), foundStock);
-        });
         if (guestUseCaseService.getCurrentUser() != "anonymousUser"){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
