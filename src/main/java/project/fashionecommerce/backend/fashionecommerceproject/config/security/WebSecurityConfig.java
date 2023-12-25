@@ -39,7 +39,7 @@ public class WebSecurityConfig {
         corsConfiguration.setExposedHeaders(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("*"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "https://fashion-ecommerce-fe.vercel.app/"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "https://fashion-ecommerce-fe.vercel.app"));
         corsConfiguration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
         return source;
