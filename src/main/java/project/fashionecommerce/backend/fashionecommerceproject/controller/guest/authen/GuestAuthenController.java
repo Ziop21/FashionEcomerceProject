@@ -2,9 +2,6 @@ package project.fashionecommerce.backend.fashionecommerceproject.controller.gues
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.authen.models.ChangePasswordRequest;

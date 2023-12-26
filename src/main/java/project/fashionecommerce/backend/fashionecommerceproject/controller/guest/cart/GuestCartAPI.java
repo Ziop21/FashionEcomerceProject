@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemRequest;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.items.models.GuestCartItemResponse;
+import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.cart.models.GuestCartRequest;
+
 import java.util.List;
 
 @RequestMapping("/api/guest/cart")
@@ -20,20 +22,19 @@ public interface GuestCartAPI {
     ResponseEntity<?> save();
 
     @GetMapping
-    ResponseEntity<List<GuestCartItemResponse>> findAllCartItem(HttpServletRequest request);
+    ResponseEntity<List<GuestCartItemResponse>> findAllCartItem(@RequestBody @Valid GuestCartRequest guestCartRequest);
 
     @DeleteMapping("/delete/{stockId}")
     void deleteCartItem(@PathVariable String stockId,
-                        HttpServletRequest request);
+                        @RequestBody @Valid GuestCartRequest guestCartRequest);
     @PostMapping("/addCartItems")
-    void addCartItems(@RequestBody @Valid List<GuestCartItemRequest> cartItems,
-                      HttpServletRequest request);
+    void addCartItems(@RequestBody @Valid GuestCartRequest guestCartRequest);
     @PostMapping("/add/{stockId}")
     void insertToCart(@PathVariable String stockId,
-                      @RequestParam(required = false, value = "quantity", defaultValue = "1") Long quantity,
-                      HttpServletRequest request);
+                      @RequestParam(value = "quantity", defaultValue = "1") Long quantity,
+                      @RequestBody @Valid GuestCartRequest guestCartRequest);
     @PostMapping("/update/{stockId}")
     void updateQuantity(@PathVariable String stockId,
-                        @RequestParam(required = false, value = "quantity", defaultValue = "1") Long quantity,
-                        HttpServletRequest request);
+                        @RequestParam(value = "quantity", defaultValue = "1") Long quantity,
+                        @RequestBody @Valid GuestCartRequest guestCartRequest);
 }

@@ -49,11 +49,9 @@ public class GuestCartUseCaseService {
     @NonNull final CartMapper cartMapper;
     @NonNull final CartItemMapper cartItemMapper;
 
-    @Value("${fashion_ecommerce.app.jwtCartCookieName}")
-    private String cartTokenCookieName;
 
-    public List<CartItem> findAllCartItem(HttpServletRequest request) {
-        String cartId = this.getCartId(request);
+    public List<CartItem> findAllCartItem(String cartToken) {
+        String cartId = this.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         if (!cart.isActive())
             throw new MyResourceNotFoundException();
@@ -96,8 +94,8 @@ public class GuestCartUseCaseService {
     }
 
     @Transactional
-    public void insertToCart(String stockId, Long quantity, HttpServletRequest request){
-        String cartId = this.getCartId(request);
+    public void insertToCart(String stockId, Long quantity, String cartToken){
+        String cartId = this.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         List<CartItem> cartItems = cart.cartItems();
         if (cart.cartItems() == null)
@@ -122,16 +120,15 @@ public class GuestCartUseCaseService {
     }
 
     @Transactional
-    public void updateQuantity(String stockId, Long quantity, HttpServletRequest request) {
-        String cartId = this.getCartId(request);
+    public void updateQuantity(String stockId, Long quantity, String cartToken) {
+        String cartId = this.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         List<CartItem> cartItems = cart.cartItems();
         cartItems = this.updateQuantity(cartItems, stockId, quantity);
         cart = cartMapper.updateCartItems(cart, cartItems);
         cartCommandService.save(cart);
     }
-    public String getCartId(HttpServletRequest request) {
-        String cartToken = jwtUtils.getCookieValueByName(request, cartTokenCookieName);
+    public String getCartId(String cartToken) {
         if (cartToken == null || jwtUtils.validateJwtToken(cartToken) == false) {
             throw new MyForbiddenException();
         }
@@ -163,8 +160,8 @@ public class GuestCartUseCaseService {
         return cartItems;
     }
     @Transactional
-    public void deleteCartItem(StockId stockId, HttpServletRequest request) {
-        String cartId = this.getCartId(request);
+    public void deleteCartItem(StockId stockId, String cartToken) {
+        String cartId = this.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         List<CartItem> cartItems = cart.cartItems();
         for (int i = 0; i < cartItems.size(); i++) {
@@ -185,8 +182,8 @@ public class GuestCartUseCaseService {
         return cartToken;
     }
 
-    public void addCartItems(List<CartItem> cartItemList, HttpServletRequest request) {
-        String cartId = this.getCartId(request);
+    public void addCartItems(List<CartItem> cartItemList, String cartToken) {
+        String cartId = this.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         cart = cartMapper.updateCartItems(cart, cartItemList);
         cartCommandService.save(cart);

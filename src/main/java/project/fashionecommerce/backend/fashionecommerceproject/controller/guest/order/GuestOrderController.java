@@ -18,9 +18,9 @@ public class GuestOrderController implements GuestOrderAPI {
     @NonNull final GuestOrderUseCaseService guestOrderUseCaseService;
     @NonNull final GuestOrderModelMapper guestOrderModelMapper;
     @Override
-    public ResponseEntity<?> save(GuestOrderRequest guestOrderRequest, HttpServletRequest request) {
+    public ResponseEntity<?> save(GuestOrderRequest guestOrderRequest) {
         Order order = guestOrderModelMapper.toDto(guestOrderRequest);
-        guestOrderUseCaseService.save(order, request);
+        guestOrderUseCaseService.save(order, guestOrderRequest.cartToken());
         return ResponseEntity.ok()
                 .body("Success");
     }

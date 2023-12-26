@@ -37,8 +37,9 @@ public class JwtUtils implements Serializable {
     @Value("${fashion_ecommerce.app.jwtCartExpiration}")
     private Long cartTokenExpirationMs;
 
-    @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
-    private String jwtRefreshCookie;
+//    @Value("${fashion_ecommerce.app.jwtRefreshCookieName}")
+//    private String jwtRefreshCookie;
+
     @Value("${fashion_ecommerce.app.jwt.issuer}")
     private String issuer;
     @Value("${fashion_ecommerce.app.jwt.audience}")
@@ -73,9 +74,9 @@ public class JwtUtils implements Serializable {
         return token;
     }
 
-    public String getJwtRefreshFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtRefreshCookie);
-    }
+//    public String getJwtRefreshFromCookies(HttpServletRequest request) {
+//        return getCookieValueByName(request, jwtRefreshCookie);
+//    }
 
     public JWTClaimsSet getClaimsFromJwtToken(String token) {
         JWTClaimsSet claims = null;
@@ -167,12 +168,12 @@ public class JwtUtils implements Serializable {
         return token;
     }
 
-    public String getCookieValueByName(HttpServletRequest request, String name) {
-        Cookie cookie = WebUtils.getCookie(request, name);
-        if (cookie != null) {
-            return cookie.getValue();
-        } else {
-            return null;
-        }
-    }
+//    public String getCookieValueByName(HttpServletRequest request, String name) {
+//        Cookie cookie = WebUtils.getCookie(request, name);
+//        if (cookie != null) {
+//            return cookie.getValue();
+//        } else {
+//            return null;
+//        }
+//    }
 }

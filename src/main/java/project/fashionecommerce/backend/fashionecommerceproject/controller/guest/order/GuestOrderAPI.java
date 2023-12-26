@@ -11,5 +11,5 @@ import project.fashionecommerce.backend.fashionecommerceproject.controller.guest
 @RequestMapping("/api/guest/order")
 public interface GuestOrderAPI {
     @PostMapping
-    ResponseEntity<?> save(@RequestBody @Valid GuestOrderRequest guestOrderRequest, HttpServletRequest request);
+    ResponseEntity<?> save(@RequestBody @Valid GuestOrderRequest guestOrderRequest);
 }

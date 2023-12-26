@@ -71,12 +71,9 @@ public class GuestOrderUseCaseService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Value("${fashion_ecommerce.app.jwtCartCookieName}")
-    private String cartTokenCookieName;
-
     @Transactional
-    public ResponseCookie save(Order order, HttpServletRequest request) {
-        String cartId = guestCartUseCaseService.getCartId(request);
+    public ResponseCookie save(Order order, String cartToken) {
+        String cartId = guestCartUseCaseService.getCartId(cartToken);
         Cart cart = cartQueryService.findById(new CartId(cartId));
         if (cart.isDeleted() || !cart.isActive()){
             throw new MyResourceNotFoundException();

@@ -29,14 +29,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    @Value("${fashion_ecommerce.app.jwtCookieName}")
-    private String jwtCookieName;
+    @Value("${fashion_ecommerce.app.tokenType}")
+    private String tokenType;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-                    String jwt = parseJwt(request);
+                String jwt = parseJwt(request);
                 if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                     JWTClaimsSet claims = jwtUtils.getClaimsFromJwtToken(jwt);
                     UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getStringClaim("email"));
@@ -54,7 +54,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String jwt = jwtUtils.getCookieValueByName(request, jwtCookieName);
-        return jwt;
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader != null && authorizationHeader.startsWith(tokenType)) {
+            String jwtWithBearerPrefix = authorizationHeader.substring(tokenType.length() + 1);
+            return jwtWithBearerPrefix;
+        }
+
+        return null;
     }
 }

@@ -18,6 +18,8 @@ public record GuestOrderRequest(
         @NotNull
         String deliveryId,
         @NotNull
-        Boolean isPaidBefore
+        Boolean isPaidBefore,
+        @NotNull
+        String cartToken
 ) {
 }
