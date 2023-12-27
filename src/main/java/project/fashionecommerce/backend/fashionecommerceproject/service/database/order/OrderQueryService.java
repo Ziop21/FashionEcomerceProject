@@ -44,6 +44,7 @@ public class OrderQueryService {
                     Criteria.where("user.firstName").regex(".*" + orderQuery.search() + ".*", "i"),
                     Criteria.where("user.lastName").regex(".*" + orderQuery.search() + ".*", "i"),
                     Criteria.where("user.email").regex(".*" + orderQuery.search() + ".*", "i"),
+                    Criteria.where("username").regex(".*" + orderQuery.search() + ".*", "i"),
                     Criteria.where("phone").regex(".*" + orderQuery.search() + ".*", "i"),
                     Criteria.where("address").regex(".*" + orderQuery.search() + ".*", "i")
             );
