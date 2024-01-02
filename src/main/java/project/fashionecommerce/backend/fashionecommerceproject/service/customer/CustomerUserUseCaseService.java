@@ -16,11 +16,14 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.user.UserMap
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.level.UserLevel;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.user.level.UserLevelId;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyConfirmPasswordUnmatchException;
+import project.fashionecommerce.backend.fashionecommerceproject.exception.MyNeedWaitingException;
 import project.fashionecommerce.backend.fashionecommerceproject.exception.MyResourceNotFoundException;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.token.TokenCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserCommandService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.UserQueryService;
 import project.fashionecommerce.backend.fashionecommerceproject.service.database.user.level.UserLevelQueryService;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +63,9 @@ public class CustomerUserUseCaseService {
         if (!passwordEncoder.matches(user.hashedPassword(), userDetails.getPassword())){
             throw new MyConfirmPasswordUnmatchException();
         }
+        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(1))){
+            throw new MyNeedWaitingException();
+        }
         foundUser = userMapper.updateDto(foundUser, user.firstName(), user.lastName(),
                 user.idCard(), user.phones(), user.addresses(), user.avatar(), user.eWallet());
         userCommandService.update(new UserId(foundUser.id()), foundUser);
@@ -71,6 +77,9 @@ public class CustomerUserUseCaseService {
         User foundUser = userQueryService.findById(new UserId(userDetails.getId()));
         if (!passwordEncoder.matches(password, userDetails.getPassword())){
             throw new MyConfirmPasswordUnmatchException();
+        }
+        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(1))){
+            throw new MyNeedWaitingException();
         }
         foundUser = userMapper.updateDtoIsActive(foundUser, false);
         foundUser = userMapper.updateDtoIsDeleted(foundUser, true);
