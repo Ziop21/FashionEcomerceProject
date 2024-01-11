@@ -85,6 +85,8 @@ public class GuestAuthenUseCaseService {
             if (!register.confirmPassword().equals(register.password()))
                 throw new MyConfirmPasswordUnmatchException();
             User user = userQueryService.findByEmailAndIsEmailActive(register.email(), true);
+            if (user == null)
+                throw new MyResourceNotFoundException();
             if (user.isActive()) {
                 throw new MyForbiddenException();
             }
@@ -137,7 +139,7 @@ public class GuestAuthenUseCaseService {
                 return "Success";
             }
             User user = userQueryService.findByEmailAndIsEmailActive(email, true);
-            if (!user.isActive()) {
+            if (user != null && !user.isActive()) {
                 throw new MyForbiddenException();
             }
             tokenCommandService.deleteByUserId(user.id());
@@ -171,7 +173,7 @@ public class GuestAuthenUseCaseService {
             if (!register.confirmPassword().equals(register.password()))
                 throw new MyConfirmPasswordUnmatchException();
             User user = userQueryService.findByEmailAndIsEmailActive(register.email(), true);
-            if (!user.isActive()) {
+            if (user != null && !user.isActive()) {
                 throw new MyForbiddenException();
             }
             String hashedPassword = passwordEncoder.encode(register.password());

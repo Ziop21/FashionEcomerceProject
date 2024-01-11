@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -53,10 +54,20 @@ public class UserQueryService {
     }
 
     public User findByEmailAndIsEmailActive(String email, Boolean isEmailActive) {
-        UserEntity user = userRepository.findByEmailAndIsDeletedAndIsEmailActive(email,
-                        false, isEmailActive)
-                .orElseThrow(MyResourceNotFoundException::new);
-        return userMapper.toDto(user);
+        Criteria criteria = new Criteria();
+        criteria.andOperator(
+                Criteria.where("email").is(email),
+                Criteria.where("isEmailActive").is(isEmailActive)
+        );
+        Aggregation mainAggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria),
+                Aggregation.sort(Sort.Direction.DESC, "createdAt"),
+                Aggregation.limit(1)
+        );
+        AggregationResults<UserEntity> results = mongoTemplate.aggregate(mainAggregation, "user", UserEntity.class);
+        if (results.getMappedResults().size() != 0)
+            return userMapper.toDto(results.getMappedResults().get(0));
+        return null;
     }
 
     public User findById(UserId userId) {

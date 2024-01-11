@@ -3,6 +3,7 @@ package project.fashionecommerce.backend.fashionecommerceproject.service.custome
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +40,10 @@ public class CustomerUserUseCaseService {
     @Autowired
     final PasswordEncoder passwordEncoder;
 
+    @Value("${fashion_ecommerce.app.profile.changeProfileWaitingDay}")
+    private Long changeProfileWaitingDay;
+    private User oldUser;
+
     public User findById() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -63,7 +68,7 @@ public class CustomerUserUseCaseService {
         if (!passwordEncoder.matches(user.hashedPassword(), userDetails.getPassword())){
             throw new MyConfirmPasswordUnmatchException();
         }
-        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(1))){
+        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(changeProfileWaitingDay))){
             throw new MyNeedWaitingException();
         }
         foundUser = userMapper.updateDto(foundUser, user.firstName(), user.lastName(),
@@ -78,11 +83,14 @@ public class CustomerUserUseCaseService {
         if (!passwordEncoder.matches(password, userDetails.getPassword())){
             throw new MyConfirmPasswordUnmatchException();
         }
-        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(1))){
+        User oldUser = userQueryService.findByEmailAndIsEmailActive(userDetails.getEmail(), false);
+        if (oldUser != null && oldUser.updatedAt().isAfter(LocalDateTime.now().minusDays(changeProfileWaitingDay))){
             throw new MyNeedWaitingException();
         }
+
         foundUser = userMapper.updateDtoIsActive(foundUser, false);
         foundUser = userMapper.updateDtoIsDeleted(foundUser, true);
+        foundUser = userMapper.updateDtoIsEmailActive(foundUser, false);
         tokenCommandService.deleteByUserId(foundUser.id());
         userCommandService.update(new UserId(userDetails.getId()), foundUser);
     }
@@ -95,6 +103,10 @@ public class CustomerUserUseCaseService {
         }
         if (!customerPasswordRequest.newPassword().equals(customerPasswordRequest.confirmPassword())){
             throw new MyConfirmPasswordUnmatchException();
+        }
+        User foundUser = userQueryService.findById(new UserId(userDetails.getId()));
+        if (foundUser.updatedAt().isAfter(LocalDateTime.now().minusDays(changeProfileWaitingDay))){
+            throw new MyNeedWaitingException();
         }
         userCommandService.updateHashedPasswordAndIsActive(
                 new UserId(userDetails.getId()),
