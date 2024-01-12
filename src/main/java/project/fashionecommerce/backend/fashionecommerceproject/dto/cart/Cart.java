@@ -12,8 +12,6 @@ public record Cart(
         Boolean isDeleted,
         Boolean isActive,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt,
-        String createdBy,
-        String updatedBy
+        LocalDateTime updatedAt
 ) {
 }
