@@ -78,7 +78,7 @@ public abstract class StockMapper {
         foundEntity.setReviews(reviewEntities);
     }
     @Mapping(source = "reviews", target = "reviews")
-    public abstract Stock updateDto(Stock stock, List<Review> reviews);
+    public abstract Stock updateDtoReviews(Stock stock, List<Review> reviews);
 
     @Mapping(source = "isActive", target = "isActive")
     public abstract Stock updateDtoIsActive(Stock stock, Boolean isActive);

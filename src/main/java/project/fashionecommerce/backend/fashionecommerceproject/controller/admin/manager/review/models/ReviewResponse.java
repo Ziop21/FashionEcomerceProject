@@ -6,7 +6,7 @@ import java.util.List;
 public record ReviewResponse(
         String orderId,
         String content,
-        Double rating,
+        Long rating,
         List<String> images,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,

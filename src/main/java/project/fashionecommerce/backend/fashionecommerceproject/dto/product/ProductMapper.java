@@ -38,4 +38,7 @@ public interface ProductMapper {
                       Double price, Double promotionalPrice, List<String> images);
     @Mapping(source = "view", target = "view")
     Product updateDtoView(Product product, Long view);
+
+    @Mapping(source = "rating", target = "rating")
+    Product updateDtoRating(Product foundProduct, Double rating);
 }

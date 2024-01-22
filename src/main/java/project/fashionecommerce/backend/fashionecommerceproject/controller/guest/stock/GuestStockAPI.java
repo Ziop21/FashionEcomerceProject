@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.fashionecommerce.backend.fashionecommerceproject.common.models.PageResponse;
 import project.fashionecommerce.backend.fashionecommerceproject.controller.guest.stock.models.GuestStockResponse;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("/api/guest/stock")
@@ -31,4 +29,7 @@ public interface GuestStockAPI {
             @RequestParam(required = true, value = "colorId", defaultValue = "") String colorId,
             @RequestParam(required = true, value = "sizeId", defaultValue = "") String sizeId
     );
+
+    @GetMapping("/{stockId}")
+    ResponseEntity<GuestStockResponse> findById(@PathVariable String stockId);
 }

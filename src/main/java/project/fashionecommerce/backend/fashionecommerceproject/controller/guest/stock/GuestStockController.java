@@ -15,6 +15,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.handler.MySo
 import project.fashionecommerce.backend.fashionecommerceproject.dto.product.ProductId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.size.SizeId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.Stock;
+import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockId;
 import project.fashionecommerce.backend.fashionecommerceproject.dto.stock.StockQuery;
 import project.fashionecommerce.backend.fashionecommerceproject.service.guest.GuestStockUseCaseService;
 
@@ -25,6 +26,13 @@ import java.util.List;
 public class GuestStockController implements GuestStockAPI {
     @NonNull final GuestStockUseCaseService guestStockUseCaseService;
     @NonNull final GuestStockModelMapper guestStockModelMapper;
+
+    @Override
+    public ResponseEntity<GuestStockResponse> findById(String stockId) {
+        Stock stock = guestStockUseCaseService.findById(new StockId(stockId));
+        return new ResponseEntity<>(guestStockModelMapper.toModel(stock), HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<PageResponse<GuestStockResponse>> findAlByProductId(String productId, String search,
     List<String> colorIds, List<String> sizeIds, String sort, Integer currentPage, Integer pageSize) {

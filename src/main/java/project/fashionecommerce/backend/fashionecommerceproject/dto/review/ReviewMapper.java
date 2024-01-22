@@ -9,7 +9,12 @@ public interface ReviewMapper {
     ReviewEntity toEntity(Review review);
 
     Review toDto(ReviewEntity reviewEntity);
-    @Mapping(source = "username", target = "username")
+
     @Mapping(source = "userId", target = "userId")
-    Review updateDto(Review review, String username, String userId);
+    @Mapping(source = "username", target = "username")
+    Review updateDtoUser(Review review, String userId, String username);
+    @Mapping(source = "isActive", target = "isActive")
+    Review updateDtoIsActive(Review review, Boolean isActive);
+    @Mapping(source = "isDeleted", target = "isDeleted")
+    Review updateDtoIsDeleted(Review review, Boolean isDeleted);
 }

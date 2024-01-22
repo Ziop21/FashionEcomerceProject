@@ -22,6 +22,10 @@ public class ProductCommmandService {
         if (productRepository.existsByName(product.name()))
             throw new MyConflictsException();
         ProductEntity productEntity = productMapper.toEntity(product);
+        if (productEntity.getView() == null)
+            productEntity.setView(0l);
+        if (productEntity.getRating() == null)
+            productEntity.setRating(0.0);
         productRepository.save(productEntity);
     }
 

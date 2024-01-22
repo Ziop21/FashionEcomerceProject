@@ -8,7 +8,7 @@ public record Review(
         String userId,
         String username,
         String content,
-        Double rating,
+        Long rating,
         List<String> images,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,

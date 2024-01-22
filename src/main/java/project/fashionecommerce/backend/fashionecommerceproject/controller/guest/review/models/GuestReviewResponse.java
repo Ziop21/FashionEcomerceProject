@@ -4,13 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record GuestReviewResponse(
-        String sizeName,
-        String colorName,
-        String orderId,
         String userId,
         String username,
+        String orderId,
         String content,
-        Double rating,
+        Long rating,
         List<String> images,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

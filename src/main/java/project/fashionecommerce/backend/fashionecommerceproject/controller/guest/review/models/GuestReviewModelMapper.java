@@ -6,7 +6,7 @@ import project.fashionecommerce.backend.fashionecommerceproject.dto.review.Revie
 
 @Mapper(componentModel = "spring")
 public interface GuestReviewModelMapper {
-    @Mapping(source = "colorName", target = "colorName")
-    @Mapping(source = "sizeName", target = "sizeName")
-    GuestReviewResponse toModel(Review review, String colorName, String sizeName);
+//    @Mapping(source = "colorName", target = "colorName")
+//    @Mapping(source = "sizeName", target = "sizeName")
+//    GuestReviewResponse toModel(Review review, String colorName, String sizeName);
 }

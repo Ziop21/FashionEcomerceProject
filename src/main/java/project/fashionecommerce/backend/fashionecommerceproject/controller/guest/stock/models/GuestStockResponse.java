@@ -5,6 +5,7 @@ import java.util.List;
 
 public record GuestStockResponse(
         String id,
+        String productId,
         String sizeId,
         String colorId,
         Long quantity,

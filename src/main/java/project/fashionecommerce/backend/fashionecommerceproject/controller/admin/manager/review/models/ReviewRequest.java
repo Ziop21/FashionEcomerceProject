@@ -9,7 +9,7 @@ public record ReviewRequest(
         String orderId,
         String content,
         @NotNull
-        Double rating,
+        Long rating,
         List<String> images,
         @NotNull
         Boolean isDeleted,
